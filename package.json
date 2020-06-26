@@ -35,5 +35,10 @@
   "devDependencies": {
     "typedoc": "^0.17.7",
     "typescript": "^3.9.5"
+  },
+  "dependencies": {
+    "axios": "^0.19.2",
+    "chalk": "^4.1.0",
+    "form-data": "^3.0.0"
   }
 }
