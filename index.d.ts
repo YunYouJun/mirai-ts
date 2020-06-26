@@ -252,6 +252,14 @@ export namespace Api {
     quote?: number;
   }
 
+  interface SendTempMessage {
+    sessionKey: string;
+    messageChain: MessageType.MessageChain;
+    qq: number;
+    group: number;
+    quote?: number;
+  }
+
   namespace Response {
     interface fetchMessage {
       code: number;

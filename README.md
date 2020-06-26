@@ -32,6 +32,7 @@ const mirai = new Mirai(mahConfig);
 
 // 对收到的消息进行处理
 // message 本质相当于同时绑定了 FriendMessage GroupMessage TempMessage
+// 你也可以单独对某一类消息进行监听
 mirai.on("message", (msg) => {
   console.log("on message");
   console.log(msg);
@@ -44,13 +45,18 @@ console.log("send command help");
 // 注意这里使用 await，所以你需要在外围函数加上 async
 // 这里只是简单示例，所以没有放在函数里。
 const data = await mirai.api.command.send("help", []);
-console.log("info:" + data);
+console.log("帮助信息:" + data);
 
 // 处理各种事件类型
 // 事件订阅说明（名称均与 mirai-api-http 中时间名一致）
 // https://github.com/RedBeanN/node-mirai/blob/master/event.md
 console.log("on other event");
-mirai.on('BotMuteEvent', ({ operator }) => console.log(`我被${operator.memberName}禁言啦！`));
+// https://github.com/project-mirai/mirai-api-http/blob/master/EventType.md#群消息撤回
+mirai.on("GroupRecallEvent", ({ operator }) => {
+  const text = `${operator.memberName} 撤回了一条消息，并拜托你不要再发色图了。`;
+  console.log(text);
+  mirai.api.sendGroupMessage(text, res.group.id);
+});
 
 // 开始监听
 mirai.listen()

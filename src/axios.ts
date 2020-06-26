@@ -4,6 +4,7 @@
  */
 
 import axios, { AxiosStatic } from "axios";
+import { log } from ".";
 
 /**
  * 初始化 axios
@@ -13,5 +14,13 @@ import axios, { AxiosStatic } from "axios";
 export function init(baseURL: string, timeout: number = 3000): AxiosStatic {
   axios.defaults.baseURL = baseURL;
   axios.defaults.timeout = timeout;
+
+  axios.interceptors.request.use(function (config) {
+    return config;
+  }, function (error) {
+    log.error('请求发送失败');
+    return Promise.reject(error);
+  });
+
   return axios;
 }

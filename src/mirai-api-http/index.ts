@@ -108,6 +108,7 @@ export default class MiraiApiHttp {
         return res;
       },
       (err) => {
+        log.error("响应失败");
         return Promise.reject(err);
       }
     );
@@ -295,6 +296,35 @@ export default class MiraiApiHttp {
   }
 
   /**
+   * 发送临时会话消息
+   * @param messageChain 消息链，是一个消息对象构成的数组
+   * @param qq 临时会话对象QQ号
+   * @param group 临时会话群号
+   * @param quote 引用一条消息的messageId进行回复
+   */
+  async sendTempMessage(
+    messageChain: string | MessageType.MessageChain,
+    qq: number,
+    group: number,
+    quote?: number
+  ): Promise<object> {
+    if (typeof messageChain === "string") {
+      messageChain = [Message.Plain(messageChain)];
+    }
+    const payload: Api.SendTempMessage = {
+      sessionKey: this.sessionKey,
+      qq,
+      group,
+      messageChain,
+    };
+    if (quote) {
+      payload.quote = quote;
+    }
+    const { data } = await this.axios.post("/sendTempMessage", payload);
+    return data;
+  }
+
+  /**
    * 使用此方法向指定对象（群或好友）发送图片消息 除非需要通过此手段获取imageId，否则不推荐使用该接口
    * @param urls 是一个url字符串构成的数组
    * @param target 发送对象的QQ号或群号，可能存在歧义
@@ -329,6 +359,89 @@ export default class MiraiApiHttp {
     form.append("type", type);
     form.append("img", img);
     this.axios.post("/uploadImage", form, { headers: form.getHeaders() });
+  }
+
+  /**
+   * 撤回消息
+   * 使用此方法撤回指定消息。对于bot发送的消息，有2分钟时间限制。对于撤回群聊中群员的消息，需要有相应权限
+   * @param target 需要撤回的消息的messageId
+   */
+  async recall(target: number | MessageType.SingleMessage) {
+    let messageId = target;
+    if (typeof target !== "number" && target.messageChain[0].id) {
+      messageId = target.messageChain[0].id;
+    }
+    const { data } = await this.axios.post('/recall', {
+      sessionKey: this.sessionKey,
+      target: messageId
+    });
+    return data;
+  }
+
+  /**
+   * 获取 bot 的好友列表
+   */
+  async friendList() {
+    const { data } = await this.axios.get('/friendList', {
+      params: {
+        sessionKey: this.sessionKey
+      }
+    });
+    return data;
+  }
+
+  /**
+   * 获取 bot 的群列表
+   */
+  async groupList() {
+    const { data } = await this.axios.get('/groupList', {
+      params: {
+        sessionKey: this.sessionKey
+      }
+    });
+    return data;
+  }
+
+  /**
+   * 获取 BOT 的群成员列表
+   * @param target 指定群的群号
+   */
+  async memberList(target: number) {
+    const { data } = await this.axios.get('/memberList', {
+      params: {
+        sessionKey: this.sessionKey,
+        target
+      }
+    });
+    return data;
+  }
+
+  /**
+   * 指定群进行全体禁言
+   * @param target 指定群的群号
+   */
+  async muteAll(target: number) {
+    const { data } = await this.axios.post('/muteAll', {
+      params: {
+        sessionKey: this.sessionKey,
+        target
+      }
+    });
+    return data;
+  }
+
+  /**
+   * 指定群解除全体禁言
+   * @param target 指定群的群号
+   */
+  async unmuteAll(target: number) {
+    const { data } = await this.axios.post('/unmuteAll', {
+      params: {
+        sessionKey: this.sessionKey,
+        target
+      }
+    });
+    return data;
   }
 
   /**
