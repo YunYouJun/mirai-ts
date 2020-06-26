@@ -33,6 +33,7 @@
   },
   "license": "AGPL-3.0",
   "devDependencies": {
+    "@types/node": "^14.0.14",
     "typedoc": "^0.17.7",
     "typescript": "^3.9.5"
   },
