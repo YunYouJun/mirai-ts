@@ -1,4 +1,4 @@
-import log from "../utils/chalk";
+import log from "../utils/log";
 import { AxiosStatic, AxiosResponse } from "axios";
 import { MessageType, Api, MiraiApiHttpConfig } from "../..";
 import Message from "../message";

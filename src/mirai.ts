@@ -1,21 +1,13 @@
-import axios from "./axios";
+/**
+ * 导出一个 Mirai 类，具体见类的各个属性和方法。
+ * @packageDocumentation
+ */
+
+import * as axios from "./axios";
 import { AxiosStatic } from "axios";
 import MiraiApiHttp from "./mirai-api-http";
 import { MessageType, MiraiApiHttpConfig, MiraiInstance } from "..";
 import Message from "./message";
-
-declare module ".." {
-  namespace MessageType {
-    interface ChatMessage {
-      /**
-       * 回复消息
-       * @param msg 消息内容
-       * @param quote 是否引用
-       */
-      reply(msg: MessageType.MessageChain | string, quote?: boolean): void;
-    }
-  }
-}
 
 /**
  * Mirai SDK 初始化类
@@ -79,22 +71,32 @@ export default class Mirai {
     await this.vertify();
   }
 
+  /**
+   * 获取 Session
+   */
   auth() {
     return this.api.auth();
   }
 
+  /**
+   * 激活 Session，绑定 QQ
+   */
   vertify() {
     return this.api.verify(this.qq);
   }
 
+  /**
+   * 释放 Session
+   */
   release() {
     return this.api.release();
   }
 
   /**
-   * Message: FriendMessage | GroupMessage | TempMessage
-   * Mirai-api-http事件类型一览 https://github.com/project-mirai/mirai-api-http/blob/master/EventType.md
-   * mirai.on('MemberMuteEvent')
+   * 绑定事件列表
+   * message: FriendMessage | GroupMessage | TempMessage
+   * [mirai-api-http事件类型一览](https://github.com/project-mirai/mirai-api-http/blob/master/EventType.md)
+   * mirai.on('MemberMuteEvent', ()=>{})
    * @param type
    * @param callback
    */
@@ -149,7 +151,7 @@ export default class Mirai {
   }
 
   /**
-   * 为消息类型挂载辅助函数
+   * 为聊天消息类型挂载辅助函数
    * @param msg 
    */
   addHelperForMsg(msg: MessageType.SingleMessage) {
@@ -180,8 +182,7 @@ export default class Mirai {
         data.forEach(async (msg) => {
           if (this.listener[msg.type]) {
             this.listener[msg.type].forEach(callback => {
-              // 
-
+              this.addHelperForMsg(msg);
               callback(msg);
             });
           }

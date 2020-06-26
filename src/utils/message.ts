@@ -1,3 +1,8 @@
+/**
+ * 消息匹配辅助函数，提供了默认的几种匹配方式，可以直接导入使用。
+ * @packageDocumentation
+ */
+
 import { Config } from "../..";
 
 /**

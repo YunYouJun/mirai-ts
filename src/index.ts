@@ -1,4 +1,4 @@
-import log from "./utils/chalk";
+import log from "./utils/log";
 import Mirai from "./mirai";
 
 export { log };

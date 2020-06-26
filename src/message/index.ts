@@ -1,5 +1,14 @@
+/**
+ * 生成对应消息格式
+ * @packageDocumentation
+ */
+
 import { MessageType } from "../..";
 
+/**
+ * 生成引用的消息格式
+ * @param messageId 消息 ID
+ */
 function Quote(messageId: number): MessageType.Quote {
   return {
     type: "quote",
@@ -7,6 +16,10 @@ function Quote(messageId: number): MessageType.Quote {
   };
 }
 
+/**
+ * 生成艾特默认的消息格式
+ * @param target QQ 号
+ */
 function At(target: number): MessageType.At {
   return {
     type: "At",
@@ -15,12 +28,20 @@ function At(target: number): MessageType.At {
   };
 }
 
+/**
+ * 生成艾特全体成员的消息格式
+ */
 function AtAll(): MessageType.AtAll {
   return {
     type: "AtAll",
   };
 }
 
+/**
+ * 生成 QQ 原生表情消息格式
+ * @param faceId QQ表情编号
+ * @param name QQ表情拼音，可选
+ */
 function Face(faceId: number, name = ""): MessageType.Face {
   return {
     type: "Face",
@@ -29,6 +50,10 @@ function Face(faceId: number, name = ""): MessageType.Face {
   };
 }
 
+/**
+ * 生成文本消息格式
+ * @param text 文本
+ */
 function Plain(text: string): MessageType.Plain {
   return {
     type: "Plain",
@@ -36,6 +61,12 @@ function Plain(text: string): MessageType.Plain {
   };
 }
 
+/**
+ * 生成图片消息格式
+ * @param imageId 图片的imageId，群图片与好友图片格式不同。不为空时将忽略url属性
+ * @param url 图片的URL，发送时可作网络图片的链接；接收时为腾讯图片服务器的链接，可用于图片下载
+ * @param path 图片的路径，发送本地图片，相对路径于plugins/MiraiAPIHTTP/images
+ */
 function Image(imageId: string = "", url: string = "", path = ""): MessageType.Image {
   return {
     type: "Image",
@@ -45,11 +76,13 @@ function Image(imageId: string = "", url: string = "", path = ""): MessageType.I
   };
 }
 
-function FlashImage(
-  imageId: string,
-  url: string,
-  path = ""
-): MessageType.FlashImage {
+/**
+ * 生成闪照消息格式
+ * @param imageId 图片的imageId，群图片与好友图片格式不同。不为空时将忽略url属性
+ * @param url 图片的URL，发送时可作网络图片的链接；接收时为腾讯图片服务器的链接，可用于图片下载
+ * @param path 图片的路径，发送本地图片，相对路径于plugins/MiraiAPIHTTP/images
+ */
+function FlashImage(imageId: string, url: string, path = ""): MessageType.FlashImage {
   return {
     type: "FlashImage",
     imageId,
@@ -58,6 +91,10 @@ function FlashImage(
   };
 }
 
+/**
+ * 富文本消息（譬如合并转发）
+ * @param xml 
+ */
 function Xml(xml: string): MessageType.Xml {
   return {
     type: "Xml",
@@ -65,6 +102,10 @@ function Xml(xml: string): MessageType.Xml {
   };
 }
 
+/**
+ * Json 消息格式（我也还没看懂这哪里用，欢迎 PR）
+ * @param json 
+ */
 function Json(json: string): MessageType.Json {
   return {
     type: "Json",
@@ -72,6 +113,10 @@ function Json(json: string): MessageType.Json {
   };
 }
 
+/**
+ * 小程序
+ * @param content 
+ */
 function App(content: string): MessageType.App {
   return {
     type: "App",
@@ -79,6 +124,15 @@ function App(content: string): MessageType.App {
   };
 }
 
+/**
+ * - "Poke": 戳一戳
+ * - "ShowLove": 比心
+ * - "Like": 点赞
+ * - "Heartbroken": 心碎
+ * - "SixSixSix": 666
+ * - "FangDaZhao": 放大招
+ * @param name 戳一戳的类型
+ */
 function Poke(name: MessageType.Pokes): MessageType.Poke {
   return {
     type: "Poke",
