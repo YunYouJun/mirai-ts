@@ -9,6 +9,8 @@ npm install mirai-ts
 # yarn add mirai-ts
 ```
 
+- [API 文档](https://www.yunyoujun.cn/mirai-ts/)
+
 ## 快速开始
 
 ```js

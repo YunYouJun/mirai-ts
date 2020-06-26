@@ -10,6 +10,7 @@
     "index.d.ts"
   ],
   "scripts": {
+    "build": "rm -rf dist && tsc",
     "docs:build": "typedoc --includeDeclarations --excludeExternals",
     "docs:dev": "cd docs && live-server"
   },
