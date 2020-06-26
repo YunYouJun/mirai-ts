@@ -1,6 +1,10 @@
 # mirai-ts
 
-mirai-api-http 的 TypeScript SDK，编译压缩为 JavaScript 发布。你也可以直接引用其中的 TypeScript。
+[![docs](https://github.com/YunYouJun/mirai-ts/workflows/docs/badge.svg)](https://www.yunyoujun.cn/mirai-ts/)
+
+mirai-api-http 的 TypeScript SDK，编译为 JavaScript 发布。附带声明文件，拥有良好的代码提示。
+
+您也可以直接引用其中的 TypeScript。
 
 ## 如何使用
 
