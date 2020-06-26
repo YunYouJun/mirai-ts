@@ -1,0 +1,29 @@
+{
+  "name": "mirai-ts",
+  "version": "0.0.1",
+  "description": "mirai typescript sdk",
+  "main": "dist/index.js",
+  "types": "index.d.ts",
+  "files": [
+    "src",
+    "dist",
+    "index.d.ts"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/YunYouJun/mirai-ts"
+  },
+  "keywords": [
+    "mirai",
+    "http",
+    "api",
+    "sdk",
+    "typescript"
+  ],
+  "author": {
+    "name": "YunYouJun",
+    "email": "me@yunyoujun.cn",
+    "url": "https://www.yunyoujun.cn"
+  },
+  "license": "AGPL-3.0"
+}
