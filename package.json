@@ -32,6 +32,7 @@
   },
   "license": "AGPL-3.0",
   "devDependencies": {
-    "typedoc": "^0.17.7"
+    "typedoc": "^0.17.7",
+    "typescript": "^3.9.5"
   }
 }

@@ -6,8 +6,12 @@
 import * as axios from "./axios";
 import { AxiosStatic } from "axios";
 import MiraiApiHttp from "./mirai-api-http";
-import { MessageType, MiraiApiHttpConfig, MiraiInstance } from "..";
+import { MessageType, MiraiApiHttpConfig } from "..";
 import Message from "./message";
+
+interface Listener {
+  [propName: string]: Function[];
+}
 
 /**
  * Mirai SDK 初始化类
@@ -35,7 +39,7 @@ export default class Mirai {
   /**
    * 监听者（回调函数）
    */
-  listener: MiraiInstance.Listener;
+  listener: Listener;
   constructor(
     mahConfig: MiraiApiHttpConfig = {
       host: "0.0.0.0",

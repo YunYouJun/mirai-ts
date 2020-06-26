@@ -319,10 +319,6 @@ export interface MiraiApiHttpConfig {
   cors?: string[];
 }
 
-export namespace MiraiInstance {
-  interface Listener {
-    [propName: string]: Function[];
-  }
-}
+export interface MiraiInstance extends Mirai { }
 
-export interface Mirai extends Mirai { }
+export default Mirai;
