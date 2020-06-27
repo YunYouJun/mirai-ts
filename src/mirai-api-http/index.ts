@@ -1,6 +1,6 @@
 import log from "../utils/log";
 import { AxiosStatic, AxiosResponse } from "axios";
-import { MessageType, Api, MiraiApiHttpConfig } from "../..";
+import { MessageType, Api, MiraiApiHttpConfig, Config } from "../..";
 import Message from "../message";
 
 import FormData from "form-data";
@@ -74,7 +74,26 @@ export default class MiraiApiHttp {
     this.command = {
       axios,
       /**
+       * 注册指令
+       * @param name 指令名
+       * @param alias 指令别名
+       * @param description 指令描述
+       * @param usage 指令描述，会在指令执行错误时显示
+       */
+      register: async (name: string, alias: string[], description: string, usage?: string) => {
+        const { data } = await this.axios.post("/command/register", {
+          authKey: config.authKey,
+          name,
+          alias,
+          description,
+          usage,
+        });
+        return data;
+      },
+      /**
        * 发送指令
+       * @param name 指令名
+       * @param args 指令参数
        */
       send: async (name: string, args: string[]) => {
         const { data } = await this.axios.post("/command/send", {
@@ -444,6 +463,126 @@ export default class MiraiApiHttp {
     return data;
   }
 
+  /**
+   * 指定群禁言指定群员
+   * @param target	指定群的群号
+   * @param memberId 指定群员QQ号
+   * @param time 禁言时长，单位为秒，最多30天，默认为 60 秒
+   */
+  async mute(target: number, memberId: number, time: number = 60) {
+    const { data } = await this.axios.post('/mute', {
+      params: {
+        sessionKey: this.sessionKey,
+        target,
+        memberId,
+        time
+      }
+    });
+    return data;
+  }
+
+  /**
+   * 指定群解除群成员禁言
+   * @param target	指定群的群号
+   * @param memberId 指定群员QQ号
+   */
+  async unmute(target: number, memberId: number) {
+    const { data } = await this.axios.post('/unmute', {
+      params: {
+        sessionKey: this.sessionKey,
+        target,
+        memberId,
+      }
+    });
+    return data;
+  }
+
+  /**
+   * 移除群成员
+   * @param target 指定群的群号
+   * @param memberId 指定群员QQ号
+   * @param msg 信息
+   */
+  async kick(target: number, memberId: number, msg: string = "您已被移出群聊") {
+    const { data } = await this.axios.post('/kick', {
+      params: {
+        sessionKey: this.sessionKey,
+        target,
+        memberId,
+        msg
+      }
+    });
+    return data;
+  }
+
+  /**
+   * 退出群聊
+   * @param target 群号
+   * bot为该群群主时退出失败并返回code 10(无操作权限)
+   */
+  async quit(target: number) {
+    const { data } = await this.axios.post('/quit', {
+      params: {
+        sessionKey: this.sessionKey,
+        target,
+      }
+    });
+    return data;
+  }
+
+  /**
+   * 传入 config 时，修改群设置
+   * 未传入 config 时，获取群设置
+   * @param target 指定群的群号
+   * @param config 群设置
+   */
+  async groupConfig(target: number, config?: Config.GroupConfig) {
+    if (config) {
+      const { data } = await this.axios.post('/groupConfig', {
+        sessionKey: this.sessionKey,
+        target,
+        config
+      });
+      return data;
+    } else {
+      const { data } = await this.axios.get('/groupConfig', {
+        params: {
+          target
+        }
+      });
+      return data;
+    }
+  }
+
+  /**
+   * 传入 info 时，修改群员资料
+   * 未传入 info 时，获取群员资料
+   * @param targer 指定群的群号
+   * @param memberId 群员QQ号
+   * @param info 群员资料
+   */
+  async memberInfo(target: number, memberId: number, info: Config.MemberInfo) {
+    if (info) {
+      const { data } = await this.axios.post('/groupConfig', {
+        sessionKey: this.sessionKey,
+        target,
+        memberId,
+        info
+      });
+      return data;
+    } else {
+      const { data } = await this.axios.get('/groupConfig', {
+        params: {
+          target,
+          memberId
+        }
+      });
+      return data;
+    }
+  }
+
+
+  // 配置相关
   /**
    * 获取 Mangers
    */
