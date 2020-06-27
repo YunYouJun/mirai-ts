@@ -595,7 +595,7 @@ export default class MiraiApiHttp {
   message(callback: Function) {
     log.info(`开始监听消息: ${this.address}`);
     const ws = new WebSocket(this.address + '/message?sessionKey=' + this.sessionKey);
-    ws.on('message', (data) => {
+    ws.on('message', (data: WebSocket.Data) => {
       const msg = JSON.parse(data.toString());
       callback(msg);
     });
@@ -608,7 +608,7 @@ export default class MiraiApiHttp {
   event(callback: Function) {
     log.info(`开始监听事件: ${this.address}`);
     const ws = new WebSocket(this.address + '/event?sessionKey=' + this.sessionKey);
-    ws.on('message', (data) => {
+    ws.on('message', (data: WebSocket.Data) => {
       const msg = JSON.parse(data.toString());
       callback(msg);
     });
@@ -621,7 +621,7 @@ export default class MiraiApiHttp {
   all(callback: Function) {
     log.info(`开始监听事件: ${this.address}`);
     const ws = new WebSocket(this.address + '/all?sessionKey=' + this.sessionKey);
-    ws.on('message', (data) => {
+    ws.on('message', (data: WebSocket.Data) => {
       const msg = JSON.parse(data.toString());
       callback(msg);
     });
