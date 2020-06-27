@@ -6,6 +6,8 @@ import Message from "../message";
 import FormData from "form-data";
 import fs from "fs";
 
+import WebSocket from "ws";
+
 /**
  * 状态码及其对应消息
  * @param code Mirai 状态码
@@ -63,6 +65,7 @@ export default class MiraiApiHttp {
   qq: number;
   verified: boolean;
 
+  address?: string;
   command: object;
   constructor(config: MiraiApiHttpConfig, axios: AxiosStatic) {
     this.config = config;
@@ -71,6 +74,9 @@ export default class MiraiApiHttp {
     this.qq = 0;
     this.verified = false;
 
+    if (this.config.enableWebsocket) {
+      this.address = `ws://${this.config.host}:${this.config.port}`;
+    }
     this.command = {
       axios,
       /**
@@ -190,7 +196,7 @@ export default class MiraiApiHttp {
 
   // 获取 Bot 收到的消息和事件
   /**
-   * 使用此方法获取bot接收到的最老消息和最老各类事件(会从MiraiApiHttp消息记录中删除)
+   * 使用此方法获取 bot 接收到的最老消息和最老各类事件(会从 MiraiApiHttp 消息记录中删除)
    * { code: 0, data: [] }
    * @param count 获取消息和事件的数量
    */
@@ -581,6 +587,45 @@ export default class MiraiApiHttp {
     }
   }
 
+  // Websocket
+  /**
+   * 监听该接口，插件将推送Bot收到的消息
+   * @param callback 回调函数
+   */
+  message(callback: Function) {
+    log.info(`开始监听消息: ${this.address}`);
+    const ws = new WebSocket(this.address + '/message?sessionKey=' + this.sessionKey);
+    ws.on('message', (data) => {
+      const msg = JSON.parse(data.toString());
+      callback(msg);
+    });
+  }
+
+  /**
+   * 监听该接口，插件将推送Bot收到的事件
+   * @param callback 回调函数
+   */
+  event(callback: Function) {
+    log.info(`开始监听事件: ${this.address}`);
+    const ws = new WebSocket(this.address + '/event?sessionKey=' + this.sessionKey);
+    ws.on('message', (data) => {
+      const msg = JSON.parse(data.toString());
+      callback(msg);
+    });
+  }
+
+  /**
+   * 监听该接口，插件将推送Bot收到的事件和消息
+   * @param callback 回调函数
+   */
+  all(callback: Function) {
+    log.info(`开始监听事件: ${this.address}`);
+    const ws = new WebSocket(this.address + '/all?sessionKey=' + this.sessionKey);
+    ws.on('message', (data) => {
+      const msg = JSON.parse(data.toString());
+      callback(msg);
+    });
+  }
 
   // 配置相关
   /**

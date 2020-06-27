@@ -24,10 +24,9 @@ npm install mirai-ts
 const Mirai = require('mirai-ts');
 
 const mahConfig = {
-  host: 'http://你的服务器地址' || 'http://localhost',
+  host: '你的 IP 地址' || '127.0.0.1',
   port: 你的端口号 || 8080,
   authKey: 你的 authKey || "el-bot-js",
-  // Todo
   enableWebsocket: false,
 };
 

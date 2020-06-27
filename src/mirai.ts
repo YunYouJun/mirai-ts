@@ -8,6 +8,7 @@ import { AxiosStatic } from "axios";
 import MiraiApiHttp from "./mirai-api-http";
 import { MessageType, MiraiApiHttpConfig } from "..";
 import Message from "./message";
+import log from "./utils/log";
 
 interface Listener {
   [propName: string]: Function[];
@@ -53,7 +54,7 @@ export default class Mirai {
     this.mahConfig = mahConfig;
     // ws todo
 
-    this.axios = axios.init(this.mahConfig.host + ":" + this.mahConfig.port);
+    this.axios = axios.init(`http://${this.mahConfig.host}:${this.mahConfig.port}`);
     this.api = new MiraiApiHttp(this.mahConfig, this.axios);
 
     // default
@@ -176,22 +177,42 @@ export default class Mirai {
   }
 
   /**
+   * 处理消息
+   * @param msg 一条消息
+   */
+  handle(msg: MessageType.SingleMessage) {
+    if (this.listener[msg.type]) {
+      this.listener[msg.type].forEach(callback => {
+        this.addHelperForMsg(msg);
+        callback(msg);
+      });
+    }
+  }
+
+  /**
    * 监听消息和事件
-   * @param interval 拉起消息时间间隔，默认 200 ms
+   * @param interval 拉起消息时间间隔，默认 200 ms，仅在未开启 Websocket 时有效
    */
   listen(interval: number = 200) {
-    setInterval(async () => {
-      const { data } = await this.api.fetchMessage();
-      if (data && data.length) {
-        data.forEach(async (msg) => {
-          if (this.listener[msg.type]) {
-            this.listener[msg.type].forEach(callback => {
-              this.addHelperForMsg(msg);
-              callback(msg);
+    const address = this.mahConfig.host + ':' + this.mahConfig.port;
+    if (this.mahConfig.enableWebsocket) {
+      this.api.all((msg: MessageType.SingleMessage) => {
+        this.handle(msg);
+      });
+    } else {
+      log.info("开始监听: http://" + address);
+      setInterval(async () => {
+        try {
+          const { data } = await this.api.fetchMessage();
+          if (data && data.length) {
+            data.forEach((msg: MessageType.SingleMessage) => {
+              this.handle(msg);
             });
           }
-        });
-      }
-    }, interval);
+        } catch {
+          log.error("消息获取失败");
+        }
+      }, interval);
+    }
   }
 }
