@@ -1,11 +1,11 @@
-# mirai-ts
+# [mirai-ts](https://github.com/YunYouJun/mirai-ts)
 
 [![docs](https://github.com/YunYouJun/mirai-ts/workflows/docs/badge.svg)](https://www.yunyoujun.cn/mirai-ts/)
-![GitHub package.json version](https://img.shields.io/github/package-json/v/YunYouJun/mirai-ts)
+[![GitHub package.json version](https://img.shields.io/github/package-json/v/YunYouJun/mirai-ts)](https://www.npmjs.com/package/mirai-ts)
 ![GitHub top language](https://img.shields.io/github/languages/top/YunYouJun/mirai-ts)
-![GitHub](https://img.shields.io/github/license/YunYouJun/mirai-ts)
+[![GitHub](https://img.shields.io/github/license/YunYouJun/mirai-ts)](https://github.com/YunYouJun/mirai-ts)
 
-mirai-api-http 的 TypeScript SDK，编译为 JavaScript 发布。附带声明文件，拥有良好的代码提示。
+mirai-api-http 的 TypeScript SDK，编译为 JavaScript 发布。附带声明文件，拥有良好的注释和类型提示。
 
 您也可以直接引用其中的 TypeScript。
 

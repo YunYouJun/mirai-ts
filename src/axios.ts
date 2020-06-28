@@ -11,7 +11,7 @@ import { log } from ".";
  * @param baseURL 请求的基础 URL
  * @param timeout  请求超时时间
  */
-export function init(baseURL: string, timeout: number = 3000): AxiosStatic {
+export function init(baseURL: string, timeout: number = 0): AxiosStatic {
   axios.defaults.baseURL = baseURL;
   axios.defaults.timeout = timeout;
 
