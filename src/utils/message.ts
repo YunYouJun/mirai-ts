@@ -38,16 +38,18 @@ function includes(str: string, keywords: string | string[]): boolean {
   }
 }
 
+function re(str: string, config: Config.Re): RegExpMatchArray | null {
+  const regExp = new RegExp(config.pattern, config.flags || "i");
+  return regExp.exec(str);
+}
+
 /**
  * 是否匹配
  * @param str 字符串
  * @param ans 回答的语法配置
  */
-function match(str: string, ans: Config.Match): boolean {
-  if (ans.re) {
-    const re = new RegExp(ans.re.pattern, ans.re.flags || "i");
-    return re.test(str);
-  }
+function match(str: string, ans: Config.Match): boolean | RegExpMatchArray | null {
+  if (ans.re) return re(str, ans.re);
   if (ans.is) return is(str, ans.is);
   if (ans.includes) return includes(str, ans.includes);
   return false;
@@ -56,5 +58,6 @@ function match(str: string, ans: Config.Match): boolean {
 export {
   is,
   includes,
+  re,
   match
 };
