@@ -74,6 +74,7 @@ export default class Mirai {
     const { session } = await this.auth();
     this.sessionKey = session;
     await this.vertify();
+    return "的美好";
   }
 
   /**

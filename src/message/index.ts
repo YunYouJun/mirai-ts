@@ -153,6 +153,16 @@ function getPlain(messageChain: MessageType.SingleMessage[]) {
   return msg;
 }
 
+/**
+ * 是否是文本信息中的一种
+ * ['FriendMessage', 'GroupMessage', 'TempMessage']
+ * @param msg 消息链
+ */
+function isMessage(msg: MessageType.SingleMessage) {
+  const msgType = ['FriendMessage', 'GroupMessage', 'TempMessage'];
+  return msgType.includes(msg.type);
+}
+
 export default {
   Quote,
   At,
@@ -165,5 +175,6 @@ export default {
   Json,
   App,
   Poke,
-  getPlain
+  getPlain,
+  isMessage
 };
