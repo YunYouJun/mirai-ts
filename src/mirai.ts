@@ -203,15 +203,11 @@ export default class Mirai {
     } else {
       log.info("开始监听: http://" + address);
       setInterval(async () => {
-        try {
-          const { data } = await this.api.fetchMessage();
-          if (data && data.length) {
-            data.forEach((msg: MessageType.SingleMessage) => {
-              this.handle(msg);
-            });
-          }
-        } catch {
-          log.error("消息获取失败");
+        const { data } = await this.api.fetchMessage();
+        if (data && data.length) {
+          data.forEach((msg: MessageType.SingleMessage) => {
+            this.handle(msg);
+          });
         }
       }, interval);
     }
