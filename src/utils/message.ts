@@ -38,9 +38,25 @@ function includes(str: string, keywords: string | string[]): boolean {
   }
 }
 
-function re(str: string, config: Config.Re): RegExpMatchArray | null {
-  const regExp = new RegExp(config.pattern, config.flags || "i");
-  return regExp.exec(str);
+/**
+ * 正则匹配（存在时，返回匹配的情况，不存在时返回 false）
+ * @param str 字符
+ * @param config 正则配置，可以是包含 pattern，flags 的对象，也可以是字符串（直接代表 pattern）
+ */
+function re(str: string, config: Config.Re | string): RegExpMatchArray | boolean {
+  let regExp = null;
+  if (typeof config === 'string') {
+    regExp = new RegExp(config);
+  } else {
+    regExp = new RegExp(config.pattern, config.flags || "i");
+  }
+
+  const result = regExp.exec(str);
+  if (result && result[0]) {
+    return result;
+  } else {
+    return false;
+  }
 }
 
 /**
