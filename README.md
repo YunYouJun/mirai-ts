@@ -57,7 +57,7 @@ console.log("帮助信息:" + data);
 mirai.on("GroupRecallEvent", ({ operator }) => {
   const text = `${operator.memberName} 撤回了一条消息，并拜托你不要再发色图了。`;
   console.log(text);
-  mirai.api.sendGroupMessage(text, res.group.id);
+  mirai.api.sendGroupMessage(text, operator.group.id);
 });
 
 // 开始监听
