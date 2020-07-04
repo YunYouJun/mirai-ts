@@ -21,7 +21,7 @@ npm install mirai-ts
 ## 快速开始
 
 ```js
-const Mirai = require('mirai-ts');
+const Mirai = require('mirai-ts').default;
 
 const mahConfig = {
   host: '你的 IP 地址' || '127.0.0.1',
