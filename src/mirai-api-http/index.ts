@@ -447,10 +447,8 @@ export default class MiraiApiHttp {
    */
   async muteAll(target: number) {
     const { data } = await this.axios.post('/muteAll', {
-      params: {
-        sessionKey: this.sessionKey,
-        target
-      }
+      sessionKey: this.sessionKey,
+      target
     });
     return data;
   }
@@ -461,10 +459,8 @@ export default class MiraiApiHttp {
    */
   async unmuteAll(target: number) {
     const { data } = await this.axios.post('/unmuteAll', {
-      params: {
-        sessionKey: this.sessionKey,
-        target
-      }
+      sessionKey: this.sessionKey,
+      target
     });
     return data;
   }
@@ -477,12 +473,10 @@ export default class MiraiApiHttp {
    */
   async mute(target: number, memberId: number, time: number = 60) {
     const { data } = await this.axios.post('/mute', {
-      params: {
-        sessionKey: this.sessionKey,
-        target,
-        memberId,
-        time
-      }
+      sessionKey: this.sessionKey,
+      target,
+      memberId,
+      time
     });
     return data;
   }
@@ -494,11 +488,9 @@ export default class MiraiApiHttp {
    */
   async unmute(target: number, memberId: number) {
     const { data } = await this.axios.post('/unmute', {
-      params: {
-        sessionKey: this.sessionKey,
-        target,
-        memberId,
-      }
+      sessionKey: this.sessionKey,
+      target,
+      memberId,
     });
     return data;
   }
@@ -511,12 +503,10 @@ export default class MiraiApiHttp {
    */
   async kick(target: number, memberId: number, msg: string = "您已被移出群聊") {
     const { data } = await this.axios.post('/kick', {
-      params: {
-        sessionKey: this.sessionKey,
-        target,
-        memberId,
-        msg
-      }
+      sessionKey: this.sessionKey,
+      target,
+      memberId,
+      msg
     });
     return data;
   }
@@ -528,10 +518,8 @@ export default class MiraiApiHttp {
    */
   async quit(target: number) {
     const { data } = await this.axios.post('/quit', {
-      params: {
-        sessionKey: this.sessionKey,
-        target,
-      }
+      sessionKey: this.sessionKey,
+      target,
     });
     return data;
   }

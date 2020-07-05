@@ -41,6 +41,10 @@ export default class Mirai {
    * 监听者（回调函数）
    */
   listener: Listener;
+  /**
+   * 当前处理的消息
+   */
+  curMsg: MessageType.SingleMessage;
   constructor(
     mahConfig: MiraiApiHttpConfig = {
       host: "0.0.0.0",
@@ -63,6 +67,7 @@ export default class Mirai {
     this.verified = false;
 
     this.listener = {};
+    this.curMsg = { type: "GroupMessage" };
   }
 
   /**
@@ -182,6 +187,7 @@ export default class Mirai {
    * @param msg 一条消息
    */
   handle(msg: MessageType.SingleMessage) {
+    this.curMsg = msg;
     if (this.listener[msg.type]) {
       this.listener[msg.type].forEach(callback => {
         this.addHelperForMsg(msg);

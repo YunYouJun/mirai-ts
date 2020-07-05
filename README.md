@@ -66,6 +66,28 @@ mirai.listen()
 // mirai.listen(500)
 ```
 
+### TypeScript
+
+```ts
+import Mirai from "mirai-ts"
+
+const mahConfig = {
+  host: '你的 IP 地址' || '127.0.0.1',
+  port: 你的端口号 || 8080,
+  authKey: 你的 authKey || "el-bot-js",
+  enableWebsocket: false,
+};
+
+const mirai = new Mirai(mahConfig);
+mirai.on("message", (msg) => {
+  console.log(msg);
+  // 复读
+  msg.reply(msg.messageChain);
+});
+
+mirai.listen()
+```
+
 ## 示例模版
 
 - [el-bot-js](https://github.com/ElpsyCN/el-bot-js/)：你可以参考它的使用方式，你也可以直接使用它。
