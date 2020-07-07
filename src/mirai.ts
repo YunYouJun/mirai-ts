@@ -49,7 +49,7 @@ export default class Mirai {
     mahConfig: MiraiApiHttpConfig = {
       host: "0.0.0.0",
       port: 8080,
-      authKey: "el-bot-js",
+      authKey: "el-psy-congroo",
       cacheSize: 4096,
       enableWebsocket: false,
       cors: ["*"],

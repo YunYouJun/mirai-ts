@@ -1,7 +1,7 @@
 # [mirai-ts](https://github.com/YunYouJun/mirai-ts)
 
 [![docs](https://github.com/YunYouJun/mirai-ts/workflows/docs/badge.svg)](https://www.yunyoujun.cn/mirai-ts/)
-[![GitHub package.json version](https://img.shields.io/github/package-json/v/YunYouJun/mirai-ts)](https://www.npmjs.com/package/mirai-ts)
+[![npm](https://img.shields.io/npm/v/mirai-ts)](https://www.npmjs.com/package/mirai-ts)
 ![GitHub top language](https://img.shields.io/github/languages/top/YunYouJun/mirai-ts)
 [![GitHub](https://img.shields.io/github/license/YunYouJun/mirai-ts)](https://github.com/YunYouJun/mirai-ts)
 
@@ -26,7 +26,7 @@ const Mirai = require('mirai-ts').default;
 const mahConfig = {
   host: '你的 IP 地址' || '127.0.0.1',
   port: 你的端口号 || 8080,
-  authKey: 你的 authKey || "el-bot-js",
+  authKey: 你的 authKey || "el-psy-congroo",
   enableWebsocket: false,
 };
 
@@ -74,7 +74,7 @@ import Mirai from "mirai-ts"
 const mahConfig = {
   host: '你的 IP 地址' || '127.0.0.1',
   port: 你的端口号 || 8080,
-  authKey: 你的 authKey || "el-bot-js",
+  authKey: 你的 authKey || "el-psy-congroo",
   enableWebsocket: false,
 };
 
@@ -90,15 +90,15 @@ mirai.listen()
 
 ## 示例模版
 
-- [el-bot-js](https://github.com/ElpsyCN/el-bot-js/)：你可以参考它的使用方式，你也可以直接使用它。
+- [el-bot](https://github.com/ElpsyCN/el-bot/)：你可以参考它的使用方式，你也可以直接使用它。
 
-EBJ 展示了整个 mirai-ts 的使用流程，并内置了一些如自动应答、转发、命令行、RSS 等常用功能（默认插件），开箱即用。
+el-bot 展示了整个 mirai-ts 的使用流程，并内置了一些如自动应答、转发、命令行、RSS 等常用功能（默认插件），开箱即用。
 
 你只需要一些自定义的配置，而不再需要编写繁琐的脚本内容。
 
 但这并不是束缚，在插件系统中你仍然可以调用机器人所有的上下文，并通过编写插件的形式快速实现你想要的功能。
 
-> 更多请参见文档 [el-bot-js | El Bot Docs](https://docs.bot.elpsy.cn/js/)
+> 更多请参见文档 [el-bot | El Bot Docs](https://docs.bot.elpsy.cn/js/)
 
 ## Why Typescript & mirai-ts?
 

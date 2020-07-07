@@ -348,7 +348,7 @@ export interface MiraiApiHttpConfig {
    */
   port: number;
   /**
-   * 可选，默认由 mirai-api-http 随机生成，建议手动指定。未传入该值时，默认未 'el-bot-js'
+   * 可选，默认由 mirai-api-http 随机生成，建议手动指定。未传入该值时，默认为 'el-psy-congroo'
    */
   authKey: string;
   /**
