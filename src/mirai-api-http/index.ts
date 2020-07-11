@@ -277,7 +277,7 @@ export default class MiraiApiHttp {
     messageChain: string | MessageType.MessageChain,
     target: number,
     quote?: number
-  ): Promise<object> {
+  ): Promise<Api.Response.sendMessage> {
     if (typeof messageChain === "string") {
       messageChain = [Message.Plain(messageChain)];
     }
@@ -304,7 +304,7 @@ export default class MiraiApiHttp {
     messageChain: string | MessageType.MessageChain,
     target: number,
     quote?: number
-  ): Promise<object> {
+  ): Promise<Api.Response.sendMessage> {
     if (typeof messageChain === "string") {
       messageChain = [Message.Plain(messageChain)];
     }

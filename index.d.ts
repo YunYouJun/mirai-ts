@@ -265,6 +265,15 @@ export namespace Api {
       code: number;
       data: MessageType.SingleMessage[];
     }
+
+    interface sendMessage {
+      code: number;
+      msg: string;
+      /**
+       * 一个Int类型属性，标识本条消息，用于撤回和引用回复
+       */
+      messageId: number;
+    }
   }
 }
 
