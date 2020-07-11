@@ -141,7 +141,7 @@ export default class Mirai {
    * @param srcMsg 回复哪条消息
    * @param quote 是否引用回复
    */
-  reply(
+  async reply(
     msgChain: string | MessageType.MessageChain,
     srcMsg: MessageType.SingleMessage,
     quote = false
@@ -154,10 +154,10 @@ export default class Mirai {
 
     if (srcMsg.type === "FriendMessage") {
       const target = (srcMsg.sender as MessageType.FriendSender).id;
-      return this.api.sendFriendMessage(msgChain, target, messageId);
+      return await this.api.sendFriendMessage(msgChain, target, messageId);
     } else if (srcMsg.type === "GroupMessage") {
       const target = (srcMsg.sender as MessageType.GroupSender).group.id;
-      return this.api.sendGroupMessage(msgChain, target, messageId);
+      return await this.api.sendGroupMessage(msgChain, target, messageId);
     }
   }
 

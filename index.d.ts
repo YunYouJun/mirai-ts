@@ -281,9 +281,9 @@ export namespace Config {
    * 匹配配置
    */
   interface Match {
-    re: Re;
-    is: string | string[];
-    includes: string | string[];
+    re?: Re;
+    is?: string | string[];
+    includes?: string | string[];
   }
 
   interface Listen {
