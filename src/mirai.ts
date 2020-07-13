@@ -7,7 +7,7 @@ import * as axios from "./axios";
 import { AxiosStatic } from "axios";
 import MiraiApiHttp from "./mirai-api-http";
 import { MessageType, MiraiApiHttpConfig } from "..";
-import Message from "./message";
+import { getPlain } from "./message";
 import log from "./utils/log";
 
 interface Listener {
@@ -178,7 +178,7 @@ export default class Mirai {
         this.reply(msgChain, msg as MessageType.ChatMessage, quote);
       };
 
-      msg.plain = Message.getPlain(msg.messageChain);
+      msg.plain = getPlain(msg.messageChain);
     }
   }
 

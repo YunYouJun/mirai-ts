@@ -1,6 +1,16 @@
 import Mirai from "./src";
 
 export namespace MessageType {
+
+  /**
+   * 整体的消息类型，包括事件等
+   * SingleMessage 属于 Message 下 MessageChain 中的类型
+   */
+  interface Message {
+    type: string;
+    [propName: string]: any;
+  }
+
   /**
    * 群的信息
    */

@@ -141,6 +141,7 @@ function Poke(name: MessageType.Pokes): MessageType.Poke {
 }
 
 // helper
+// ------------
 /**
  * 获取纯文本
  * @param messageChain 消息链
@@ -163,6 +164,36 @@ function isMessage(msg: MessageType.SingleMessage) {
   return msgType.includes(msg.type);
 }
 
+/**
+ * 是否被艾特
+ * 传入 qq 时，返回是否被艾特
+ * 未传入 qq 时，返回艾特消息
+ * @param msg 
+ */
+function isAt(msg: MessageType.Message, qq?: number) {
+  if (qq) {
+    return msg.messageChain.some((singleMessage: MessageType.SingleMessage) => {
+      return (singleMessage.type === "At" && singleMessage.target === qq);
+    });
+  } else {
+    let atMsg = {};
+    msg.messageChain.some((singleMessage: MessageType.SingleMessage) => {
+      if (singleMessage.type === 'At') {
+        atMsg = singleMessage;
+        return true;
+      }
+    });
+    return atMsg;
+  }
+}
+
+// helper
+export {
+  getPlain,
+  isMessage,
+  isAt,
+};
+
 export default {
   Quote,
   At,
@@ -175,6 +206,4 @@ export default {
   Json,
   App,
   Poke,
-  getPlain,
-  isMessage
 };
