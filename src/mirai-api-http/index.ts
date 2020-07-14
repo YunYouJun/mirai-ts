@@ -155,6 +155,7 @@ export default class MiraiApiHttp {
     const { data } = await this.axios.post("/auth", {
       authKey,
     });
+
     if (data.code === 0) {
       this.sessionKey = data.session;
       log.success(`获取 Session: ${data.session}`);
