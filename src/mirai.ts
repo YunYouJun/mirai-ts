@@ -6,8 +6,8 @@
 import * as axios from "./axios";
 import { AxiosStatic } from "axios";
 import MiraiApiHttp from "./mirai-api-http";
-import { MessageType, MiraiApiHttpConfig } from "..";
-import { getPlain } from "./message";
+import { Contact, MessageType, MiraiApiHttpConfig } from "..";
+import { getPlain, isMessage } from "./message";
 import log from "./utils/log";
 
 interface Listener {
@@ -44,7 +44,7 @@ export default class Mirai {
   /**
    * 当前处理的消息
    */
-  curMsg: MessageType.BaseSingleMessage;
+  curMsg: MessageType.MessageEvent;
   constructor(
     mahConfig: MiraiApiHttpConfig = {
       host: "0.0.0.0",
@@ -67,7 +67,9 @@ export default class Mirai {
     this.verified = false;
 
     this.listener = {};
-    this.curMsg = { type: "GroupMessage" };
+    this.curMsg = {
+      type: "GroupMessage",
+    };
   }
 
   /**
@@ -153,10 +155,10 @@ export default class Mirai {
     }
 
     if (srcMsg.type === "FriendMessage") {
-      const target = (srcMsg.sender as MessageType.FriendSender).id;
+      const target = (srcMsg.sender as Contact.Friend).id;
       return this.api.sendFriendMessage(msgChain, target, messageId);
     } else if (srcMsg.type === "GroupMessage") {
-      const target = (srcMsg.sender as MessageType.GroupSender).group.id;
+      const target = (srcMsg.sender as Contact.Member).group.id;
       return this.api.sendGroupMessage(msgChain, target, messageId);
     }
   }
@@ -165,7 +167,7 @@ export default class Mirai {
    * 为聊天消息类型挂载辅助函数
    * @param msg 
    */
-  addHelperForMsg(msg: MessageType.Message) {
+  addHelperForMsg(msg: MessageType.ChatMessage) {
     if (
       msg.type === "FriendMessage" ||
       msg.type === "GroupMessage" ||
@@ -185,11 +187,13 @@ export default class Mirai {
    * 处理消息
    * @param msg 一条消息
    */
-  handle(msg: MessageType.Message) {
+  handle(msg: MessageType.MessageEvent) {
     this.curMsg = msg;
     if (this.listener[msg.type]) {
       this.listener[msg.type].forEach(callback => {
-        this.addHelperForMsg(msg);
+        if (isMessage(msg)) {
+          this.addHelperForMsg((msg as MessageType.ChatMessage));
+        }
         callback(msg);
       });
     }
@@ -202,7 +206,7 @@ export default class Mirai {
   listen(interval: number = 200) {
     const address = this.mahConfig.host + ':' + this.mahConfig.port;
     if (this.mahConfig.enableWebsocket) {
-      this.api.all((msg: MessageType.Message) => {
+      this.api.all((msg: MessageType.MessageEvent) => {
         this.handle(msg);
       });
     } else {

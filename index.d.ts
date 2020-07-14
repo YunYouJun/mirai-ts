@@ -1,18 +1,6 @@
 import Mirai from "./src";
 
-export namespace MessageType {
-  type Permission = "OWNER" | "ADMINISTRATOR" | "MEMBER";
-
-
-  /**
-   * 整体的消息类型，包括事件等
-   * SingleMessage 属于 Message 下 MessageChain 中的类型
-   */
-  interface BaseMessage {
-    type: string;
-    [propName: string]: any;
-  }
-
+export namespace Contact {
   /**
    * 群的信息
    */
@@ -30,10 +18,12 @@ export namespace MessageType {
      */
     permission: Permission;
   }
+
+
   /**
-   * 发送者信息
+   * 基础用户信息
    */
-  interface BaseSender {
+  interface BaseUser {
     /**
      * QQ 号
      */
@@ -41,23 +31,23 @@ export namespace MessageType {
   }
 
   /**
-   *
+   * 好友信息类型
    */
-  interface FriendSender extends BaseSender {
+  interface Friend extends BaseUser {
     /**
-     * 发送者的昵称
+     * 用户昵称
      */
     nickname: string;
     /**
-     * 发送者的备注
+     * 用户备注
      */
     remark: string;
   }
 
   /**
-   * 消息发送群的信息
+   * 群成员信息类型
    */
-  interface GroupSender extends BaseSender {
+  interface Member extends BaseUser {
     /**
      * 群名片
      */
@@ -65,14 +55,29 @@ export namespace MessageType {
     /**
      * 群权限 OWNER、ADMINISTRATOR或MEMBER
      */
-    permission: string;
+    permission: Permission;
+    /**
+     * 所在的群
+     */
     group: Group;
   }
 
-  type Sender = FriendSender | GroupSender;
+  type User = Friend | Member;
+}
+
+export namespace MessageType {
+  type Permission = "OWNER" | "ADMINISTRATOR" | "MEMBER";
 
   /**
-   * fetchMessage 获取的消息或事件
+   * 整体的消息类型，包括事件等
+   */
+  interface BaseMessageEvent {
+    type: string;
+    [propName: string]: any;
+  }
+
+  /**
+   * FriendMessage | GroupMessage | TempMessage 下的 MessageChain 中的单条消息类型
    * 单条消息 此处命名与 mamoe/mirai-core 保持一致
    */
   interface BaseSingleMessage {
@@ -92,7 +97,7 @@ export namespace MessageType {
   }
 
   interface Quote extends BaseSingleMessage {
-    type: "Quote"
+    type: "Quote";
     /**
      * 	被引用回复的原消息的messageId
      */
@@ -224,7 +229,7 @@ export namespace MessageType {
    * 小程序
    */
   interface App extends BaseSingleMessage {
-    type: "App"
+    type: "App";
     /**
      * 内容
      */
@@ -261,34 +266,38 @@ export namespace MessageType {
    * 消息链
    */
   type MessageChain = Array<SingleMessage>;
-  
-   
+
   interface BaseChatMessage extends BaseSingleMessage {
     type: "GroupMessage" | "TempMessage" | "FriendMessage";
     messageChain: MessageChain & {
       0: Source;
     };
-    sender: Sender;
+    sender: Contact.User;
     reply: (msgChain: string | MessageType.MessageChain, quote = false) => Promise<void>;
     plain: string;
   }
+  interface FriendMessage extends BaseChatMessage {
+    type: "FriendMessage";
+    sender: Friend;
+  }
   interface GroupMessage extends BaseChatMessage {
     type: "GroupMessage";
-    sender: GroupSender;
+    sender: Contact.Member;
   }
   interface TempMessage extends BaseChatMessage {
     type: "TempMessage";
-    sender: GroupSender;
+    sender: Contact.Member;
   }
-  interface FriendMessage extends BaseChatMessage {
-    type: "FriendMessage";
-    sender: FriendSender;
-  }
+
   /**
    * 包括 FriendMessage GroupMessage TempMessage
    */
   type ChatMessage = GroupMessage | TempMessage | FriendMessage;
-  type Message = ChatMessage | SingleMessage;
+
+  /**
+   * 基础的消息类型
+   */
+  type MessageEvent = ChatMessage | BaseMessageEvent;
 }
 
 export namespace Api {
@@ -320,7 +329,7 @@ export namespace Api {
   namespace Response {
     interface fetchMessage {
       code: number;
-      data: MessageType.Message[];
+      data: MessageType.MessageEvent[];
     }
 
     interface sendMessage {

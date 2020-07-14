@@ -253,10 +253,10 @@ export default class MiraiApiHttp {
   }
 
   /**
-   * 使用此方法获取bot接收到的消息和各类事件
+   * 通过 messageId 获取一条被缓存的消息
    * @param id 获取消息的messageId
    */
-  async messageFromId(id: number): Promise<MessageType.Message> {
+  async messageFromId(id: number): Promise<MessageType.MessageEvent> {
     const { data } = await this.axios.get("/messageFromId", {
       params: {
         sessionKey: this.sessionKey,
