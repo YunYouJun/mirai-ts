@@ -11,7 +11,7 @@ import { MessageType } from "../..";
  */
 function Quote(messageId: number): MessageType.Quote {
   return {
-    type: "quote",
+    type: "Quote",
     id: messageId,
   };
 }
@@ -148,8 +148,8 @@ function Poke(name: MessageType.Pokes): MessageType.Poke {
  */
 function getPlain(messageChain: MessageType.SingleMessage[]) {
   let msg = "";
-  messageChain.forEach((chain: MessageType.SingleMessage) => {
-    if (chain.type === "Plain") msg += (chain as MessageType.Plain).text;
+  messageChain.forEach((chain) => {
+    if (chain.type === "Plain") msg += chain.text;
   });
   return msg;
 }
@@ -159,7 +159,7 @@ function getPlain(messageChain: MessageType.SingleMessage[]) {
  * ['FriendMessage', 'GroupMessage', 'TempMessage']
  * @param msg 消息链
  */
-function isMessage(msg: MessageType.SingleMessage) {
+function isMessage(msg: MessageType.Message) {
   const msgType = ['FriendMessage', 'GroupMessage', 'TempMessage'];
   return msgType.includes(msg.type);
 }
@@ -170,14 +170,14 @@ function isMessage(msg: MessageType.SingleMessage) {
  * 未传入 qq 时，返回艾特消息
  * @param msg 
  */
-function isAt(msg: MessageType.Message, qq?: number) {
+function isAt(msg: MessageType.ChatMessage, qq?: number) {
   if (qq) {
-    return msg.messageChain.some((singleMessage: MessageType.SingleMessage) => {
+    return msg.messageChain.some((singleMessage) => {
       return (singleMessage.type === "At" && singleMessage.target === qq);
     });
   } else {
     let atMsg = {};
-    msg.messageChain.some((singleMessage: MessageType.SingleMessage) => {
+    msg.messageChain.some((singleMessage) => {
       if (singleMessage.type === 'At') {
         atMsg = singleMessage;
         return true;

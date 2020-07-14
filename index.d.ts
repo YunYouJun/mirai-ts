@@ -1,12 +1,14 @@
 import Mirai from "./src";
 
 export namespace MessageType {
+  type Permission = "OWNER" | "ADMINISTRATOR" | "MEMBER";
+
 
   /**
    * 整体的消息类型，包括事件等
    * SingleMessage 属于 Message 下 MessageChain 中的类型
    */
-  interface Message {
+  interface BaseMessage {
     type: string;
     [propName: string]: any;
   }
@@ -26,23 +28,22 @@ export namespace MessageType {
     /**
      * 群中，Bot的群限权
      */
-    permission: string;
+    permission: Permission;
   }
   /**
    * 发送者信息
    */
-  interface Sender {
+  interface BaseSender {
     /**
      * QQ 号
      */
     id: number;
-    [propName: string]: any;
   }
 
   /**
    *
    */
-  interface FriendSender extends Sender {
+  interface FriendSender extends BaseSender {
     /**
      * 发送者的昵称
      */
@@ -56,7 +57,7 @@ export namespace MessageType {
   /**
    * 消息发送群的信息
    */
-  interface GroupSender extends Sender {
+  interface GroupSender extends BaseSender {
     /**
      * 群名片
      */
@@ -68,31 +69,18 @@ export namespace MessageType {
     group: Group;
   }
 
-  /**
-   * 消息链
-   */
-  interface MessageChain {
-    [index: number]: SingleMessage;
-  }
+  type Sender = FriendSender | GroupSender;
 
   /**
    * fetchMessage 获取的消息或事件
    * 单条消息 此处命名与 mamoe/mirai-core 保持一致
    */
-  interface SingleMessage {
+  interface BaseSingleMessage {
     type: string;
-    [propName: string]: any;
   }
 
-  /**
-   * 包括 FriendMessage GroupMessage TempMessage
-   */
-  interface ChatMessage extends SingleMessage {
-    messageChain: MessageChain;
-    sender: Sender;
-  }
-
-  interface Source extends SingleMessage {
+  interface Source extends BaseSingleMessage {
+    type: "Source";
     /**
      * 	消息的识别号，用于引用回复（Source 类型永远为 chain 的第一个元素）
      */
@@ -103,7 +91,8 @@ export namespace MessageType {
     time: number;
   }
 
-  interface Quote extends SingleMessage {
+  interface Quote extends BaseSingleMessage {
+    type: "Quote"
     /**
      * 	被引用回复的原消息的messageId
      */
@@ -123,13 +112,14 @@ export namespace MessageType {
     /**
      * 被引用回复的原消息的消息链对象
      */
-    origin?: object;
+    origin?: MessageChain;
   }
 
   /**
    * 艾特某人
    */
-  interface At extends SingleMessage {
+  interface At extends BaseSingleMessage {
+    type: "At";
     /**
      * 群员QQ号
      */
@@ -143,12 +133,15 @@ export namespace MessageType {
   /**
    * 艾特全体成员
    */
-  type AtAll = SingleMessage;
+  interface AtAll extends BaseSingleMessage {
+    type: "AtAll";
+  }
 
   /**
    * 原生表情
    */
-  interface Face extends SingleMessage {
+  interface Face extends BaseSingleMessage {
+    type: "Face";
     /**
      * QQ表情编号，可选，优先高于name
      */
@@ -162,7 +155,8 @@ export namespace MessageType {
   /**
    * 文本
    */
-  interface Plain extends SingleMessage {
+  interface Plain extends BaseSingleMessage {
+    type: "Plain";
     /**
      * 	文字消息
      */
@@ -172,7 +166,8 @@ export namespace MessageType {
   /**
    * 图片
    */
-  interface Image extends SingleMessage {
+  interface Image extends BaseSingleMessage {
+    type: "Image";
     /**
      * 图片的imageId，群图片与好友图片格式不同。不为空时将忽略url属性
      */
@@ -190,19 +185,35 @@ export namespace MessageType {
   /**
    * 闪照
    */
-  type FlashImage = Image;
+  interface FlashImage extends BaseSingleMessage {
+    type: "FlashImage";
+    /**
+     * 图片的imageId，群图片与好友图片格式不同。不为空时将忽略url属性
+     */
+    imageId: string;
+    /**
+     * 图片的URL，发送时可作网络图片的链接；接收时为腾讯图片服务器的链接，可用于图片下载
+     */
+    url: string;
+    /**
+     * 图片的路径，发送本地图片，相对路径于plugins/MiraiAPIHTTP/images
+     */
+    path: string;
+  }
 
   /**
    * 富文本消息（譬如合并转发）
    */
-  interface Xml extends SingleMessage {
+  interface Xml extends BaseSingleMessage {
+    type: "Xml";
     /**
      * XML文本
      */
     xml: string;
   }
 
-  interface Json extends SingleMessage {
+  interface Json extends BaseSingleMessage {
+    type: "Json";
     /**
      * Json文本
      */
@@ -212,7 +223,8 @@ export namespace MessageType {
   /**
    * 小程序
    */
-  interface App extends SingleMessage {
+  interface App extends BaseSingleMessage {
+    type: "App"
     /**
      * 内容
      */
@@ -236,12 +248,47 @@ export namespace MessageType {
     FangDaZhao,
   }
 
-  interface Poke extends SingleMessage {
+  interface Poke extends BaseSingleMessage {
+    type: "Poke";
     /**
      * 	戳一戳的类型
      */
     name: Pokes;
   }
+
+  type SingleMessage = Source | Quote | At | AtAll | Face | Plain | Image | FlashImage | Xml | Json | App;
+  /**
+   * 消息链
+   */
+  type MessageChain = Array<SingleMessage>;
+  
+   
+  interface BaseChatMessage extends BaseSingleMessage {
+    type: "GroupMessage" | "TempMessage" | "FriendMessage";
+    messageChain: MessageChain & {
+      0: Source;
+    };
+    sender: Sender;
+    reply: (msgChain: string | MessageType.MessageChain, quote = false) => Promise<void>;
+    plain: string;
+  }
+  interface GroupMessage extends BaseChatMessage {
+    type: "GroupMessage";
+    sender: GroupSender;
+  }
+  interface TempMessage extends BaseChatMessage {
+    type: "TempMessage";
+    sender: GroupSender;
+  }
+  interface FriendMessage extends BaseChatMessage {
+    type: "FriendMessage";
+    sender: FriendSender;
+  }
+  /**
+   * 包括 FriendMessage GroupMessage TempMessage
+   */
+  type ChatMessage = GroupMessage | TempMessage | FriendMessage;
+  type Message = ChatMessage | SingleMessage;
 }
 
 export namespace Api {
@@ -273,7 +320,7 @@ export namespace Api {
   namespace Response {
     interface fetchMessage {
       code: number;
-      data: MessageType.SingleMessage[];
+      data: MessageType.Message[];
     }
 
     interface sendMessage {
