@@ -1,6 +1,6 @@
 import log from "../utils/log";
 import { AxiosStatic, AxiosResponse } from "axios";
-import { MessageType, Api, MiraiApiHttpConfig, Config } from "../..";
+import { MessageType, Api, MiraiApiHttpConfig, Config, EventType } from "../..";
 import Message from "../message";
 
 import FormData from "form-data";
@@ -256,7 +256,7 @@ export default class MiraiApiHttp {
    * 使用此方法获取bot接收到的消息和各类事件
    * @param id 获取消息的messageId
    */
-  async messageFromId(id: number): Promise<MessageType.Message> {
+  async messageFromId(id: number): Promise<MessageType.ChatMessage> {
     const { data } = await this.axios.get("/messageFromId", {
       params: {
         sessionKey: this.sessionKey,
@@ -575,12 +575,77 @@ export default class MiraiApiHttp {
     }
   }
 
+  /**
+   * 相应新朋友请求
+   * @param event 请求的事件
+   * @param operate 操作 allow 同意添加好友, deny 拒绝添加好友, black 拒绝添加好友并添加黑名单，不再接收该用户的好友申请
+   * @param message 响应消息
+   */
+  async responseNewFriendRequest(
+    event: EventType.NewFriendRequestEvent,
+    operate: "allow" | "deny" | "black",
+    message?: string
+  ) {
+    await this.axios.post("/resp/newFriendRequestEvent", {
+      sessionKey: this.sessionKey,
+      eventId: event.eventId,
+      fromId: event.fromId,
+      groupId: event.groupId,
+      operate: ["allow", "deny", "black"].indexOf(operate),
+      message,
+    });
+  }
+
+  /**
+   * 相应新入群请求
+   * @param event 请求的事件
+   * @param operate 操作 allow 同意入群, deny 拒绝入群, ignore 忽略请求, deny-black 拒绝入群并添加黑名单，不再接收该用户的入群申请, ignore-black 忽略入群并添加黑名单，不再接收该用户的入群申请
+   * @param message 响应消息
+   */
+  async responseMemberJoinRequest(
+    event: EventType.MemberJoinRequestEvent,
+    operate: "allow" | "deny" | "ignore" | "deny-black" | "ignore-black",
+    message?: string
+  ) {
+    await this.axios.post("/resp/memberJoinRequestEvent", {
+      sessionKey: this.sessionKey,
+      eventId: event.eventId,
+      fromId: event.fromId,
+      groupId: event.groupId,
+      operate: ["allow", "deny", "ignore", "deny-black", "ignore-black"].indexOf(
+        operate
+      ),
+      message,
+    });
+  }
+
+  /**
+   * 相应被邀请入群申请
+   * @param event 请求的事件
+   * @param operate 操作 allow 同意邀请, deny 拒绝邀请
+   * @param message 响应消息
+   */
+  async responseBotInvitedJoinGroupRequest(
+    event: EventType.BotInvitedJoinGroupRequestEvent,
+    operate: "allow" | "deny",
+    message?: string
+  ) {
+    await this.axios.post("/resp/botInvitedJoinGroupRequestEvent", {
+      sessionKey: this.sessionKey,
+      eventId: event.eventId,
+      fromId: event.fromId,
+      groupId: event.groupId,
+      operate: ["allow", "deny"].indexOf(operate),
+      message,
+    });
+  }
+
   // Websocket
   /**
    * 监听该接口，插件将推送Bot收到的消息
    * @param callback 回调函数
    */
-  message(callback: Function) {
+  message(callback: (msg: MessageType.ChatMessage) => any) {
     log.info(`开始监听消息: ${this.address}`);
     const ws = new WebSocket(this.address + '/message?sessionKey=' + this.sessionKey);
     ws.on('message', (data: WebSocket.Data) => {
@@ -593,7 +658,7 @@ export default class MiraiApiHttp {
    * 监听该接口，插件将推送Bot收到的事件
    * @param callback 回调函数
    */
-  event(callback: Function) {
+  event(callback: (event: EventType.Event) => any) {
     log.info(`开始监听事件: ${this.address}`);
     const ws = new WebSocket(this.address + '/event?sessionKey=' + this.sessionKey);
     ws.on('message', (data: WebSocket.Data) => {
@@ -606,7 +671,7 @@ export default class MiraiApiHttp {
    * 监听该接口，插件将推送Bot收到的事件和消息
    * @param callback 回调函数
    */
-  all(callback: Function) {
+  all(callback: (data: EventType.Event | MessageType.ChatMessage) => any) {
     log.info(`开始监听事件: ${this.address}`);
     const ws = new WebSocket(this.address + '/all?sessionKey=' + this.sessionKey);
     ws.on('message', (data: WebSocket.Data) => {

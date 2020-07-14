@@ -1,17 +1,290 @@
 import Mirai from "./src";
 
+export 
+
+export namespace EventType {
+  type Group = MessageType.Group;
+  type GroupMember = MessageType.GroupSender;
+  /**
+   * 内部基类
+   */
+  interface BaseEvent {
+    type: string;
+  }
+
+  interface BotOnlineEvent extends BaseEvent {
+    type: "BotOnlineEvent";
+    qq: number;
+  }
+  
+  interface BotOfflineEventActive extends BaseEvent {
+    type: "BotOfflineEventActive";
+    qq: number;
+  }
+  
+  interface BotOfflineEventForce extends BaseEvent {
+    type: "BotOfflineEventForce";
+    qq: number;
+  }
+  
+  interface BotOfflineEventDropped extends BaseEvent {
+    type: "BotOfflineEventDropped";
+    qq: number;
+  }
+  
+  interface BotReloginEvent extends BaseEvent {
+    type: "BotReloginEvent";
+    qq: number;
+  }
+  
+  interface GroupRecallEvent extends BaseEvent {
+    type: "GroupRecallEvent";
+    authorId: number;
+    messageId: number;
+    time: number;
+    group: Group;
+    operator: GroupMember | null;
+  }
+  
+  interface FriendRecallEvent extends BaseEvent {
+    type: "FriendRecallEvent";
+    authorId: number;
+    messageId: number;
+    time: number;
+    operator: number;
+  }
+  
+  interface BotGroupPermissionChangeEvent extends BaseEvent {
+    type: "BotGroupPermissionChangeEvent";
+    origin: Permission;
+    current: Permission;
+    group: Group;
+  }
+  
+  interface BotMuteEvent extends BaseEvent {
+    type: "BotMuteEvent";
+    durationSeconds: number;
+    operator: GroupMember;
+  }
+  
+  interface BotUnmuteEvent extends BaseEvent {
+    type: "BotUnmuteEvent";
+    operator: GroupMember;
+  }
+  
+  interface BotJoinGroupEvent extends BaseEvent {
+    type: "BotJoinGroupEvent";
+    group: Group;
+  }
+  
+  interface BotLeaveEventActive extends BaseEvent {
+    type: "BotLeaveEventActive";
+    group: Group;
+  }
+  
+  interface BotLeaveEventKick extends BaseEvent {
+    type: "BotLeaveEventKick";
+    group: Group;
+  }
+  
+  interface GroupNameChangeEvent extends BaseEvent {
+    type: "GroupNameChangeEvent";
+    origin: string;
+    current: string;
+    group: Group;
+    operator: GroupMember | null;
+  }
+  
+  interface GroupEntranceAnnouncementChangeEvent extends BaseEvent {
+    type: "GroupEntranceAnnouncementChangeEvent";
+    origin: string;
+    current: string;
+    group: Group;
+    operator: GroupMember | null;
+  }
+  
+  interface GroupMuteAllEvent extends BaseEvent {
+    type: "GroupMuteAllEvent";
+    origin: boolean;
+    current: boolean;
+    group: Group;
+    operator: GroupMember | null;
+  }
+  
+  interface GroupAllowAnonymousChatEvent extends BaseEvent {
+    type: "GroupAllowAnonymousChatEvent";
+    origin: boolean;
+    current: boolean;
+    group: Group;
+    operator: GroupMember | null;
+  }
+  
+  interface GroupAllowConfessTalkEvent extends BaseEvent {
+    type: "GroupAllowConfessTalkEvent";
+    origin: boolean;
+    current: boolean;
+    group: GroupMember;
+    isByBot: boolean;
+  }
+  
+  interface GroupAllowMemberInviteEvent extends BaseEvent {
+    type: "GroupAllowMemberInviteEvent";
+    origin: boolean;
+    current: boolean;
+    group: Group;
+    operator: GroupMember | null;
+  }
+  
+  interface MemberJoinEvent extends BaseEvent {
+    type: "MemberJoinEvent";
+    member: GroupMember;
+  }
+  
+  interface MemberLeaveEventKick extends BaseEvent {
+    type: "MemberLeaveEventKick";
+    member: GroupMember;
+    operator: GroupMember | null;
+  }
+  
+  interface MemberLeaveEventQuit extends BaseEvent {
+    type: "MemberLeaveEventQuit";
+    member: GroupMember;
+  }
+  
+  interface MemberCardChangeEvent extends BaseEvent {
+    type: "MemberCardChangeEvent";
+    origin: string;
+    current: string;
+    member: GroupMember;
+    operator: GroupMember | null;
+  }
+  
+  interface MemberSpecialTitleChangeEvent extends BaseEvent {
+    type: "MemberSpecialTitleChangeEvent";
+    origin: string;
+    current: string;
+    member: GroupMember;
+  }
+  
+  interface MemberPermissionChangeEvent extends BaseEvent {
+    type: "MemberPermissionChangeEvent";
+    origin: Permission;
+    current: Permission;
+    member: GroupMember;
+  }
+  
+  interface MemberMuteEvent extends BaseEvent {
+    type: "MemberMuteEvent";
+    durationSeconds: number;
+    member: GroupMember;
+    operator: GroupMember | null;
+  }
+  
+  interface MemberUnmuteEvent extends BaseEvent {
+    type: "MemberUnmuteEvent";
+    member: GroupMember;
+    operator: GroupMember | null;
+  }
+  
+  interface NewFriendRequestEvent extends BaseEvent {
+    type: "NewFriendRequestEvent";
+    eventId: number;
+    fromId: number;
+    groupId: number;
+    nick: string;
+    message: string;
+  }
+  
+  interface MemberJoinRequestEvent extends BaseEvent {
+    type: "MemberJoinRequestEvent";
+    eventId: number;
+    fromId: number;
+    groupId: number;
+    groupName: string;
+    nick: string;
+    message: string;
+  }
+  
+  interface BotInvitedJoinGroupRequestEvent extends BaseEvent {
+    type: "BotInvitedJoinGroupRequestEvent";
+    eventId: number;
+    fromId: number;
+    groupId: number;
+    groupName: string;
+    nick: string;
+    message: string;
+  }
+  
+  type Event =
+    | BotOnlineEvent
+    | BotOfflineEventActive
+    | BotOfflineEventForce
+    | BotOfflineEventDropped
+    | BotReloginEvent
+    | GroupRecallEvent
+    | FriendRecallEvent
+    | BotGroupPermissionChangeEvent
+    | BotMuteEvent
+    | BotUnmuteEvent
+    | BotJoinGroupEvent
+    | BotLeaveEventActive
+    | BotLeaveEventKick
+    | GroupNameChangeEvent
+    | GroupEntranceAnnouncementChangeEvent
+    | GroupMuteAllEvent
+    | GroupAllowAnonymousChatEvent
+    | GroupAllowConfessTalkEvent
+    | GroupAllowMemberInviteEvent
+    | MemberJoinEvent
+    | MemberLeaveEventKick
+    | MemberLeaveEventQuit
+    | MemberCardChangeEvent
+    | MemberSpecialTitleChangeEvent
+    | MemberPermissionChangeEvent
+    | MemberMuteEvent
+    | MemberUnmuteEvent
+    | NewFriendRequestEvent
+    | MemberJoinRequestEvent
+    | BotInvitedJoinGroupRequestEvent;
+  
+  type EventType = Event["type"];
+
+  type EventMap = {
+    BotOnlineEvent: BotOnlineEvent;
+    BotOfflineEventActive: BotOfflineEventActive;
+    BotOfflineEventForce: BotOfflineEventForce;
+    BotOfflineEventDropped: BotOfflineEventDropped;
+    BotReloginEvent: BotReloginEvent;
+    GroupRecallEvent: GroupRecallEvent;
+    FriendRecallEvent: FriendRecallEvent;
+    BotGroupPermissionChangeEvent: BotGroupPermissionChangeEvent;
+    BotMuteEvent: BotMuteEvent;
+    BotUnmuteEvent: BotUnmuteEvent;
+    BotJoinGroupEvent: BotJoinGroupEvent;
+    BotLeaveEventActive: BotLeaveEventActive;
+    BotLeaveEventKick: BotLeaveEventKick;
+    GroupNameChangeEvent: GroupNameChangeEvent;
+    GroupEntranceAnnouncementChangeEvent: GroupEntranceAnnouncementChangeEvent;
+    GroupMuteAllEvent: GroupMuteAllEvent;
+    GroupAllowAnonymousChatEvent: GroupAllowAnonymousChatEvent;
+    GroupAllowConfessTalkEvent: GroupAllowConfessTalkEvent;
+    GroupAllowMemberInviteEvent: GroupAllowMemberInviteEvent;
+    MemberJoinEvent: MemberJoinEvent;
+    MemberLeaveEventKick: MemberLeaveEventKick;
+    MemberLeaveEventQuit: MemberLeaveEventQuit;
+    MemberCardChangeEvent: MemberCardChangeEvent;
+    MemberSpecialTitleChangeEvent: MemberSpecialTitleChangeEvent;
+    MemberPermissionChangeEvent: MemberPermissionChangeEvent;
+    MemberMuteEvent: MemberMuteEvent;
+    MemberUnmuteEvent: MemberUnmuteEvent;
+    NewFriendRequestEvent: NewFriendRequestEvent;
+    MemberJoinRequestEvent: MemberJoinRequestEvent;
+    BotInvitedJoinGroupRequestEvent: BotInvitedJoinGroupRequestEvent;
+  };
+}
+
 export namespace MessageType {
   type Permission = "OWNER" | "ADMINISTRATOR" | "MEMBER";
-
-
-  /**
-   * 整体的消息类型，包括事件等
-   * SingleMessage 属于 Message 下 MessageChain 中的类型
-   */
-  interface BaseMessage {
-    type: string;
-    [propName: string]: any;
-  }
 
   /**
    * 群的信息
@@ -30,8 +303,8 @@ export namespace MessageType {
      */
     permission: Permission;
   }
-  /**
-   * 发送者信息
+  /*
+   * 内部基类
    */
   interface BaseSender {
     /**
@@ -69,11 +342,13 @@ export namespace MessageType {
     group: Group;
   }
 
+  /**
+   * 发送者信息
+   */
   type Sender = FriendSender | GroupSender;
 
-  /**
-   * fetchMessage 获取的消息或事件
-   * 单条消息 此处命名与 mamoe/mirai-core 保持一致
+  /*
+   * 内部基类
    */
   interface BaseSingleMessage {
     type: string;
@@ -256,13 +531,17 @@ export namespace MessageType {
     name: Pokes;
   }
 
+  /**
+   * fetchMessage 获取的消息或事件
+   * 单条消息 此处命名与 mamoe/mirai-core 保持一致
+   */
   type SingleMessage = Source | Quote | At | AtAll | Face | Plain | Image | FlashImage | Xml | Json | App;
+
   /**
    * 消息链
    */
   type MessageChain = Array<SingleMessage>;
   
-   
   interface BaseChatMessage extends BaseSingleMessage {
     type: "GroupMessage" | "TempMessage" | "FriendMessage";
     messageChain: MessageChain & {
@@ -288,6 +567,14 @@ export namespace MessageType {
    * 包括 FriendMessage GroupMessage TempMessage
    */
   type ChatMessage = GroupMessage | TempMessage | FriendMessage;
+
+
+  type ChatMessageType = ChatMessage["type"];
+  type ChatMessageMap = {
+    GroupMessage: MessageType.GroupMessage;
+    FriendMessage: MessageType.FriendMessage;
+    TempMessage: MessageType.TempMessage;
+  };
   type Message = ChatMessage | SingleMessage;
 }
 
@@ -320,7 +607,7 @@ export namespace Api {
   namespace Response {
     interface fetchMessage {
       code: number;
-      data: MessageType.Message[];
+      data: MessageType.ChatMessage[];
     }
 
     interface sendMessage {

@@ -6,13 +6,20 @@
 import * as axios from "./axios";
 import { AxiosStatic } from "axios";
 import MiraiApiHttp from "./mirai-api-http";
-import { MessageType, MiraiApiHttpConfig } from "..";
+import { MessageType, MiraiApiHttpConfig, EventType } from "..";
 import { getPlain } from "./message";
 import log from "./utils/log";
 
-interface Listener {
-  [propName: string]: Function[];
-}
+type Listener = Map<MessageType.ChatMessageType | EventType.EventType, Function[]>;
+
+type Data<T extends "message" | EventType.EventType | MessageType.ChatMessageType> =
+  T extends EventType.EventType
+  ? EventType.EventMap[T]
+  : (T extends MessageType.ChatMessageType
+    ? MessageType.ChatMessageMap[T]
+    : MessageType.ChatMessage);
+
+type C = Data<"GroupMessage">;
 
 /**
  * Mirai SDK 初始化类
@@ -42,9 +49,9 @@ export default class Mirai {
    */
   listener: Listener;
   /**
-   * 当前处理的消息
+   * 当前处理的信息
    */
-  curMsg: MessageType.BaseSingleMessage;
+  curMsg?: MessageType.ChatMessage | EventType.Event;
   constructor(
     mahConfig: MiraiApiHttpConfig = {
       host: "0.0.0.0",
@@ -66,8 +73,7 @@ export default class Mirai {
     this.qq = 0;
     this.verified = false;
 
-    this.listener = {};
-    this.curMsg = { type: "GroupMessage" };
+    this.listener = new Map();
   }
 
   /**
@@ -78,7 +84,7 @@ export default class Mirai {
     // Todo
     const { session } = await this.auth();
     this.sessionKey = session;
-    await this.vertify();
+    await this.verify();
     return "的美好";
   }
 
@@ -92,7 +98,7 @@ export default class Mirai {
   /**
    * 激活 Session，绑定 QQ
    */
-  vertify() {
+  verify() {
     return this.api.verify(this.qq);
   }
 
@@ -111,14 +117,15 @@ export default class Mirai {
    * @param type
    * @param callback
    */
-  on(type: string, callback: Function) {
+  on<T extends "message" | EventType.EventType | MessageType.ChatMessageType>(type: T, callback: (data: Data<T>) => any) {
+    // too complex for typescript so that in some case it cannot identify the type correctly
     // 说明监听所有
     if (type === 'message') {
-      this.addListener('FriendMessage', callback);
-      this.addListener('GroupMessage', callback);
-      this.addListener('TempMessage', callback);
+      this.addListener('FriendMessage', callback as any);
+      this.addListener('GroupMessage', callback as any);
+      this.addListener('TempMessage', callback as any);
     } else {
-      this.addListener(type, callback);
+      this.addListener<Exclude<T, "message">>(type as any, callback);
     }
   }
 
@@ -127,11 +134,12 @@ export default class Mirai {
    * @param type 
    * @param callback 
    */
-  addListener(type: string, callback: Function) {
-    if (this.listener[type]) {
-      this.listener[type].push(callback);
+  addListener<T extends EventType.EventType | MessageType.ChatMessageType>(type: T, callback: (data: Data<T>) => any) {
+    const set = this.listener.get(type);
+    if (set) {
+      set.push(callback);
     } else {
-      this.listener[type] = [callback];
+      this.listener.set(type, [callback]);
     }
   }
 
@@ -165,12 +173,7 @@ export default class Mirai {
    * 为聊天消息类型挂载辅助函数
    * @param msg 
    */
-  addHelperForMsg(msg: MessageType.Message) {
-    if (
-      msg.type === "FriendMessage" ||
-      msg.type === "GroupMessage" ||
-      msg.type === "TempMessage"
-    ) {
+  addHelperForMsg(msg: MessageType.ChatMessage) {
       msg.reply = async (
         msgChain: string | MessageType.MessageChain,
         quote = false
@@ -178,18 +181,24 @@ export default class Mirai {
         this.reply(msgChain, msg, quote);
       };
       msg.plain = getPlain(msg.messageChain);
-    }
   }
 
   /**
    * 处理消息
    * @param msg 一条消息
    */
-  handle(msg: MessageType.Message) {
+  handle(msg: MessageType.ChatMessage | EventType.Event) {
     this.curMsg = msg;
-    if (this.listener[msg.type]) {
-      this.listener[msg.type].forEach(callback => {
-        this.addHelperForMsg(msg);
+    const set = this.listener.get(msg.type);
+    if (set) {
+      set.forEach(callback => {
+        if (
+          msg.type === "FriendMessage" ||
+          msg.type === "GroupMessage" ||
+          msg.type === "TempMessage"
+        ) {
+          this.addHelperForMsg(msg);
+        }
         callback(msg);
       });
     }
@@ -202,7 +211,7 @@ export default class Mirai {
   listen(interval: number = 200) {
     const address = this.mahConfig.host + ':' + this.mahConfig.port;
     if (this.mahConfig.enableWebsocket) {
-      this.api.all((msg: MessageType.Message) => {
+      this.api.all((msg) => {
         this.handle(msg);
       });
     } else {
