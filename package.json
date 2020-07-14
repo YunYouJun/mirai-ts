@@ -1,16 +1,17 @@
 {
   "name": "mirai-ts",
   "version": "0.2.2",
-  "description": "mirai typescript sdk",
+  "description": "Mirai TypeScript SDK",
   "main": "dist/index.js",
   "types": "index.d.ts",
   "files": [
     "src",
     "dist",
+    "types",
     "index.d.ts"
   ],
   "scripts": {
-    "prepublish": "yarn build",
+    "prepublish": "npm run build",
     "build": "rm -rf dist && tsc",
     "docs:build": "typedoc --includeDeclarations --excludeExternals",
     "docs:dev": "cd docs && live-server"
