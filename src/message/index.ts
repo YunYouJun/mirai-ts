@@ -159,7 +159,7 @@ function getPlain(messageChain: MessageType.SingleMessage[]) {
  * ['FriendMessage', 'GroupMessage', 'TempMessage']
  * @param msg 消息链
  */
-function isMessage(msg: MessageType.Message) {
+function isMessage(msg: MessageType.MessageEvent) {
   const msgType = ['FriendMessage', 'GroupMessage', 'TempMessage'];
   return msgType.includes(msg.type);
 }

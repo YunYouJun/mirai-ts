@@ -155,6 +155,7 @@ export default class MiraiApiHttp {
     const { data } = await this.axios.post("/auth", {
       authKey,
     });
+
     if (data.code === 0) {
       this.sessionKey = data.session;
       log.success(`获取 Session: ${data.session}`);
@@ -253,7 +254,7 @@ export default class MiraiApiHttp {
   }
 
   /**
-   * 使用此方法获取bot接收到的消息和各类事件
+   * 通过 messageId 获取一条被缓存的消息
    * @param id 获取消息的messageId
    */
   async messageFromId(id: number): Promise<MessageType.ChatMessage> {

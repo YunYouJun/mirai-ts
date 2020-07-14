@@ -6,8 +6,8 @@
 import * as axios from "./axios";
 import { AxiosStatic } from "axios";
 import MiraiApiHttp from "./mirai-api-http";
-import { MessageType, MiraiApiHttpConfig, EventType } from "..";
-import { getPlain } from "./message";
+import { Contact, MessageType, EventType, MiraiApiHttpConfig } from "..";
+import { getPlain, isMessage } from "./message";
 import log from "./utils/log";
 
 type Listener = Map<MessageType.ChatMessageType | EventType.EventType, Function[]>;
@@ -51,7 +51,7 @@ export default class Mirai {
   /**
    * 当前处理的信息
    */
-  curMsg?: MessageType.ChatMessage | EventType.Event;
+  curMsg?: MessageType.MessageEvent | EventType.Event;
   constructor(
     mahConfig: MiraiApiHttpConfig = {
       host: "0.0.0.0",
@@ -84,8 +84,7 @@ export default class Mirai {
     // Todo
     const { session } = await this.auth();
     this.sessionKey = session;
-    await this.verify();
-    return "的美好";
+    return await this.verify();
   }
 
   /**
@@ -161,10 +160,10 @@ export default class Mirai {
     }
 
     if (srcMsg.type === "FriendMessage") {
-      const target = (srcMsg.sender as MessageType.FriendSender).id;
+      const target = (srcMsg.sender as Contact.Friend).id;
       return this.api.sendFriendMessage(msgChain, target, messageId);
     } else if (srcMsg.type === "GroupMessage") {
-      const target = (srcMsg.sender as MessageType.GroupSender).group.id;
+      const target = (srcMsg.sender as Contact.Member).group.id;
       return this.api.sendGroupMessage(msgChain, target, messageId);
     }
   }
