@@ -256,7 +256,7 @@ export default class MiraiApiHttp {
    * 使用此方法获取bot接收到的消息和各类事件
    * @param id 获取消息的messageId
    */
-  async messageFromId(id: number): Promise<MessageType.SingleMessage> {
+  async messageFromId(id: number): Promise<MessageType.Message> {
     const { data } = await this.axios.get("/messageFromId", {
       params: {
         sessionKey: this.sessionKey,
@@ -391,7 +391,7 @@ export default class MiraiApiHttp {
    * 使用此方法撤回指定消息。对于bot发送的消息，有2分钟时间限制。对于撤回群聊中群员的消息，需要有相应权限
    * @param target 需要撤回的消息的messageId
    */
-  async recall(target: number | MessageType.SingleMessage) {
+  async recall(target: number | MessageType.ChatMessage) {
     let messageId = target;
     if (typeof target !== "number" && target.messageChain[0].id) {
       messageId = target.messageChain[0].id;

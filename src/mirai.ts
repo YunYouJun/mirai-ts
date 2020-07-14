@@ -44,7 +44,7 @@ export default class Mirai {
   /**
    * 当前处理的消息
    */
-  curMsg: MessageType.SingleMessage;
+  curMsg: MessageType.BaseSingleMessage;
   constructor(
     mahConfig: MiraiApiHttpConfig = {
       host: "0.0.0.0",
@@ -143,7 +143,7 @@ export default class Mirai {
    */
   reply(
     msgChain: string | MessageType.MessageChain,
-    srcMsg: MessageType.SingleMessage,
+    srcMsg: MessageType.ChatMessage,
     quote = false
   ) {
     let messageId = 0;
@@ -165,7 +165,7 @@ export default class Mirai {
    * 为聊天消息类型挂载辅助函数
    * @param msg 
    */
-  addHelperForMsg(msg: MessageType.SingleMessage) {
+  addHelperForMsg(msg: MessageType.Message) {
     if (
       msg.type === "FriendMessage" ||
       msg.type === "GroupMessage" ||
@@ -175,9 +175,8 @@ export default class Mirai {
         msgChain: string | MessageType.MessageChain,
         quote = false
       ) => {
-        this.reply(msgChain, msg as MessageType.ChatMessage, quote);
+        this.reply(msgChain, msg, quote);
       };
-
       msg.plain = getPlain(msg.messageChain);
     }
   }
@@ -186,7 +185,7 @@ export default class Mirai {
    * 处理消息
    * @param msg 一条消息
    */
-  handle(msg: MessageType.SingleMessage) {
+  handle(msg: MessageType.Message) {
     this.curMsg = msg;
     if (this.listener[msg.type]) {
       this.listener[msg.type].forEach(callback => {
@@ -203,7 +202,7 @@ export default class Mirai {
   listen(interval: number = 200) {
     const address = this.mahConfig.host + ':' + this.mahConfig.port;
     if (this.mahConfig.enableWebsocket) {
-      this.api.all((msg: MessageType.SingleMessage) => {
+      this.api.all((msg: MessageType.Message) => {
         this.handle(msg);
       });
     } else {
@@ -211,7 +210,7 @@ export default class Mirai {
       setInterval(async () => {
         const { data } = await this.api.fetchMessage();
         if (data && data.length) {
-          data.forEach((msg: MessageType.SingleMessage) => {
+          data.forEach((msg) => {
             this.handle(msg);
           });
         }
