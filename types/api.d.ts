@@ -1,4 +1,5 @@
 import { MessageType } from "./message-type";
+import { EventType } from '..';
 export namespace Api {
   interface SendMessage {
     sessionKey: string;
@@ -28,7 +29,7 @@ export namespace Api {
   namespace Response {
     interface fetchMessage {
       code: number;
-      data: MessageType.MessageEvent[];
+      data: (MessageType.ChatMessage | EventType.Event)[];
     }
 
     interface sendMessage {

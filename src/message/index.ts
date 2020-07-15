@@ -4,6 +4,7 @@
  */
 
 import { MessageType } from "../..";
+import { EventType } from '../..';
 
 /**
  * 生成引用的消息格式
@@ -159,7 +160,7 @@ function getPlain(messageChain: MessageType.SingleMessage[]) {
  * ['FriendMessage', 'GroupMessage', 'TempMessage']
  * @param msg 消息链
  */
-function isMessage(msg: MessageType.MessageEvent) {
+function isMessage(msg: MessageType.ChatMessage | EventType.Event ): msg is MessageType.ChatMessage {
   const msgType = ['FriendMessage', 'GroupMessage', 'TempMessage'];
   return msgType.includes(msg.type);
 }
@@ -170,13 +171,13 @@ function isMessage(msg: MessageType.MessageEvent) {
  * 未传入 qq 时，返回艾特消息
  * @param msg 
  */
-function isAt(msg: MessageType.ChatMessage, qq?: number) {
+function isAt(msg: MessageType.ChatMessage, qq?: number): boolean | MessageType.At | undefined {
   if (qq) {
     return msg.messageChain.some((singleMessage) => {
       return (singleMessage.type === "At" && singleMessage.target === qq);
     });
   } else {
-    let atMsg = {};
+    let atMsg: MessageType.At | undefined = undefined;
     msg.messageChain.some((singleMessage) => {
       if (singleMessage.type === 'At') {
         atMsg = singleMessage;

@@ -1,19 +1,6 @@
 import { Contact } from "./contact";
 
 export namespace MessageType {
-
-  /**
-   * 整体的消息类型，包括事件等
-   */
-  interface BaseMessageEvent {
-    type: string;
-    [propName: string]: any;
-  }
-
-  /**
-   * FriendMessage | GroupMessage | TempMessage 下的 MessageChain 中的单条消息类型
-   * 单条消息 此处命名与 mamoe/mirai-core 保持一致
-   */
   interface BaseSingleMessage {
     type: string;
   }
@@ -195,6 +182,10 @@ export namespace MessageType {
     name: Pokes;
   }
 
+  /**
+   * FriendMessage | GroupMessage | TempMessage 下的 MessageChain 中的单条消息类型
+   * 单条消息 此处命名与 mamoe/mirai-core 保持一致
+   */
   type SingleMessage = Source | Quote | At | AtAll | Face | Plain | Image | FlashImage | Xml | Json | App;
   /**
    * 消息链
@@ -207,12 +198,12 @@ export namespace MessageType {
       0: Source;
     };
     sender: Contact.User;
-    reply: (msgChain: string | MessageType.MessageChain, quote = false) => Promise<void>;
+    reply: (msgChain: string | MessageType.MessageChain, quote?: boolean) => Promise<void>;
     plain: string;
   }
   interface FriendMessage extends BaseChatMessage {
     type: "FriendMessage";
-    sender: Friend;
+    sender: Contact.Friend;
   }
   interface GroupMessage extends BaseChatMessage {
     type: "GroupMessage";
@@ -228,8 +219,12 @@ export namespace MessageType {
    */
   type ChatMessage = GroupMessage | TempMessage | FriendMessage;
 
-  /**
-   * 基础的消息类型
-   */
-  type MessageEvent = ChatMessage | BaseMessageEvent;
+  type ChatMessageType = ChatMessage["type"];
+
+  type ChatMessageMap = {
+    "message": ChatMessage;
+    "GroupMessage": GroupMessage;
+    "FriendMessage": FriendMessage;
+    "TempMessage": TempMessage;
+  }
 }
