@@ -577,7 +577,7 @@ export default class MiraiApiHttp {
   }
 
   /**
-   * 相应新朋友请求
+   * 响应新朋友请求
    * @param event 请求的事件
    * @param operate 操作 allow 同意添加好友, deny 拒绝添加好友, black 拒绝添加好友并添加黑名单，不再接收该用户的好友申请
    * @param message 响应消息
@@ -598,7 +598,7 @@ export default class MiraiApiHttp {
   }
 
   /**
-   * 相应新入群请求
+   * 响应新入群请求
    * @param event 请求的事件
    * @param operate 操作 allow 同意入群, deny 拒绝入群, ignore 忽略请求, deny-black 拒绝入群并添加黑名单，不再接收该用户的入群申请, ignore-black 忽略入群并添加黑名单，不再接收该用户的入群申请
    * @param message 响应消息
@@ -621,7 +621,7 @@ export default class MiraiApiHttp {
   }
 
   /**
-   * 相应被邀请入群申请
+   * 响应被邀请入群申请
    * @param event 请求的事件
    * @param operate 操作 allow 同意邀请, deny 拒绝邀请
    * @param message 响应消息

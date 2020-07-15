@@ -231,5 +231,5 @@ export namespace MessageType {
   /**
    * 基础的消息类型
    */
-  type MessageEvent = ChatMessage | SingleMessage;
+  type MessageEvent = ChatMessage;
 }

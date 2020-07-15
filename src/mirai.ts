@@ -156,14 +156,14 @@ export default class Mirai {
     let messageId = 0;
 
     if (quote && srcMsg.messageChain[0].type === "Source") {
-      messageId = (srcMsg.messageChain[0] as MessageType.Source).id;
+      messageId = srcMsg.messageChain[0].id;
     }
 
     if (srcMsg.type === "FriendMessage") {
-      const target = (srcMsg.sender as Contact.Friend).id;
+      const target = srcMsg.sender.id;
       return this.api.sendFriendMessage(msgChain, target, messageId);
     } else if (srcMsg.type === "GroupMessage") {
-      const target = (srcMsg.sender as Contact.Member).group.id;
+      const target = srcMsg.sender.group.id;
       return this.api.sendGroupMessage(msgChain, target, messageId);
     }
   }
