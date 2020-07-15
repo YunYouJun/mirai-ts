@@ -51,7 +51,7 @@ export default class Mirai {
   /**
    * 当前处理的信息
    */
-  curMsg?: MessageType.MessageEvent | EventType.Event;
+  curMsg?: MessageType.ChatMessage | EventType.Event;
   constructor(
     mahConfig: MiraiApiHttpConfig = {
       host: "0.0.0.0",

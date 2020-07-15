@@ -29,7 +29,7 @@ export namespace Api {
   namespace Response {
     interface fetchMessage {
       code: number;
-      data: (MessageType.MessageEvent | EventType.Event)[];
+      data: (MessageType.ChatMessage | EventType.Event)[];
     }
 
     interface sendMessage {

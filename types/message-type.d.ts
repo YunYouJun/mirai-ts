@@ -198,12 +198,12 @@ export namespace MessageType {
       0: Source;
     };
     sender: Contact.User;
-    reply: (msgChain: string | MessageType.MessageChain, quote = false) => Promise<void>;
+    reply: (msgChain: string | MessageType.MessageChain, quote?: boolean) => Promise<void>;
     plain: string;
   }
   interface FriendMessage extends BaseChatMessage {
     type: "FriendMessage";
-    sender: Friend;
+    sender: Contact.Friend;
   }
   interface GroupMessage extends BaseChatMessage {
     type: "GroupMessage";
@@ -227,9 +227,4 @@ export namespace MessageType {
     "FriendMessage": FriendMessage;
     "TempMessage": TempMessage;
   }
-
-  /**
-   * 基础的消息类型
-   */
-  type MessageEvent = ChatMessage;
 }
