@@ -6,8 +6,8 @@
 import * as axios from "./axios";
 import { AxiosStatic } from "axios";
 import MiraiApiHttp from "./mirai-api-http";
-import { Contact, MessageType, EventType, MiraiApiHttpConfig } from "..";
-import { getPlain, isMessage } from "./message";
+import { MessageType, EventType, MiraiApiHttpConfig } from "..";
+import { getPlain } from "./message";
 import log from "./utils/log";
 
 type Listener = Map<MessageType.ChatMessageType | EventType.EventType, Function[]>;
@@ -18,8 +18,6 @@ type Data<T extends "message" | EventType.EventType | MessageType.ChatMessageTyp
   : (T extends MessageType.ChatMessageType
     ? MessageType.ChatMessageMap[T]
     : MessageType.ChatMessage);
-
-type C = Data<"GroupMessage">;
 
 /**
  * Mirai SDK 初始化类
@@ -63,8 +61,6 @@ export default class Mirai {
     }
   ) {
     this.mahConfig = mahConfig;
-    // ws todo
-
     this.axios = axios.init(`http://${this.mahConfig.host}:${this.mahConfig.port}`);
     this.api = new MiraiApiHttp(this.mahConfig, this.axios);
 
@@ -173,13 +169,13 @@ export default class Mirai {
    * @param msg 
    */
   addHelperForMsg(msg: MessageType.ChatMessage) {
-      msg.reply = async (
-        msgChain: string | MessageType.MessageChain,
-        quote = false
-      ) => {
-        this.reply(msgChain, msg, quote);
-      };
-      msg.plain = getPlain(msg.messageChain);
+    msg.reply = async (
+      msgChain: string | MessageType.MessageChain,
+      quote = false
+    ) => {
+      this.reply(msgChain, msg, quote);
+    };
+    msg.plain = getPlain(msg.messageChain);
   }
 
   /**
