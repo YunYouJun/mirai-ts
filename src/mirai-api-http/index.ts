@@ -264,7 +264,7 @@ export default class MiraiApiHttp {
         id,
       },
     });
-    return data;
+    return data.data;
   }
 
   /**
