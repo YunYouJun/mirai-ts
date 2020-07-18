@@ -257,14 +257,18 @@ export default class MiraiApiHttp {
    * 通过 messageId 获取一条被缓存的消息
    * @param id 获取消息的messageId
    */
-  async messageFromId(id: number): Promise<MessageType.ChatMessage> {
+  async messageFromId(id: number): Promise<Api.Response.messageFromId | MessageType.ChatMessage> {
     const { data } = await this.axios.get("/messageFromId", {
       params: {
         sessionKey: this.sessionKey,
         id,
       },
     });
-    return data.data;
+    if (data.code === 0) {
+      return data.data;
+    } else {
+      return data;
+    }
   }
 
   /**

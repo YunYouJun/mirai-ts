@@ -2,6 +2,7 @@
 
 [![docs](https://github.com/YunYouJun/mirai-ts/workflows/docs/badge.svg)](https://www.yunyoujun.cn/mirai-ts/)
 [![npm](https://img.shields.io/npm/v/mirai-ts)](https://www.npmjs.com/package/mirai-ts)
+[![Language grade: JavaScript](https://img.shields.io/lgtm/grade/javascript/g/YunYouJun/mirai-ts.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/YunYouJun/mirai-ts/context:javascript)
 ![GitHub top language](https://img.shields.io/github/languages/top/YunYouJun/mirai-ts)
 [![GitHub](https://img.shields.io/github/license/YunYouJun/mirai-ts)](https://github.com/YunYouJun/mirai-ts)
 
@@ -25,7 +26,7 @@ const Mirai = require('mirai-ts').default;
 
 const mahConfig = {
   host: '你的 IP 地址' || '127.0.0.1',
-  port: 你的端口号 || 8080,
+  port: 你的端口号 || 4859,
   authKey: 你的 authKey || "el-psy-congroo",
   enableWebsocket: false,
 };
