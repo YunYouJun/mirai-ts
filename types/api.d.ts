@@ -32,13 +32,20 @@ export namespace Api {
       data: (MessageType.ChatMessage | EventType.Event)[];
     }
 
-    interface sendMessage {
+    /**
+     * 基础响应格式
+     */
+    interface BaseResponse {
       code: number;
       msg: string;
+    }
+    interface sendMessage extends BaseResponse {
       /**
        * 一个Int类型属性，标识本条消息，用于撤回和引用回复
        */
       messageId: number;
     }
+
+    type messageFromId = BaseResponse;
   }
 }
