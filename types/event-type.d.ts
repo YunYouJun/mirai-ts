@@ -12,27 +12,27 @@ export namespace EventType {
     type: "BotOnlineEvent";
     qq: number;
   }
-  
+
   interface BotOfflineEventActive extends BaseEvent {
     type: "BotOfflineEventActive";
     qq: number;
   }
-  
+
   interface BotOfflineEventForce extends BaseEvent {
     type: "BotOfflineEventForce";
     qq: number;
   }
-  
+
   interface BotOfflineEventDropped extends BaseEvent {
     type: "BotOfflineEventDropped";
     qq: number;
   }
-  
+
   interface BotReloginEvent extends BaseEvent {
     type: "BotReloginEvent";
     qq: number;
   }
-  
+
   interface GroupRecallEvent extends BaseEvent {
     type: "GroupRecallEvent";
     authorId: number;
@@ -41,7 +41,7 @@ export namespace EventType {
     group: Contact.Group;
     operator: Contact.Member | null;
   }
-  
+
   interface FriendRecallEvent extends BaseEvent {
     type: "FriendRecallEvent";
     authorId: number;
@@ -49,40 +49,40 @@ export namespace EventType {
     time: number;
     operator: number;
   }
-  
+
   interface BotGroupPermissionChangeEvent extends BaseEvent {
     type: "BotGroupPermissionChangeEvent";
     origin: Permission;
     current: Permission;
     group: Contact.Group;
   }
-  
+
   interface BotMuteEvent extends BaseEvent {
     type: "BotMuteEvent";
     durationSeconds: number;
     operator: Contact.Member;
   }
-  
+
   interface BotUnmuteEvent extends BaseEvent {
     type: "BotUnmuteEvent";
     operator: Contact.Member;
   }
-  
+
   interface BotJoinGroupEvent extends BaseEvent {
     type: "BotJoinGroupEvent";
     group: Contact.Group;
   }
-  
+
   interface BotLeaveEventActive extends BaseEvent {
     type: "BotLeaveEventActive";
     group: Contact.Group;
   }
-  
+
   interface BotLeaveEventKick extends BaseEvent {
     type: "BotLeaveEventKick";
     group: Contact.Group;
   }
-  
+
   interface GroupNameChangeEvent extends BaseEvent {
     type: "GroupNameChangeEvent";
     origin: string;
@@ -90,7 +90,7 @@ export namespace EventType {
     group: Contact.Group;
     operator: Contact.Member | null;
   }
-  
+
   interface GroupEntranceAnnouncementChangeEvent extends BaseEvent {
     type: "GroupEntranceAnnouncementChangeEvent";
     origin: string;
@@ -98,7 +98,7 @@ export namespace EventType {
     group: Contact.Group;
     operator: Contact.Member | null;
   }
-  
+
   interface GroupMuteAllEvent extends BaseEvent {
     type: "GroupMuteAllEvent";
     origin: boolean;
@@ -106,7 +106,7 @@ export namespace EventType {
     group: Contact.Group;
     operator: Contact.Member | null;
   }
-  
+
   interface GroupAllowAnonymousChatEvent extends BaseEvent {
     type: "GroupAllowAnonymousChatEvent";
     origin: boolean;
@@ -114,7 +114,7 @@ export namespace EventType {
     group: Contact.Group;
     operator: Contact.Member | null;
   }
-  
+
   interface GroupAllowConfessTalkEvent extends BaseEvent {
     type: "GroupAllowConfessTalkEvent";
     origin: boolean;
@@ -122,7 +122,7 @@ export namespace EventType {
     group: Contact.Member;
     isByBot: boolean;
   }
-  
+
   interface GroupAllowMemberInviteEvent extends BaseEvent {
     type: "GroupAllowMemberInviteEvent";
     origin: boolean;
@@ -130,23 +130,23 @@ export namespace EventType {
     group: Contact.Group;
     operator: Contact.Member | null;
   }
-  
+
   interface MemberJoinEvent extends BaseEvent {
     type: "MemberJoinEvent";
     member: Contact.Member;
   }
-  
+
   interface MemberLeaveEventKick extends BaseEvent {
     type: "MemberLeaveEventKick";
     member: Contact.Member;
     operator: Contact.Member | null;
   }
-  
+
   interface MemberLeaveEventQuit extends BaseEvent {
     type: "MemberLeaveEventQuit";
     member: Contact.Member;
   }
-  
+
   interface MemberCardChangeEvent extends BaseEvent {
     type: "MemberCardChangeEvent";
     origin: string;
@@ -154,34 +154,34 @@ export namespace EventType {
     member: Contact.Member;
     operator: Contact.Member | null;
   }
-  
+
   interface MemberSpecialTitleChangeEvent extends BaseEvent {
     type: "MemberSpecialTitleChangeEvent";
     origin: string;
     current: string;
     member: Contact.Member;
   }
-  
+
   interface MemberPermissionChangeEvent extends BaseEvent {
     type: "MemberPermissionChangeEvent";
-    origin: Permission;
-    current: Permission;
+    origin: Contact.Permission;
+    current: Contact.Permission;
     member: Contact.Member;
   }
-  
+
   interface MemberMuteEvent extends BaseEvent {
     type: "MemberMuteEvent";
     durationSeconds: number;
     member: Contact.Member;
     operator: Contact.Member | null;
   }
-  
+
   interface MemberUnmuteEvent extends BaseEvent {
     type: "MemberUnmuteEvent";
     member: Contact.Member;
     operator: Contact.Member | null;
   }
-  
+
   interface NewFriendRequestEvent extends BaseEvent {
     type: "NewFriendRequestEvent";
     eventId: number;
@@ -190,7 +190,7 @@ export namespace EventType {
     nick: string;
     message: string;
   }
-  
+
   interface MemberJoinRequestEvent extends BaseEvent {
     type: "MemberJoinRequestEvent";
     eventId: number;
@@ -200,7 +200,7 @@ export namespace EventType {
     nick: string;
     message: string;
   }
-  
+
   interface BotInvitedJoinGroupRequestEvent extends BaseEvent {
     type: "BotInvitedJoinGroupRequestEvent";
     eventId: number;
@@ -210,7 +210,7 @@ export namespace EventType {
     nick: string;
     message: string;
   }
-  
+
   type Event =
     | BotOnlineEvent
     | BotOfflineEventActive
@@ -242,7 +242,7 @@ export namespace EventType {
     | NewFriendRequestEvent
     | MemberJoinRequestEvent
     | BotInvitedJoinGroupRequestEvent;
-  
+
   type EventType = Event["type"];
 
   type EventMap = {
