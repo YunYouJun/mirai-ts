@@ -52,8 +52,8 @@ export namespace EventType {
 
   interface BotGroupPermissionChangeEvent extends BaseEvent {
     type: "BotGroupPermissionChangeEvent";
-    origin: Permission;
-    current: Permission;
+    origin: Contact.Permission;
+    current: Contact.Permission;
     group: Contact.Group;
   }
 
