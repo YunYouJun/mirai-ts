@@ -24,11 +24,14 @@ npm install mirai-ts
 ```js
 const Mirai = require("mirai-ts").default;
 
+// 你的 QQ 号
+const qq = 114514;
+// 请与 plugins/MiraiAPIHTTP/setting.yml 保持一致
 const mahConfig = {
   host: "你的 IP 地址" || "127.0.0.1",
   port: 你的端口号 || 4859,
   authKey: "你的 authKey" || "el-psy-congroo",
-  // 推荐 true，websocket 无须轮询，更少占用资源。须先设置 MiraiAPIHTTP/setting.yml 中为 true。
+  // 推荐 true，websocket 无须轮询，更少占用资源。
   enableWebsocket: false,
 };
 
@@ -36,7 +39,7 @@ const mirai = new Mirai(mahConfig);
 
 async function app() {
   // 登录 QQ
-  await mirai.login(你的 QQ 号);
+  await mirai.login(qq);
 
   // 对收到的消息进行处理
   // message 本质相当于同时绑定了 FriendMessage GroupMessage TempMessage
@@ -54,7 +57,7 @@ async function app() {
   console.log("帮助信息:" + data);
 
   // 处理各种事件类型
-  // 事件订阅说明（名称均与 mirai-api-http 中时间名一致）
+  // 事件订阅说明（名称均与 mirai-api-http 中事件名一致）
   // https://github.com/RedBeanN/node-mirai/blob/master/event.md
   // console.log("on other event");
   // https://github.com/project-mirai/mirai-api-http/blob/master/EventType.md#群消息撤回
@@ -78,6 +81,7 @@ app();
 ```ts
 import Mirai from "mirai-ts"
 
+const qq = 114514;
 const mahConfig = {
   host: '你的 IP 地址' || '127.0.0.1',
   port: 你的端口号 || 8080,
@@ -88,7 +92,7 @@ const mahConfig = {
 const mirai = new Mirai(mahConfig);
 
 async function app() {
-  await mirai.login(你的 QQ 号);
+  await mirai.login(qq);
   mirai.on("message", (msg) => {
     console.log(msg);
     // 复读
