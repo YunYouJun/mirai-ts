@@ -337,7 +337,7 @@ export default class MiraiApiHttp {
     qq: number,
     group: number,
     quote?: number
-  ): Promise<object> {
+  ): Promise<Api.Response.sendMessage> {
     if (typeof messageChain === "string") {
       messageChain = [Message.Plain(messageChain)];
     }
