@@ -22,49 +22,55 @@ npm install mirai-ts
 ## 快速开始
 
 ```js
-const Mirai = require('mirai-ts').default;
+const Mirai = require("mirai-ts").default;
 
 const mahConfig = {
-  host: '你的 IP 地址' || '127.0.0.1',
+  host: "你的 IP 地址" || "127.0.0.1",
   port: 你的端口号 || 4859,
-  authKey: 你的 authKey || "el-psy-congroo",
+  authKey: "你的 authKey" || "el-psy-congroo",
+  // 推荐 true，websocket 无须轮询，更少占用资源。须先设置 MiraiAPIHTTP/setting.yml 中为 true。
   enableWebsocket: false,
 };
 
 const mirai = new Mirai(mahConfig);
 
-// 对收到的消息进行处理
-// message 本质相当于同时绑定了 FriendMessage GroupMessage TempMessage
-// 你也可以单独对某一类消息进行监听
-// console.log("on message");
-mirai.on("message", (msg) => {
-  console.log(msg);
-  // 复读
-  msg.reply(msg.messageChain);
-});
+async function app() {
+  // 登录 QQ
+  await mirai.login(你的 QQ 号);
 
-// 调用 mirai-ts 封装的 mirai-api-http 发送指令
-console.log("send command help");
-// 注意这里使用 await，所以你需要在外围函数加上 async
-// 这里只是简单示例，所以没有放在函数里。
-const data = await mirai.api.command.send("help", []);
-console.log("帮助信息:" + data);
+  // 对收到的消息进行处理
+  // message 本质相当于同时绑定了 FriendMessage GroupMessage TempMessage
+  // 你也可以单独对某一类消息进行监听
+  // console.log("on message");
+  mirai.on("message", (msg) => {
+    console.log(msg);
+    // 复读
+    msg.reply(msg.messageChain);
+  });
 
-// 处理各种事件类型
-// 事件订阅说明（名称均与 mirai-api-http 中时间名一致）
-// https://github.com/RedBeanN/node-mirai/blob/master/event.md
-// console.log("on other event");
-// https://github.com/project-mirai/mirai-api-http/blob/master/EventType.md#群消息撤回
-mirai.on("GroupRecallEvent", ({ operator }) => {
-  const text = `${operator.memberName} 撤回了一条消息，并拜托你不要再发色图了。`;
-  console.log(text);
-  mirai.api.sendGroupMessage(text, operator.group.id);
-});
+  // 调用 mirai-ts 封装的 mirai-api-http 发送指令
+  console.log("send command help");
+  const data = await mirai.api.command.send("help", []);
+  console.log("帮助信息:" + data);
 
-// 开始监听
-mirai.listen()
-// 传入参数可以设置轮训间隔的 ms，譬如：
-// mirai.listen(500)
+  // 处理各种事件类型
+  // 事件订阅说明（名称均与 mirai-api-http 中时间名一致）
+  // https://github.com/RedBeanN/node-mirai/blob/master/event.md
+  // console.log("on other event");
+  // https://github.com/project-mirai/mirai-api-http/blob/master/EventType.md#群消息撤回
+  mirai.on("GroupRecallEvent", ({ operator }) => {
+    const text = `${operator.memberName} 撤回了一条消息，并拜托你不要再发色图了。`;
+    console.log(text);
+    mirai.api.sendGroupMessage(text, operator.group.id);
+  });
+
+  // 开始监听
+  mirai.listen();
+  // 传入参数可以设置轮训间隔的 ms，譬如：
+  // mirai.listen(500)
+}
+
+app();
 ```
 
 ### TypeScript
@@ -80,13 +86,18 @@ const mahConfig = {
 };
 
 const mirai = new Mirai(mahConfig);
-mirai.on("message", (msg) => {
-  console.log(msg);
-  // 复读
-  msg.reply(msg.messageChain);
-});
 
-mirai.listen()
+async function app() {
+  await mirai.login(你的 QQ 号);
+  mirai.on("message", (msg) => {
+    console.log(msg);
+    // 复读
+    msg.reply(msg.messageChain);
+  });
+  mirai.listen()
+}
+
+app();
 ```
 
 ## 示例模版
