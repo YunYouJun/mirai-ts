@@ -647,7 +647,7 @@ export default class MiraiApiHttp {
 
   // Websocket
   /**
-   * 监听该接口，插件将推送Bot收到的消息
+   * 监听该接口，插件将推送 Bot 收到的消息
    * @param callback 回调函数
    */
   message(callback: (msg: MessageType.ChatMessage) => any) {
@@ -660,7 +660,7 @@ export default class MiraiApiHttp {
   }
 
   /**
-   * 监听该接口，插件将推送Bot收到的事件
+   * 监听该接口，插件将推送 Bot 收到的事件
    * @param callback 回调函数
    */
   event(callback: (event: EventType.Event) => any) {
@@ -673,11 +673,11 @@ export default class MiraiApiHttp {
   }
 
   /**
-   * 监听该接口，插件将推送Bot收到的事件和消息
+   * 监听该接口，插件将推送 Bot 收到的消息和事件
    * @param callback 回调函数
    */
   all(callback: (data: EventType.Event | MessageType.ChatMessage) => any) {
-    log.info(`开始监听事件: ${this.address}`);
+    log.info(`开始监听消息和事件: ${this.address}`);
     const ws = new WebSocket(this.address + '/all?sessionKey=' + this.sessionKey);
     ws.on('message', (data: WebSocket.Data) => {
       const msg = JSON.parse(data.toString());

@@ -85,7 +85,7 @@ const qq = 114514;
 const mahConfig = {
   host: '你的 IP 地址' || '127.0.0.1',
   port: 你的端口号 || 8080,
-  authKey: 你的 authKey || "el-psy-congroo",
+  authKey: "你的 authKey" || "el-psy-congroo",
   enableWebsocket: false,
 };
 
