@@ -14,7 +14,6 @@ export interface MiraiInstance extends Mirai { }
 // 工具
 export * as log from "./utils/log";
 export * as Message from "./utils/message";
-export * from "./helpers";
 
 // 类型
 export * as Api from "./types/api";

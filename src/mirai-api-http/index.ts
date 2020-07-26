@@ -58,6 +58,9 @@ function handleStatusCode(code: number) {
   return msg;
 }
 
+/**
+ * 与 mirai-api-http [setting.yml](https://github.com/project-mirai/mirai-api-http#settingyml模板) 的配置保持一致
+ */
 export interface MiraiApiHttpConfig {
   /**
    * 可选，默认值为0.0.0.0

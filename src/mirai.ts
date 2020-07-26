@@ -8,7 +8,7 @@ import { AxiosStatic } from "axios";
 import MiraiApiHttp from "./mirai-api-http";
 import { MessageType, EventType, MiraiApiHttpConfig } from ".";
 import log from "./utils/log";
-import { getPlain } from "./helpers";
+import { getPlain } from "./message/helper";
 
 type Listener = Map<MessageType.ChatMessageType | EventType.EventType, Function[]>;
 

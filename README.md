@@ -104,6 +104,30 @@ async function app() {
 app();
 ```
 
+## API
+
+```js
+const { Message, log, MessageType, EventType } = require('mirai-ts');
+```
+
+```ts
+import { Message, log, MessageType, EventType } from 'mirai-ts';
+```
+
+### [Message](https://www.yunyoujun.cn/mirai-ts/modules/_message_index_.html)
+
+- `Message`: 生成对应消息的辅助方法，如生成艾特某人的消息 `Message.At(qq)`
+
+[其他辅助方法](https://www.yunyoujun.cn/mirai-ts/modules/_message_helper_.html)
+
+### [log](https://www.yunyoujun.cn/mirai-ts/modules/_utils_log_.html)
+
+- `log`: 彩色日志，如 `log.success('We are free!')`
+
+## 结构
+
+- `types` 目录下为对应类型定义
+
 ## 示例模版
 
 - [el-bot](https://github.com/ElpsyCN/el-bot/)：你可以参考它的使用方式，你也可以直接使用它。
