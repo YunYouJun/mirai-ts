@@ -4,18 +4,19 @@
  */
 
 import Mirai from "./mirai";
-import Message from "./message";
-import MiraiApiHttp from "./mirai-api-http";
-export { Message, MiraiApiHttp };
-
 export default Mirai;
+
+// 必须放在最前面
 if (typeof module !== 'undefined') {
-  module.exports = Mirai;
-  module.exports.default = Mirai;
-  module.exports.Mirai = Mirai;
+  exports = module.exports = Mirai;
 }
 
 export interface MiraiInstance extends Mirai { }
+
+// 
+import Message from "./message";
+import MiraiApiHttp from "./mirai-api-http";
+export { Message, MiraiApiHttp };
 
 // 工具
 export * as log from "./utils/log";

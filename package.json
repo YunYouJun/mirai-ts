@@ -9,6 +9,7 @@
     "dist"
   ],
   "scripts": {
+    "demo": "node demo/index.js",
     "prepublish": "npm run build",
     "build": "rm -rf dist && tsc",
     "docs:build": "typedoc --includeDeclarations --excludeExternals",
