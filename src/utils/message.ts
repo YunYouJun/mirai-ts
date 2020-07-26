@@ -3,7 +3,7 @@
  * @packageDocumentation
  */
 
-import { Config } from "../..";
+import * as Config from "../types/config";
 
 /**
  * 匹配是否相同，当 keywords 为数组时，代表或，有一个相同即可
