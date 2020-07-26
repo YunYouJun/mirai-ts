@@ -22,7 +22,7 @@ npm install mirai-ts
 ## 快速开始
 
 ```js
-const Mirai = require("mirai-ts").default;
+const Mirai = require("mirai-ts");
 
 // 你的 QQ 号
 const qq = 114514;
