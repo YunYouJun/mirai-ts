@@ -3,7 +3,7 @@
  * @packageDocumentation
  */
 
-import * as MessageType from "../types/message-type";
+import * as MessageType from "./types/message-type";
 
 /**
  * 生成引用的消息格式
@@ -153,5 +153,3 @@ export default {
   App,
   Poke,
 };
-
-export * from "./helper";

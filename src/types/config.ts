@@ -1,4 +1,9 @@
 /**
+ * 配置类型，为了保证 mirai-ts 纯净，未来可能会被分离
+ * @packageDocumentation
+ */
+
+/**
 * 正则表达式
 */
 export interface Re {

@@ -1,6 +1,14 @@
+/**
+ * API 请求格式
+ * @packageDocumentation
+ */
+
 import * as MessageType from "../message-type";
 export * as Response from "./response";
 
+/**
+ * 基础的发送消息格式
+ */
 export interface SendMessage {
   sessionKey: string;
   target: number;

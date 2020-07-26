@@ -1,7 +1,12 @@
-import log from "../utils/log";
+/**
+ * mirai-api-http 类，实现了 [mirai-appi-http](https://github.com/project-mirai/mirai-api-http) 文档中的所有请求
+ * @packageDocumentation
+ */
+
+import log from "./utils/log";
 import { AxiosStatic, AxiosResponse } from "axios";
-import { MessageType, Api, Config, EventType } from "..";
-import Message from "../message";
+import { MessageType, Api, Config, EventType } from ".";
+import Message from "./message";
 
 import FormData from "form-data";
 import fs from "fs";

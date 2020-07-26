@@ -1,3 +1,8 @@
+/**
+ * API 响应格式
+ * @packageDocumentation
+ */
+
 import * as MessageType from "../message-type";
 import * as EventType from '../event-type';
 

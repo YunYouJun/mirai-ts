@@ -104,29 +104,45 @@ async function app() {
 app();
 ```
 
-## API
+## 其他
 
 ```js
-const { Message, log, MessageType, EventType } = require('mirai-ts');
+const { Message, log, check, MessageType, EventType } = require('mirai-ts');
 ```
 
 ```ts
-import { Message, log, MessageType, EventType } from 'mirai-ts';
+import { Message, log, check, MessageType, EventType } from 'mirai-ts';
 ```
 
-### [Message](https://www.yunyoujun.cn/mirai-ts/modules/_message_index_.html)
+### [Message](https://www.yunyoujun.cn/mirai-ts/modules/_message_.html)
 
 - `Message`: 生成对应消息的辅助方法，如生成艾特某人的消息 `Message.At(qq)`
 
-[其他辅助方法](https://www.yunyoujun.cn/mirai-ts/modules/_message_helper_.html)
+> 消息链应当是一个数组，如 `messageChain = [Message.At(qq), Message.Plain('来点色图')]`
 
 ### [log](https://www.yunyoujun.cn/mirai-ts/modules/_utils_log_.html)
 
 - `log`: 彩色日志，如 `log.success('We are free!')`
 
+### [check](https://www.yunyoujun.cn/mirai-ts/modules/_utils_check_.html)
+
+消息匹配与检测。
+
+如判断消息链是否有艾特某人：
+
+```js
+const { check } = require("mirai-ts");
+check.isAt(qq);
+```
+
 ## 结构
 
-- `types` 目录下为对应类型定义
+`types` 目录下为对应类型定义
+
+- `api`: API 发送与响应格式
+- `contact`: 用户信息格式（如 Friend, Member, Group 等）
+- `event-type`: 事件类型
+- `message-type`: 消息类型
 
 ## 示例模版
 

@@ -1,3 +1,8 @@
+/**
+ * 消息类型，与 [Mirai-api-http 消息类型一览](https://github.com/project-mirai/mirai-api-http/blob/master/MessageType.md) 保持一致
+ * @packageDocumentation
+ */
+
 import * as Contact from "./contact";
 
 interface BaseSingleMessage {
