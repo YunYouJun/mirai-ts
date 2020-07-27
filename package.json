@@ -1,6 +1,6 @@
 {
   "name": "mirai-ts",
-  "version": "0.4.4",
+  "version": "0.4.5",
   "description": "Mirai TypeScript SDK",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
