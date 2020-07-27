@@ -419,7 +419,8 @@ export default class MiraiApiHttp {
     form.append("sessionKey", this.sessionKey);
     form.append("type", type);
     form.append("img", img);
-    this.axios.post("/uploadImage", form, { headers: form.getHeaders() });
+    const { data } = await this.axios.post("/uploadImage", form, { headers: form.getHeaders() });
+    return data;
   }
 
   /**
