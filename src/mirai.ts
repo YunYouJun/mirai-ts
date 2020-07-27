@@ -7,7 +7,7 @@ import * as axios from "./axios";
 import { AxiosStatic } from "axios";
 import MiraiApiHttp from "./mirai-api-http";
 import { MessageType, EventType, MiraiApiHttpConfig } from ".";
-import log from "./utils/log";
+import * as log from "./utils/log";
 import { getPlain } from "./utils";
 
 type Listener = Map<MessageType.ChatMessageType | EventType.EventType, Function[]>;
@@ -27,7 +27,6 @@ export default class Mirai {
    * 封装 mirai-api-http 的固有方法
    */
   api: MiraiApiHttp;
-  mahConfig: MiraiApiHttpConfig;
   /**
    * 请求工具
    */
@@ -47,11 +46,15 @@ export default class Mirai {
    */
   listener: Listener;
   /**
-   * 当前处理的信息
+   * 轮询获取消息的时间间隔，默认 200 ms，仅在未开启 Websocket 时有效
+   */
+  interval: number;
+  /**
+   * 当前处理的消息
    */
   curMsg?: MessageType.ChatMessage | EventType.Event;
   constructor(
-    mahConfig: MiraiApiHttpConfig = {
+    public mahConfig: MiraiApiHttpConfig = {
       host: "0.0.0.0",
       port: 8080,
       authKey: "el-psy-congroo",
@@ -60,7 +63,6 @@ export default class Mirai {
       cors: ["*"],
     }
   ) {
-    this.mahConfig = mahConfig;
     this.axios = axios.init(`http://${this.mahConfig.host}:${this.mahConfig.port}`);
     this.api = new MiraiApiHttp(this.mahConfig, this.axios);
 
@@ -70,6 +72,7 @@ export default class Mirai {
     this.verified = false;
 
     this.listener = new Map();
+    this.interval = 200;
   }
 
   /**
@@ -201,12 +204,13 @@ export default class Mirai {
 
   /**
    * 监听消息和事件
-   * @param interval 拉起消息时间间隔，默认 200 ms，仅在未开启 Websocket 时有效
+   * @param callback 回调函数
    */
-  listen(interval: number = 200) {
+  listen(callback?: Function) {
     const address = this.mahConfig.host + ':' + this.mahConfig.port;
     if (this.mahConfig.enableWebsocket) {
       this.api.all((msg) => {
+        if (callback) { callback(msg); }
         this.handle(msg);
       });
     } else {
@@ -215,10 +219,11 @@ export default class Mirai {
         const { data } = await this.api.fetchMessage();
         if (data && data.length) {
           data.forEach((msg) => {
+            if (callback) { callback(msg); };
             this.handle(msg);
           });
         }
-      }, interval);
+      }, this.interval);
     }
   }
 }

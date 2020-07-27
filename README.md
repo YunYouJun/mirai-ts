@@ -69,8 +69,10 @@ async function app() {
 
   // 开始监听
   mirai.listen();
-  // 传入参数可以设置轮训间隔的 ms，譬如：
-  // mirai.listen(500)
+  // 可传入回调函数对监听的函数进行处理，如：
+  // mirai.listen((msg) => {
+  //   console.log(msg)
+  // })
 }
 
 app();

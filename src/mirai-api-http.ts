@@ -3,7 +3,7 @@
  * @packageDocumentation
  */
 
-import log from "./utils/log";
+import * as log from "./utils/log";
 import { AxiosStatic, AxiosResponse } from "axios";
 import { MessageType, Api, Config, EventType } from ".";
 import Message from "./message";
