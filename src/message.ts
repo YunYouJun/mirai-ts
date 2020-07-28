@@ -67,7 +67,7 @@ function Plain(text: string): MessageType.Plain {
  * @param url 图片的URL，发送时可作网络图片的链接；接收时为腾讯图片服务器的链接，可用于图片下载
  * @param path 图片的路径，发送本地图片，相对路径于plugins/MiraiAPIHTTP/images
  */
-function Image(imageId: string = "", url: string = "", path = ""): MessageType.Image {
+function Image(imageId = "", url = "", path = ""): MessageType.Image {
   return {
     type: "Image",
     imageId,
@@ -82,7 +82,11 @@ function Image(imageId: string = "", url: string = "", path = ""): MessageType.I
  * @param url 图片的URL，发送时可作网络图片的链接；接收时为腾讯图片服务器的链接，可用于图片下载
  * @param path 图片的路径，发送本地图片，相对路径于plugins/MiraiAPIHTTP/images
  */
-function FlashImage(imageId: string, url: string, path = ""): MessageType.FlashImage {
+function FlashImage(
+  imageId: string,
+  url: string,
+  path = ""
+): MessageType.FlashImage {
   return {
     type: "FlashImage",
     imageId,
@@ -93,7 +97,7 @@ function FlashImage(imageId: string, url: string, path = ""): MessageType.FlashI
 
 /**
  * 富文本消息（譬如合并转发）
- * @param xml 
+ * @param xml
  */
 function Xml(xml: string): MessageType.Xml {
   return {
@@ -104,7 +108,7 @@ function Xml(xml: string): MessageType.Xml {
 
 /**
  * Json 消息格式（我也还没看懂这哪里用，欢迎 PR）
- * @param json 
+ * @param json
  */
 function Json(json: string): MessageType.Json {
   return {
@@ -115,7 +119,7 @@ function Json(json: string): MessageType.Json {
 
 /**
  * 小程序
- * @param content 
+ * @param content
  */
 function App(content: string): MessageType.App {
   return {

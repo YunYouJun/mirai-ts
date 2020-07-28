@@ -7,14 +7,14 @@ import Mirai from "./mirai";
 export default Mirai;
 
 // 必须放在最前面，适配 js require
-if (typeof module !== 'undefined') {
+if (typeof module !== "undefined") {
   module.exports = Mirai;
   module.exports.default = Mirai;
   module.exports.Mirai = Mirai;
   exports = module.exports;
 }
 
-export interface MiraiInstance extends Mirai { }
+export type MiraiInstance = Mirai;
 
 import Message from "./message";
 import MiraiApiHttp from "./mirai-api-http";
@@ -31,4 +31,3 @@ export * as Contact from "./types/contact";
 export * as MessageType from "./types/message-type";
 export * as EventType from "./types/event-type";
 export { MiraiApiHttpConfig } from "./mirai-api-http";
-

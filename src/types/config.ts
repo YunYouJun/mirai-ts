@@ -4,8 +4,8 @@
  */
 
 /**
-* 正则表达式
-*/
+ * 正则表达式
+ */
 export interface Re {
   pattern: string;
   flags: string;

@@ -37,9 +37,4 @@ const error = (msg: any) => {
   console.log(chalk.red(msg));
 };
 
-export {
-  info,
-  success,
-  warning,
-  error,
-};
+export { info, success, warning, error };

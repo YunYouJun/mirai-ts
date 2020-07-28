@@ -33,4 +33,3 @@ export interface SendTempMessage {
   group: number;
   quote?: number;
 }
-

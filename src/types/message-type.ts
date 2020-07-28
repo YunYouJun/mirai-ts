@@ -190,7 +190,18 @@ export interface Poke extends BaseSingleMessage {
  * FriendMessage | GroupMessage | TempMessage 下的 MessageChain 中的单条消息类型
  * 单条消息 此处命名与 mamoe/mirai-core 保持一致
  */
-export type SingleMessage = Source | Quote | At | AtAll | Face | Plain | Image | FlashImage | Xml | Json | App;
+export type SingleMessage =
+  | Source
+  | Quote
+  | At
+  | AtAll
+  | Face
+  | Plain
+  | Image
+  | FlashImage
+  | Xml
+  | Json
+  | App;
 /**
  * 消息链
  */
@@ -226,8 +237,8 @@ export type ChatMessage = GroupMessage | TempMessage | FriendMessage;
 export type ChatMessageType = ChatMessage["type"];
 
 export type ChatMessageMap = {
-  "message": ChatMessage;
-  "GroupMessage": GroupMessage;
-  "FriendMessage": FriendMessage;
-  "TempMessage": TempMessage;
+  message: ChatMessage;
+  GroupMessage: GroupMessage;
+  FriendMessage: FriendMessage;
+  TempMessage: TempMessage;
 };

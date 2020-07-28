@@ -23,7 +23,6 @@ export interface Group {
   permission: Permission;
 }
 
-
 /**
  * 基础用户信息
  */

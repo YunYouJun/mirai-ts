@@ -4,7 +4,7 @@
  */
 
 import * as MessageType from "../message-type";
-import * as EventType from '../event-type';
+import * as EventType from "../event-type";
 
 export interface fetchMessage {
   code: number;

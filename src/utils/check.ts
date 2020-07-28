@@ -46,9 +46,12 @@ export function includes(str: string, keywords: string | string[]): boolean {
  * @param str 字符
  * @param config 正则配置，可以是包含 pattern，flags 的对象，也可以是字符串（直接代表 pattern）
  */
-export function re(str: string, config: Config.Re | string): RegExpMatchArray | boolean {
+export function re(
+  str: string,
+  config: Config.Re | string
+): RegExpMatchArray | boolean {
   let regExp = null;
-  if (typeof config === 'string') {
+  if (typeof config === "string") {
     regExp = new RegExp(config);
   } else {
     regExp = new RegExp(config.pattern, config.flags || "i");
@@ -67,7 +70,10 @@ export function re(str: string, config: Config.Re | string): RegExpMatchArray | 
  * @param str 字符串
  * @param ans 回答的语法配置
  */
-export function match(str: string, ans: Config.Match): boolean | RegExpMatchArray | null {
+export function match(
+  str: string,
+  ans: Config.Match
+): boolean | RegExpMatchArray | null {
   if (ans.re) return re(str, ans.re);
   if (ans.is) return is(str, ans.is);
   if (ans.includes) return includes(str, ans.includes);
@@ -82,8 +88,10 @@ export function match(str: string, ans: Config.Match): boolean | RegExpMatchArra
  * ['FriendMessage', 'GroupMessage', 'TempMessage']
  * @param msg 消息链
  */
-export function isMessage(msg: MessageType.ChatMessage | EventType.Event): msg is MessageType.ChatMessage {
-  const msgType = ['FriendMessage', 'GroupMessage', 'TempMessage'];
+export function isMessage(
+  msg: MessageType.ChatMessage | EventType.Event
+): msg is MessageType.ChatMessage {
+  const msgType = ["FriendMessage", "GroupMessage", "TempMessage"];
   return msgType.includes(msg.type);
 }
 
@@ -91,17 +99,20 @@ export function isMessage(msg: MessageType.ChatMessage | EventType.Event): msg i
  * 是否被艾特
  * 传入 qq 时，返回是否被艾特
  * 未传入 qq 时，返回艾特消息
- * @param msg 
+ * @param msg
  */
-export function isAt(msg: MessageType.ChatMessage, qq?: number): boolean | MessageType.At | undefined {
+export function isAt(
+  msg: MessageType.ChatMessage,
+  qq?: number
+): boolean | MessageType.At | undefined {
   if (qq) {
     return msg.messageChain.some((singleMessage) => {
-      return (singleMessage.type === "At" && singleMessage.target === qq);
+      return singleMessage.type === "At" && singleMessage.target === qq;
     });
   } else {
     let atMsg: MessageType.At | undefined = undefined;
     msg.messageChain.some((singleMessage) => {
-      if (singleMessage.type === 'At') {
+      if (singleMessage.type === "At") {
         atMsg = singleMessage;
         return true;
       }
@@ -109,4 +120,3 @@ export function isAt(msg: MessageType.ChatMessage, qq?: number): boolean | Messa
     return atMsg;
   }
 }
-

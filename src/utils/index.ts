@@ -7,7 +7,7 @@ import * as MessageType from "../types/message-type";
 
 /**
  * 获取纯文本
- * 
+ *
  * > getPlain 已自动调用并挂载于 msg 上，你可以直接使用 msg.plain 获取纯文本内容，而无须调用 getPlain。
  * @param messageChain 消息链
  */
@@ -19,6 +19,4 @@ function getPlain(messageChain: MessageType.MessageChain) {
   return msg;
 }
 
-export {
-  getPlain
-};
+export { getPlain };

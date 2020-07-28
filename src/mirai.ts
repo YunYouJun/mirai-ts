@@ -10,14 +10,21 @@ import { MessageType, EventType, MiraiApiHttpConfig } from ".";
 import * as log from "./utils/log";
 import { getPlain } from "./utils";
 
-type Listener = Map<MessageType.ChatMessageType | EventType.EventType, Function[]>;
+type Listener = Map<
+  MessageType.ChatMessageType | EventType.EventType,
+  Function[]
+>;
 
-type Data<T extends "message" | EventType.EventType | MessageType.ChatMessageType> =
-  T extends EventType.EventType
+/**
+ * 数据类型
+ */
+type Data<
+  T extends "message" | EventType.EventType | MessageType.ChatMessageType
+> = T extends EventType.EventType
   ? EventType.EventMap[T]
-  : (T extends MessageType.ChatMessageType
-    ? MessageType.ChatMessageMap[T]
-    : MessageType.ChatMessage);
+  : T extends MessageType.ChatMessageType
+  ? MessageType.ChatMessageMap[T]
+  : MessageType.ChatMessage;
 
 /**
  * Mirai SDK 初始化类
@@ -63,7 +70,9 @@ export default class Mirai {
       cors: ["*"],
     }
   ) {
-    this.axios = axios.init(`http://${this.mahConfig.host}:${this.mahConfig.port}`);
+    this.axios = axios.init(
+      `http://${this.mahConfig.host}:${this.mahConfig.port}`
+    );
     this.api = new MiraiApiHttp(this.mahConfig, this.axios);
 
     // default
@@ -115,24 +124,30 @@ export default class Mirai {
    * @param type
    * @param callback
    */
-  on<T extends "message" | EventType.EventType | MessageType.ChatMessageType>(type: T, callback: (data: Data<T>) => any) {
+  on<T extends "message" | EventType.EventType | MessageType.ChatMessageType>(
+    type: T,
+    callback: (data: Data<T>) => any
+  ) {
     // too complex for typescript so that in some case it cannot identify the type correctly
     // 说明监听所有
-    if (type === 'message') {
-      this.addListener('FriendMessage', callback as any);
-      this.addListener('GroupMessage', callback as any);
-      this.addListener('TempMessage', callback as any);
+    if (type === "message") {
+      this.addListener("FriendMessage", callback);
+      this.addListener("GroupMessage", callback);
+      this.addListener("TempMessage", callback);
     } else {
-      this.addListener<Exclude<T, "message">>(type as any, callback);
+      this.addListener(type as Exclude<T, "message">, callback);
     }
   }
 
   /**
    * 添加监听者
-   * @param type 
-   * @param callback 
+   * @param type
+   * @param callback
    */
-  addListener<T extends EventType.EventType | MessageType.ChatMessageType>(type: T, callback: (data: Data<T>) => any) {
+  addListener<T extends EventType.EventType | MessageType.ChatMessageType>(
+    type: T,
+    callback: Function
+  ) {
     const set = this.listener.get(type);
     if (set) {
       set.push(callback);
@@ -169,7 +184,7 @@ export default class Mirai {
 
   /**
    * 为聊天消息类型挂载辅助函数
-   * @param msg 
+   * @param msg
    */
   addHelperForMsg(msg: MessageType.ChatMessage) {
     msg.reply = async (
@@ -189,7 +204,7 @@ export default class Mirai {
     this.curMsg = msg;
     const set = this.listener.get(msg.type);
     if (set) {
-      set.forEach(callback => {
+      set.forEach((callback) => {
         if (
           msg.type === "FriendMessage" ||
           msg.type === "GroupMessage" ||
@@ -207,10 +222,12 @@ export default class Mirai {
    * @param callback 回调函数
    */
   listen(callback?: Function) {
-    const address = this.mahConfig.host + ':' + this.mahConfig.port;
+    const address = this.mahConfig.host + ":" + this.mahConfig.port;
     if (this.mahConfig.enableWebsocket) {
       this.api.all((msg) => {
-        if (callback) { callback(msg); }
+        if (callback) {
+          callback(msg);
+        }
         this.handle(msg);
       });
     } else {
@@ -219,7 +236,9 @@ export default class Mirai {
         const { data } = await this.api.fetchMessage();
         if (data && data.length) {
           data.forEach((msg) => {
-            if (callback) { callback(msg); };
+            if (callback) {
+              callback(msg);
+            }
             this.handle(msg);
           });
         }

@@ -81,11 +81,11 @@ app();
 ### TypeScript
 
 ```ts
-import Mirai from "mirai-ts"
+import Mirai from "mirai-ts";
 
 const qq = 114514;
 const mahConfig = {
-  host: '你的 IP 地址' || '127.0.0.1',
+  host: "你的 IP 地址" || "127.0.0.1",
   port: 你的端口号 || 8080,
   authKey: "你的 authKey" || "el-psy-congroo",
   enableWebsocket: false,
@@ -100,7 +100,7 @@ async function app() {
     // 复读
     msg.reply(msg.messageChain);
   });
-  mirai.listen()
+  mirai.listen();
 }
 
 app();
@@ -109,11 +109,11 @@ app();
 ## 其他
 
 ```js
-const { Message, log, check, MessageType, EventType } = require('mirai-ts');
+const { Message, log, check, MessageType, EventType } = require("mirai-ts");
 ```
 
 ```ts
-import { Message, log, check, MessageType, EventType } from 'mirai-ts';
+import { Message, log, check, MessageType, EventType } from "mirai-ts";
 ```
 
 ### [Message](https://www.yunyoujun.cn/mirai-ts/modules/_message_.html)
