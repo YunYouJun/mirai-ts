@@ -8,13 +8,14 @@ export default Mirai;
 
 // 必须放在最前面，适配 js require
 if (typeof module !== 'undefined') {
-  // lgtm [js/useless-assignment-to-local]
-  exports = module.exports = Mirai;
+  module.exports = Mirai;
+  module.exports.default = Mirai;
+  module.exports.Mirai = Mirai;
+  exports = module.exports;
 }
 
 export interface MiraiInstance extends Mirai { }
 
-// 
 import Message from "./message";
 import MiraiApiHttp from "./mirai-api-http";
 export { Message, MiraiApiHttp };
