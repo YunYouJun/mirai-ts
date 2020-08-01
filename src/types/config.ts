@@ -1,34 +1,7 @@
 /**
- * 配置类型，为了保证 mirai-ts 纯净，未来可能会被分离
+ * 群设置与成员信息设置
  * @packageDocumentation
  */
-
-/**
- * 正则表达式
- */
-export interface Re {
-  pattern: string;
-  flags: string;
-}
-
-/**
- * 匹配配置
- */
-export interface Match {
-  re?: Re;
-  is?: string | string[];
-  includes?: string | string[];
-}
-
-export interface Listen {
-  friend?: number[];
-  group?: number[];
-}
-
-export interface Target {
-  friend?: number[];
-  group?: number[];
-}
 
 /**
  * 群设置
@@ -60,6 +33,9 @@ export interface GroupConfig {
   anonymousChat?: boolean;
 }
 
+/**
+ * 群员信息
+ */
 export interface MemberInfo {
   /**
    * 群名片

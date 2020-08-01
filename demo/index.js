@@ -15,7 +15,7 @@ const mirai = new Mirai(mahConfig);
 
 async function app() {
   // 登录 QQ
-  await mirai.login(qq);
+  await mirai.link(qq);
 
   // 对收到的消息进行处理
   // message 本质相当于同时绑定了 FriendMessage GroupMessage TempMessage

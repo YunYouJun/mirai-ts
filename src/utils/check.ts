@@ -5,7 +5,28 @@
 
 import * as MessageType from "../types/message-type";
 import * as EventType from "../types/event-type";
-import * as Config from "../types/config";
+
+/**
+ * 配置类型
+ * @packageDocumentation
+ */
+
+/**
+ * 正则表达式
+ */
+export interface Re {
+  pattern: string;
+  flags: string;
+}
+
+/**
+ * 匹配配置
+ */
+export interface Match {
+  re?: Re;
+  is?: string | string[];
+  includes?: string | string[];
+}
 
 // 匹配
 /**
@@ -48,7 +69,7 @@ export function includes(str: string, keywords: string | string[]): boolean {
  */
 export function re(
   str: string,
-  config: Config.Re | string
+  config: Re | string
 ): RegExpMatchArray | boolean {
   let regExp = null;
   if (typeof config === "string") {
@@ -72,7 +93,7 @@ export function re(
  */
 export function match(
   str: string,
-  ans: Config.Match
+  ans: Match
 ): boolean | RegExpMatchArray | null {
   if (ans.re) return re(str, ans.re);
   if (ans.is) return is(str, ans.is);

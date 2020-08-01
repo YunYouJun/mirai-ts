@@ -85,9 +85,16 @@ export default class Mirai {
   }
 
   /**
-   * login 登录 QQ 号
+   * @deprecated since version v0.5.0
    */
-  async login(qq: number) {
+  login(qq: number) {
+    log.error("mirai.login(qq) 请使用 miria.link(qq) 替代");
+  }
+
+  /**
+   * link 链接 mirai 已经登录的 QQ 号
+   */
+  async link(qq: number) {
     this.qq = qq;
     // Todo
     const { session } = await this.auth();
