@@ -116,17 +116,17 @@ const { Message, log, check, MessageType, EventType } = require("mirai-ts");
 import { Message, log, check, MessageType, EventType } from "mirai-ts";
 ```
 
-### [Message](https://www.yunyoujun.cn/mirai-ts/modules/_message_.html)
+### [Message](https://www.yunyoujun.cn/mirai-ts/modules/_src_message_.html)
 
 - `Message`: 生成对应消息的辅助方法，如生成艾特某人的消息 `Message.At(qq)`
 
 > 消息链应当是一个数组，如 `messageChain = [Message.At(qq), Message.Plain('来点色图')]`
 
-### [log](https://www.yunyoujun.cn/mirai-ts/modules/_utils_log_.html)
+### [log](https://www.yunyoujun.cn/mirai-ts/modules/_src_utils_log_.html)
 
 - `log`: 彩色日志，如 `log.success('We are free!')`
 
-### [check](https://www.yunyoujun.cn/mirai-ts/modules/_utils_check_.html)
+### [check](https://www.yunyoujun.cn/mirai-ts/modules/_src_utils_check_.html)
 
 消息匹配与检测。
 
