@@ -232,10 +232,10 @@ export default class Mirai {
     const address = this.mahConfig.host + ":" + this.mahConfig.port;
     if (this.mahConfig.enableWebsocket) {
       this.api.all((msg) => {
+        this.handle(msg);
         if (callback) {
           callback(msg);
         }
-        this.handle(msg);
       });
     } else {
       log.info("开始监听: http://" + address);
@@ -243,10 +243,10 @@ export default class Mirai {
         const { data } = await this.api.fetchMessage();
         if (data && data.length) {
           data.forEach((msg) => {
+            this.handle(msg);
             if (callback) {
               callback(msg);
             }
-            this.handle(msg);
           });
         }
       }, this.interval);

@@ -23,6 +23,7 @@ export { Message, MiraiApiHttp };
 // 工具
 export * as log from "./utils/log";
 export * as check from "./utils/check";
+export * as template from "./utils/template";
 
 // 类型
 export * as Api from "./types/api";
