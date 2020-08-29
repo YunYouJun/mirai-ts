@@ -4,12 +4,17 @@
  */
 
 import * as Contact from "./contact";
+import { MessageChain } from "./message-type";
 
 /**
  * 内部基类
  */
 export interface BaseEvent {
   type: string;
+  /**
+   * reply 辅助函数
+   */
+  reply?: (msgChain: string | MessageChain, quote?: boolean) => Promise<void>;
 }
 
 /**

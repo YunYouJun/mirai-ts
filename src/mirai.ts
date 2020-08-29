@@ -9,6 +9,7 @@ import MiraiApiHttp from "./mirai-api-http";
 import { MessageType, EventType, MiraiApiHttpConfig } from ".";
 import * as log from "./utils/log";
 import { getPlain } from "./utils";
+import { isMessage } from "./utils/check";
 
 type Listener = Map<
   MessageType.ChatMessageType | EventType.EventType,
@@ -164,43 +165,103 @@ export default class Mirai {
   }
 
   /**
-   * 快速回复
+   * 快速回复（只在消息类型包含群组或好友信息时有效）
    * @param msg 发送内容（消息链/纯文本皆可）
    * @param srcMsg 回复哪条消息
-   * @param quote 是否引用回复
+   * @param quote 是否引用回复（非聊天消息类型时无效）
    */
   reply(
     msgChain: string | MessageType.MessageChain,
-    srcMsg: MessageType.ChatMessage,
+    srcMsg: EventType.Event | MessageType.ChatMessage,
     quote = false
   ) {
     let messageId = 0;
+    let target = 0;
+    let type = "friend";
 
-    if (quote && srcMsg.messageChain[0].type === "Source") {
-      messageId = srcMsg.messageChain[0].id;
+    if (isMessage(srcMsg)) {
+      if (quote && srcMsg.messageChain[0].type === "Source") {
+        messageId = srcMsg.messageChain[0].id;
+      }
     }
 
-    if (srcMsg.type === "FriendMessage") {
-      const target = srcMsg.sender.id;
+    // reply 不同的目标
+    switch (srcMsg.type) {
+      case "TempMessage":
+      case "FriendMessage":
+        type = "friend";
+        target = srcMsg.sender.id;
+        break;
+      case "GroupMessage":
+        type = "group";
+        target = srcMsg.sender.group.id;
+        break;
+      case "BotOnlineEvent":
+      case "BotOfflineEventActive":
+      case "BotOfflineEventForce":
+      case "BotOfflineEventDropped":
+      case "BotReloginEvent":
+        type = "friend";
+        target = srcMsg.qq;
+        break;
+      case "GroupRecallEvent":
+      case "BotGroupPermissionChangeEvent":
+      case "BotJoinGroupEvent":
+      case "GroupNameChangeEvent":
+      case "GroupEntranceAnnouncementChangeEvent":
+      case "GroupMuteAllEvent":
+      case "GroupAllowAnonymousChatEvent":
+      case "GroupAllowConfessTalkEvent":
+      case "GroupAllowMemberInviteEvent":
+        type = "group";
+        break;
+      case "MemberJoinEvent":
+      case "MemberLeaveEventKick":
+      case "MemberLeaveEventQuit":
+      case "MemberCardChangeEvent":
+      case "MemberSpecialTitleChangeEvent":
+      case "MemberPermissionChangeEvent":
+      case "MemberMuteEvent":
+      case "MemberUnmuteEvent":
+        type = "group";
+        target = srcMsg.member.group.id;
+        break;
+      case "MemberJoinRequestEvent":
+        type = "group";
+        target = srcMsg.groupId;
+        break;
+      default:
+        break;
+    }
+
+    if (type === "friend") {
       return this.api.sendFriendMessage(msgChain, target, messageId);
-    } else if (srcMsg.type === "GroupMessage") {
-      const target = srcMsg.sender.group.id;
+    } else if (type === "group") {
       return this.api.sendGroupMessage(msgChain, target, messageId);
     }
   }
 
   /**
-   * 为聊天消息类型挂载辅助函数
+   * 为消息类型挂载辅助函数
    * @param msg
    */
-  addHelperForMsg(msg: MessageType.ChatMessage) {
-    msg.reply = async (
+  addHelperForMsg(msg: MessageType.ChatMessage | EventType.Event) {
+    // 消息类型添加直接获取消息内容的参数
+    if (
+      msg.type === "FriendMessage" ||
+      msg.type === "GroupMessage" ||
+      msg.type === "TempMessage"
+    ) {
+      msg.plain = getPlain(msg.messageChain);
+    }
+
+    // 为各类型添加 reply 辅助函数
+    (msg as any).reply = async (
       msgChain: string | MessageType.MessageChain,
       quote = false
     ) => {
       this.reply(msgChain, msg, quote);
     };
-    msg.plain = getPlain(msg.messageChain);
   }
 
   /**
@@ -212,13 +273,7 @@ export default class Mirai {
     const set = this.listener.get(msg.type);
     if (set) {
       set.forEach((callback) => {
-        if (
-          msg.type === "FriendMessage" ||
-          msg.type === "GroupMessage" ||
-          msg.type === "TempMessage"
-        ) {
-          this.addHelperForMsg(msg);
-        }
+        this.addHelperForMsg(msg);
         callback(msg);
       });
     }

@@ -148,7 +148,7 @@ check.isAt(qq);
 
 ## 示例模版
 
-- [el-bot](https://github.com/ElpsyCN/el-bot/)：你可以参考它的使用方式，你也可以直接使用它。
+- [el-bot](https://github.com/YunYouJun/el-bot/)：你可以参考它的使用方式，你也可以直接使用它。
 
 el-bot 展示了整个 mirai-ts 的使用流程，并内置了一些如自动应答、转发、命令行、RSS 等常用功能（默认插件），开箱即用。
 
