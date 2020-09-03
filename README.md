@@ -21,6 +21,8 @@ npm install mirai-ts
 
 ## 快速开始
 
+### JavaScript
+
 ```js
 const Mirai = require("mirai-ts");
 

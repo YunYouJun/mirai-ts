@@ -3,65 +3,22 @@
  * @packageDocumentation
  */
 
-import * as log from "./utils/log";
+import * as log from "../utils/log";
 import { AxiosStatic, AxiosResponse } from "axios";
-import { MessageType, Api, Config, EventType } from ".";
-import Message from "./message";
+import { MessageType, Api, Config, EventType } from "..";
+import Message from "../message";
 
+// for upload image
 import FormData from "form-data";
 import fs from "fs";
-
 import WebSocket from "ws";
 
-/**
- * 状态码及其对应消息
- * @param code Mirai 状态码
- * Todo: to json
- */
-function handleStatusCode(code: number) {
-  let msg = "";
-  switch (code) {
-    case 0:
-      msg = "正常";
-      break;
-    case 1:
-      msg = "错误的 auth key";
-      break;
-    case 2:
-      msg = "指定的 Bot 不存在";
-      break;
-    case 3:
-      msg = "Session 失效或不存在";
-      break;
-    case 4:
-      msg = "Session 未认证(未激活)";
-      break;
-    case 5:
-      msg = "发送消息目标不存在(指定对象不存在)";
-      break;
-    case 6:
-      msg = "指定文件不存在，出现于发送本地图片";
-      break;
-    case 10:
-      msg = "无操作权限，指 Bot 没有对应操作的限权";
-      break;
-    case 20:
-      msg = "Bot 被禁言，指 Bot 当前无法向指定群发送消息";
-      break;
-    case 30:
-      msg = "消息过长";
-      break;
-    case 400:
-      msg = "错误的访问，如参数错误等";
-      break;
-    case 500:
-      msg = "服务器端错误的响应（mirai-console/mirai-api-http 背锅）";
-      break;
-    default:
-      break;
-  }
-  return msg;
-}
+// nested api url
+import { Command } from "./command";
+import { Resp } from "./resp";
+
+// 处理状态码
+import { handleStatusCode } from "./utils";
 
 /**
  * 与 mirai-api-http [setting.yml](https://github.com/project-mirai/mirai-api-http#settingyml模板) 的配置保持一致
@@ -99,7 +56,12 @@ export default class MiraiApiHttp {
   verified: boolean;
 
   address?: string;
-  command: any;
+  command: Command;
+  /**
+   * https://github.com/project-mirai/mirai-api-http/blob/master/EventType.md
+   * EventType 中的请求
+   */
+  resp: Resp;
   constructor(public config: MiraiApiHttpConfig, public axios: AxiosStatic) {
     this.sessionKey = "";
     this.qq = 0;
@@ -108,44 +70,8 @@ export default class MiraiApiHttp {
     if (this.config.enableWebsocket) {
       this.address = `ws://${this.config.host}:${this.config.port}`;
     }
-    this.command = {
-      axios,
-      /**
-       * 注册指令
-       * @param name 指令名
-       * @param alias 指令别名
-       * @param description 指令描述
-       * @param usage 指令描述，会在指令执行错误时显示
-       */
-      register: async (
-        name: string,
-        alias: string[],
-        description: string,
-        usage?: string
-      ) => {
-        const { data } = await this.axios.post("/command/register", {
-          authKey: config.authKey,
-          name,
-          alias,
-          description,
-          usage,
-        });
-        return data;
-      },
-      /**
-       * 发送指令
-       * @param name 指令名
-       * @param args 指令参数
-       */
-      send: async (name: string, args: string[]) => {
-        const { data } = await this.axios.post("/command/send", {
-          authKey: config.authKey,
-          name,
-          args,
-        });
-        return data;
-      },
-    };
+    this.command = new Command(this);
+    this.resp = new Resp(this);
   }
 
   /**
@@ -416,18 +342,21 @@ export default class MiraiApiHttp {
   }
 
   /**
-   * 使用此方法上传图片文件至服务器并返回ImageId
-   * @param type "friend" 或 "group" 或 "temp"
+   * 使用此方法上传图片文件至服务器并返回 ImageId
+   * @param type
    * @param img 图片文件
    */
-  async uploadImage(type: string, img: string | fs.ReadStream) {
+  async uploadImage(
+    type: "friend" | "group" | "temp",
+    img: string | fs.ReadStream | File
+  ) {
     if (typeof img === "string") img = fs.createReadStream(img);
     const form = new FormData();
     form.append("sessionKey", this.sessionKey);
     form.append("type", type);
     form.append("img", img);
     const { data } = await this.axios.post("/uploadImage", form, {
-      headers: form.getHeaders(),
+      headers: form.getHeaders(), // same as post: { 'Content-Type': 'multipart/form-data' }
     });
     return data;
   }
@@ -619,75 +548,6 @@ export default class MiraiApiHttp {
       });
       return data;
     }
-  }
-
-  /**
-   * 响应新朋友请求
-   * @param event 请求的事件
-   * @param operate 操作 allow 同意添加好友, deny 拒绝添加好友, black 拒绝添加好友并添加黑名单，不再接收该用户的好友申请
-   * @param message 响应消息
-   */
-  async responseNewFriendRequest(
-    event: EventType.NewFriendRequestEvent,
-    operate: "allow" | "deny" | "black",
-    message?: string
-  ) {
-    await this.axios.post("/resp/newFriendRequestEvent", {
-      sessionKey: this.sessionKey,
-      eventId: event.eventId,
-      fromId: event.fromId,
-      groupId: event.groupId,
-      operate: ["allow", "deny", "black"].indexOf(operate),
-      message,
-    });
-  }
-
-  /**
-   * 响应新入群请求
-   * @param event 请求的事件
-   * @param operate 操作 allow 同意入群, deny 拒绝入群, ignore 忽略请求, deny-black 拒绝入群并添加黑名单，不再接收该用户的入群申请, ignore-black 忽略入群并添加黑名单，不再接收该用户的入群申请
-   * @param message 响应消息
-   */
-  async responseMemberJoinRequest(
-    event: EventType.MemberJoinRequestEvent,
-    operate: "allow" | "deny" | "ignore" | "deny-black" | "ignore-black",
-    message?: string
-  ) {
-    await this.axios.post("/resp/memberJoinRequestEvent", {
-      sessionKey: this.sessionKey,
-      eventId: event.eventId,
-      fromId: event.fromId,
-      groupId: event.groupId,
-      operate: [
-        "allow",
-        "deny",
-        "ignore",
-        "deny-black",
-        "ignore-black",
-      ].indexOf(operate),
-      message,
-    });
-  }
-
-  /**
-   * 响应被邀请入群申请
-   * @param event 请求的事件
-   * @param operate 操作 allow 同意邀请, deny 拒绝邀请
-   * @param message 响应消息
-   */
-  async responseBotInvitedJoinGroupRequest(
-    event: EventType.BotInvitedJoinGroupRequestEvent,
-    operate: "allow" | "deny",
-    message?: string
-  ) {
-    await this.axios.post("/resp/botInvitedJoinGroupRequestEvent", {
-      sessionKey: this.sessionKey,
-      eventId: event.eventId,
-      fromId: event.fromId,
-      groupId: event.groupId,
-      operate: ["allow", "deny"].indexOf(operate),
-      message,
-    });
   }
 
   // Websocket
