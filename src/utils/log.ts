@@ -5,12 +5,16 @@
 
 import chalk from "chalk";
 
+const log = (msg: any) => {
+  console.log(chalk.cyan("[mirai-ts]"), msg);
+};
+
 /**
  * 输出提示信息（蓝色）
  * @param msg 文本
  */
 const info = (msg: any) => {
-  console.log(chalk.blue(msg));
+  log(chalk.blue(msg));
 };
 
 /**
@@ -18,7 +22,7 @@ const info = (msg: any) => {
  * @param msg 文本
  */
 const success = (msg: any) => {
-  console.log(chalk.green(msg));
+  log(chalk.green(msg));
 };
 
 /**
@@ -26,7 +30,7 @@ const success = (msg: any) => {
  * @param msg 文本
  */
 const warning = (msg: any) => {
-  console.log(chalk.yellow(msg));
+  log(chalk.yellow(msg));
 };
 
 /**
@@ -34,7 +38,7 @@ const warning = (msg: any) => {
  * @param msg 文本
  */
 const error = (msg: any) => {
-  console.log(chalk.red(msg));
+  log(chalk.red(msg));
 };
 
 export { info, success, warning, error };

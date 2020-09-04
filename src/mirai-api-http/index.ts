@@ -10,7 +10,6 @@ import Message from "../message";
 
 // for upload image
 import FormData from "form-data";
-import fs from "fs";
 import WebSocket from "ws";
 
 // nested api url
@@ -19,6 +18,8 @@ import { Resp } from "./resp";
 
 // 处理状态码
 import { handleStatusCode } from "./utils";
+
+import ora from "ora";
 
 /**
  * 与 mirai-api-http [setting.yml](https://github.com/project-mirai/mirai-api-http#settingyml模板) 的配置保持一致
@@ -55,13 +56,17 @@ export default class MiraiApiHttp {
   qq: number;
   verified: boolean;
 
-  address?: string;
+  address: string;
   command: Command;
   /**
    * https://github.com/project-mirai/mirai-api-http/blob/master/EventType.md
    * EventType 中的请求
    */
   resp: Resp;
+  /**
+   * 旋转进度
+   */
+  spinner?: ora.Ora;
   constructor(public config: MiraiApiHttpConfig, public axios: AxiosStatic) {
     this.sessionKey = "";
     this.qq = 0;
@@ -69,6 +74,8 @@ export default class MiraiApiHttp {
 
     if (this.config.enableWebsocket) {
       this.address = `ws://${this.config.host}:${this.config.port}`;
+    } else {
+      this.address = `http://${this.config.host}:${this.config.port}`;
     }
     this.command = new Command(this);
     this.resp = new Resp(this);
@@ -86,7 +93,7 @@ export default class MiraiApiHttp {
             log.error(`Code ${res.data.code}: ${message}`);
 
             if (res.data.code === 3) {
-              log.info("正在自动尝试重新建立连接...");
+              log.warning("正在尝试重新建立连接...");
               await this.auth();
               await this.verify(this.qq);
             }
@@ -120,7 +127,8 @@ export default class MiraiApiHttp {
 
     if (data.code === 0) {
       this.sessionKey = data.session;
-      log.success(`获取 Session: ${data.session}`);
+
+      this.spinner = ora(`验证 Session: ${data.session}`).start();
     }
     return data;
   }
@@ -136,7 +144,10 @@ export default class MiraiApiHttp {
     });
     if (data.code === 0) {
       this.verified = true;
-      log.success(`Session(${this.sessionKey}) 验证成功`);
+      this.spinner?.succeed();
+    } else {
+      this.verified = false;
+      this.spinner?.fail();
     }
     return data;
   }
@@ -346,11 +357,11 @@ export default class MiraiApiHttp {
    * @param type
    * @param img 图片文件
    */
-  async uploadImage(
-    type: "friend" | "group" | "temp",
-    img: string | fs.ReadStream | File
-  ) {
-    if (typeof img === "string") img = fs.createReadStream(img);
+  async uploadImage(type: "friend" | "group" | "temp", img: string | File) {
+    if (typeof img === "string") {
+      const fs = require("fs");
+      img = fs.createReadStream(img);
+    }
     const form = new FormData();
     form.append("sessionKey", this.sessionKey);
     form.append("type", type);
@@ -555,8 +566,8 @@ export default class MiraiApiHttp {
    * 监听该接口，插件将推送 Bot 收到的消息
    * @param callback 回调函数
    */
-  message(callback: (msg: MessageType.ChatMessage) => any) {
-    log.info(`开始监听消息: ${this.address}`);
+  message(callback: (msg: MessageType.ChatMessage) => any): void {
+    log.info(`监听消息: ${this.address}`);
     const ws = new WebSocket(
       this.address + "/message?sessionKey=" + this.sessionKey
     );
@@ -571,7 +582,7 @@ export default class MiraiApiHttp {
    * @param callback 回调函数
    */
   event(callback: (event: EventType.Event) => any) {
-    log.info(`开始监听事件: ${this.address}`);
+    log.info(`监听事件: ${this.address}`);
     const ws = new WebSocket(
       this.address + "/event?sessionKey=" + this.sessionKey
     );
@@ -586,7 +597,7 @@ export default class MiraiApiHttp {
    * @param callback 回调函数
    */
   all(callback: (data: EventType.Event | MessageType.ChatMessage) => any) {
-    log.info(`开始监听消息和事件: ${this.address}`);
+    log.info(`监听消息和事件: ${this.address}`);
     const ws = new WebSocket(
       this.address + "/all?sessionKey=" + this.sessionKey
     );
