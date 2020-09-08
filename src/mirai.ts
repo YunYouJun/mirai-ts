@@ -11,6 +11,13 @@ import * as log from "./utils/log";
 import { getPlain } from "./utils";
 import { isMessage } from "./utils/check";
 
+// 所有消息
+export type MessageAndEvent = MessageType.ChatMessage | EventType.Event;
+// 所有消息类型
+export type MessageAndEventType =
+  | MessageType.ChatMessageType
+  | EventType.EventType;
+
 type Listener = Map<
   MessageType.ChatMessageType | EventType.EventType,
   Function[]
@@ -50,9 +57,21 @@ export default class Mirai {
    */
   verified: boolean;
   /**
+   * 监听器状态（false 则不执行监听器回调函数）
+   */
+  active: boolean;
+  /**
    * 监听者（回调函数）
    */
   listener: Listener;
+  /**
+   * 监听者之前执行的函数
+   */
+  beforeListener: Function[];
+  /**
+   * 监听者之后执行的函数
+   */
+  afterListener: Function[];
   /**
    * 轮询获取消息的时间间隔，默认 200 ms，仅在未开启 Websocket 时有效
    */
@@ -81,15 +100,23 @@ export default class Mirai {
     this.qq = 0;
     this.verified = false;
 
+    this.active = true;
     this.listener = new Map();
+    this.beforeListener = [];
+    this.afterListener = [];
     this.interval = 200;
+
+    const pkg = require("../package.json");
+    log.info(`Version ${pkg.version}`);
+    log.info(`Docs: ${pkg.homepage}`);
+    log.info(`GitHub: ${pkg.repository.url}`);
   }
 
   /**
    * @deprecated since version v0.5.0
    */
   login(qq: number) {
-    log.error("mirai.login(qq) 请使用 miria.link(qq) 替代");
+    log.error(`mirai.login(qq) 请使用 miria.link(${qq}) 替代`);
   }
 
   /**
@@ -246,6 +273,7 @@ export default class Mirai {
    * @param msg
    */
   addHelperForMsg(msg: MessageType.ChatMessage | EventType.Event) {
+    this.curMsg = msg;
     // 消息类型添加直接获取消息内容的参数
     if (
       msg.type === "FriendMessage" ||
@@ -265,32 +293,57 @@ export default class Mirai {
   }
 
   /**
-   * 处理消息
-   * @param msg 一条消息
+   * 执行所有事件监听回调函数
+   * @param msg
    */
-  handle(msg: MessageType.ChatMessage | EventType.Event) {
-    this.curMsg = msg;
-    const set = this.listener.get(msg.type);
-    if (set) {
-      set.forEach((callback) => {
-        this.addHelperForMsg(msg);
-        callback(msg);
-      });
+  execListener(msg: MessageType.ChatMessage | EventType.Event) {
+    this.beforeListener.forEach((cb) => {
+      cb(msg);
+    });
+    if (this.active) {
+      const set = this.listener.get(msg.type);
+      if (set) {
+        set.forEach((callback) => {
+          callback(msg);
+        });
+      }
+    }
+    this.afterListener.forEach((cb) => {
+      cb(msg);
+    });
+  }
+
+  /**
+   * 处理消息
+   * @param msg
+   * @param before 在监听器函数执行前执行
+   * @param after 在监听器函数执行后执行
+   */
+  handle(
+    msg: MessageType.ChatMessage | EventType.Event,
+    before?: Function,
+    after?: Function
+  ) {
+    this.addHelperForMsg(msg);
+    if (before) {
+      before(msg);
+    }
+    this.execListener(msg);
+    if (after) {
+      after(msg);
     }
   }
 
   /**
    * 监听消息和事件
-   * @param callback 回调函数
+   * @param before 在监听器函数执行前执行
+   * @param after 在监听器函数执行后执行
    */
-  listen(callback?: Function) {
+  listen(before?: Function, after?: Function) {
     const address = this.mahConfig.host + ":" + this.mahConfig.port;
     if (this.mahConfig.enableWebsocket) {
       this.api.all((msg) => {
-        this.handle(msg);
-        if (callback) {
-          callback(msg);
-        }
+        this.handle(msg, before, after);
       });
     } else {
       log.info("开始监听: http://" + address);
@@ -298,10 +351,7 @@ export default class Mirai {
         const { data } = await this.api.fetchMessage();
         if (data && data.length) {
           data.forEach((msg) => {
-            this.handle(msg);
-            if (callback) {
-              callback(msg);
-            }
+            this.handle(msg, before, after);
           });
         }
       }, this.interval);

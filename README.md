@@ -158,7 +158,7 @@ el-bot 展示了整个 mirai-ts 的使用流程，并内置了一些如自动应
 
 但这并不是束缚，在插件系统中你仍然可以调用机器人所有的上下文，并通过编写插件的形式快速实现你想要的功能。
 
-> 更多请参见文档 [el-bot | El Bot Docs](https://docs.bot.elpsy.cn/js/)
+> 更多请参见文档 [el-bot | El Bot Docs](https://docs.bot.elpsy.cn/)
 
 ## Why Typescript & mirai-ts?
 

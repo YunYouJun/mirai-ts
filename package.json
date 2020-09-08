@@ -1,6 +1,6 @@
 {
   "name": "mirai-ts",
-  "version": "0.6.1",
+  "version": "0.6.2",
   "description": "Mirai TypeScript SDK",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -33,6 +33,7 @@
     "type": "git",
     "url": "https://github.com/YunYouJun/mirai-ts"
   },
+  "homepage": "https://www.yunyoujun.cn/mirai-ts/",
   "keywords": [
     "mirai",
     "http",
