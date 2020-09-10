@@ -19,8 +19,6 @@ import { Resp } from "./resp";
 // 处理状态码
 import { handleStatusCode } from "./utils";
 
-import ora from "ora";
-
 /**
  * 与 mirai-api-http [setting.yml](https://github.com/project-mirai/mirai-api-http#settingyml模板) 的配置保持一致
  */
@@ -63,10 +61,7 @@ export default class MiraiApiHttp {
    * EventType 中的请求
    */
   resp: Resp;
-  /**
-   * 旋转进度
-   */
-  spinner?: ora.Ora;
+
   constructor(public config: MiraiApiHttpConfig, public axios: AxiosStatic) {
     this.sessionKey = "";
     this.qq = 0;
@@ -127,8 +122,6 @@ export default class MiraiApiHttp {
 
     if (data.code === 0) {
       this.sessionKey = data.session;
-
-      this.spinner = ora(`验证 Session: ${data.session}`).start();
     }
     return data;
   }
@@ -142,13 +135,7 @@ export default class MiraiApiHttp {
       sessionKey: this.sessionKey,
       qq,
     });
-    if (data.code === 0) {
-      this.verified = true;
-      this.spinner?.succeed();
-    } else {
-      this.verified = false;
-      this.spinner?.fail();
-    }
+    this.verified = data.code === 0;
     return data;
   }
 
@@ -163,7 +150,6 @@ export default class MiraiApiHttp {
     });
     if (data.code === 0) {
       this.verified = false;
-      log.success(`释放 ${qq} Session: ${this.sessionKey}`);
     }
     return data;
   }

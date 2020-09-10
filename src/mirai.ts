@@ -10,6 +10,7 @@ import { MessageType, EventType, MiraiApiHttpConfig } from ".";
 import * as log from "./utils/log";
 import { getPlain } from "./utils";
 import { isMessage } from "./utils/check";
+import ora from "ora";
 
 // 所有消息
 export type MessageAndEvent = MessageType.ChatMessage | EventType.Event;
@@ -56,6 +57,10 @@ export default class Mirai {
    * 是否验证成功
    */
   verified: boolean;
+  /**
+   * 旋转进度
+   */
+  spinner?: ora.Ora;
   /**
    * 监听器状态（false 则不执行监听器回调函数）
    */
@@ -133,22 +138,36 @@ export default class Mirai {
   /**
    * 获取 Session
    */
-  auth() {
-    return this.api.auth();
+  async auth() {
+    const data = await this.api.auth();
+    if (data.code === 0) {
+      this.spinner = ora(`验证 Session: ${data.session}`).start();
+    }
+    return data;
   }
 
   /**
    * 激活 Session，绑定 QQ
    */
-  verify() {
-    return this.api.verify(this.qq);
+  async verify() {
+    const data = await this.api.verify(this.qq);
+    if (data.code === 0) {
+      this.spinner?.succeed();
+    } else {
+      this.spinner?.fail();
+    }
+    return data;
   }
 
   /**
    * 释放 Session
    */
-  release() {
-    return this.api.release();
+  async release() {
+    const data = await this.api.release();
+    if (data.code === 0) {
+      log.success(`释放 ${this.qq} Session: ${this.sessionKey}`);
+    }
+    return data;
   }
 
   /**
