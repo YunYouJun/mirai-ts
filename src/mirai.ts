@@ -332,6 +332,8 @@ export default class Mirai {
     if (after) {
       after(msg);
     }
+    // 清空当前 curMsg
+    delete this.curMsg;
   }
 
   /**
