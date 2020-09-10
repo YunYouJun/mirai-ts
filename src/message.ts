@@ -65,9 +65,13 @@ function Plain(text: string): MessageType.Plain {
  * 生成图片消息格式
  * @param imageId 图片的imageId，群图片与好友图片格式不同。不为空时将忽略url属性
  * @param url 图片的URL，发送时可作网络图片的链接；接收时为腾讯图片服务器的链接，可用于图片下载
- * @param path 图片的路径，发送本地图片，相对路径于plugins/MiraiAPIHTTP/images
+ * @param path 图片的路径，发送本地图片，相对路径于 `plugins/MiraiAPIHTTP/images`
  */
-function Image(imageId = "", url = "", path = ""): MessageType.Image {
+function Image(
+  imageId: string | null = null,
+  url: string | null = null,
+  path: string | null = null
+): MessageType.Image {
   return {
     type: "Image",
     imageId,
@@ -80,16 +84,35 @@ function Image(imageId = "", url = "", path = ""): MessageType.Image {
  * 生成闪照消息格式
  * @param imageId 图片的imageId，群图片与好友图片格式不同。不为空时将忽略url属性
  * @param url 图片的URL，发送时可作网络图片的链接；接收时为腾讯图片服务器的链接，可用于图片下载
- * @param path 图片的路径，发送本地图片，相对路径于plugins/MiraiAPIHTTP/images
+ * @param path 图片的路径，发送本地图片，相对路径于 `plugins/MiraiAPIHTTP/images`
  */
 function FlashImage(
-  imageId: string,
-  url: string,
-  path = ""
+  imageId: string | null = null,
+  url: string | null = null,
+  path: string | null = null
 ): MessageType.FlashImage {
   return {
     type: "FlashImage",
     imageId,
+    url,
+    path,
+  };
+}
+
+/**
+ * 生成语音消息格式
+ * @param voiceId 语音的 voiceId，不为空时将忽略 url 属性
+ * @param url 语音的URL，发送时可作网络语音的链接；接收时为腾讯语音服务器的链接，可用于语音下载
+ * @param path 语音的路径，发送本地语音，相对路径于 `plugins/MiraiAPIHTTP/voices`
+ */
+function Voice(
+  voiceId: string | null = null,
+  url: string | null = null,
+  path: string | null = null
+): MessageType.Voice {
+  return {
+    type: "Voice",
+    voiceId,
     url,
     path,
   };
@@ -152,6 +175,7 @@ export default {
   Plain,
   Image,
   FlashImage,
+  Voice,
   Xml,
   Json,
   App,

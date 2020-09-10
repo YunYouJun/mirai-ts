@@ -101,15 +101,15 @@ export interface Image extends BaseSingleMessage {
   /**
    * 图片的imageId，群图片与好友图片格式不同。不为空时将忽略url属性
    */
-  imageId: string;
+  imageId: string | null;
   /**
    * 图片的URL，发送时可作网络图片的链接；接收时为腾讯图片服务器的链接，可用于图片下载
    */
-  url: string;
+  url: string | null;
   /**
    * 图片的路径，发送本地图片，相对路径于plugins/MiraiAPIHTTP/images
    */
-  path: string;
+  path: string | null;
 }
 
 /**
@@ -120,15 +120,34 @@ export interface FlashImage extends BaseSingleMessage {
   /**
    * 图片的imageId，群图片与好友图片格式不同。不为空时将忽略url属性
    */
-  imageId: string;
+  imageId: string | null;
   /**
    * 图片的URL，发送时可作网络图片的链接；接收时为腾讯图片服务器的链接，可用于图片下载
    */
-  url: string;
+  url: string | null;
   /**
    * 图片的路径，发送本地图片，相对路径于plugins/MiraiAPIHTTP/images
    */
-  path: string;
+  path: string | null;
+}
+
+/**
+ * 语音
+ */
+export interface Voice extends BaseSingleMessage {
+  type: "Voice";
+  /**
+   * 语音的 voiceId，不为空时将忽略 url 属性
+   */
+  voiceId: string | null;
+  /**
+   * 语音的URL，发送时可作网络语音的链接；接收时为腾讯语音服务器的链接，可用于语音下载
+   */
+  url: string | null;
+  /**
+   * 语音的路径，发送本地语音，相对路径于 `plugins/MiraiAPIHTTP/voices`
+   */
+  path: string | null;
 }
 
 /**

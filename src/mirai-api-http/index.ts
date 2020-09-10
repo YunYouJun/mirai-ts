@@ -373,6 +373,26 @@ export default class MiraiApiHttp {
   }
 
   /**
+   * 使用此方法上传语音文件至服务器并返回 VoiceId
+   * @param type 当前仅支持 "group"
+   * @param voice 语音文件
+   */
+  async uploadVoice(type: "friend" | "group" | "temp", voice: string | File) {
+    if (typeof voice === "string") {
+      const fs = require("fs");
+      voice = fs.createReadStream(voice);
+    }
+    const form = new FormData();
+    form.append("sessionKey", this.sessionKey);
+    form.append("type", type);
+    form.append("voice", voice);
+    const { data } = await this.axios.post("/uploadVoice", form, {
+      headers: form.getHeaders(), // same as post: { 'Content-Type': 'multipart/form-data' }
+    });
+    return data;
+  }
+
+  /**
    * 撤回消息
    * 使用此方法撤回指定消息。对于bot发送的消息，有2分钟时间限制。对于撤回群聊中群员的消息，需要有相应权限
    * @param target 需要撤回的消息的messageId
