@@ -234,9 +234,12 @@ export default class Mirai {
     // reply 不同的目标
     switch (srcMsg.type) {
       case "TempMessage":
-        type = "temp";
-        target = srcMsg.sender.id;
-        break;
+        return this.api.sendTempMessage(
+          msgChain,
+          srcMsg.sender.id,
+          srcMsg.sender.group.id,
+          messageId
+        );
       case "FriendMessage":
         type = "friend";
         target = srcMsg.sender.id;
@@ -263,7 +266,6 @@ export default class Mirai {
       case "GroupAllowConfessTalkEvent":
       case "GroupAllowMemberInviteEvent":
         type = "group";
-        target = srcMsg.group.id;
         break;
       case "MemberJoinEvent":
       case "MemberLeaveEventKick":
@@ -284,10 +286,7 @@ export default class Mirai {
         break;
     }
 
-    // 回复消息
-    if (type === "temp") {
-      return this.api.sendTempMessage(msgChain, target, messageId);
-    } else if (type === "friend") {
+    if (type === "friend") {
       return this.api.sendFriendMessage(msgChain, target, messageId);
     } else if (type === "group") {
       return this.api.sendGroupMessage(msgChain, target, messageId);
