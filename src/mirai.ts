@@ -288,7 +288,7 @@ export default class Mirai {
   }
 
   /**
-   * 为消息类型挂载辅助函数
+   * 为消息和事件类型挂载辅助函数
    * @param msg
    */
   addHelperForMsg(msg: MessageType.ChatMessage | EventType.Event) {
@@ -309,6 +309,13 @@ export default class Mirai {
     ) => {
       this.reply(msgChain, msg, quote);
     };
+
+    // 为请求类事件添加 respond 辅助函数
+    if (((e): e is EventType.RequestEvent => true)(msg)) {
+      msg.respond = async (operate: any, message?: string) => {
+        this.api.resp.mapper[msg.type](msg as any, operate, message);
+      };
+    }
   }
 
   /**

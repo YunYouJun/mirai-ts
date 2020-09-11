@@ -7,7 +7,24 @@ import { EventType } from "..";
  * resp.xxx 以与 mirai-api-http URL 保持一致
  */
 export class Resp {
-  constructor(public api: MiraiApiHttp) {}
+  /**
+   * 将请求事件类型映射到合适的响应方法
+   */
+  mapper: {
+    [type in EventType.RequestEvent["type"]]: (
+      event: EventType.EventMap[type],
+      operate: EventType.EventMap[type]["operations"][number],
+      message?: string
+    ) => Promise<void>;
+  };
+
+  constructor(private api: MiraiApiHttp) {
+    this.mapper = {
+      NewFriendRequestEvent: this.newFriendRequest,
+      MemberJoinRequestEvent: this.memberJoinRequest,
+      BotInvitedJoinGroupRequestEvent: this.botInvitedJoinGroupRequest,
+    };
+  }
 
   /**
    * 响应新朋友请求
@@ -17,7 +34,7 @@ export class Resp {
    */
   async newFriendRequest(
     event: EventType.NewFriendRequestEvent,
-    operate: "allow" | "deny" | "black",
+    operate: typeof event["operations"][number],
     message = ""
   ) {
     await this.api.axios.post("/resp/newFriendRequestEvent", {
@@ -25,7 +42,7 @@ export class Resp {
       eventId: event.eventId,
       fromId: event.fromId,
       groupId: event.groupId,
-      operate: ["allow", "deny", "black"].indexOf(operate),
+      operate: event.operations.indexOf(operate),
       message,
     });
   }
@@ -38,7 +55,7 @@ export class Resp {
    */
   async memberJoinRequest(
     event: EventType.MemberJoinRequestEvent,
-    operate: "allow" | "deny" | "ignore" | "deny-black" | "ignore-black",
+    operate: typeof event["operations"][number],
     message = ""
   ) {
     await this.api.axios.post("/resp/memberJoinRequestEvent", {
@@ -46,13 +63,7 @@ export class Resp {
       eventId: event.eventId,
       fromId: event.fromId,
       groupId: event.groupId,
-      operate: [
-        "allow",
-        "deny",
-        "ignore",
-        "deny-black",
-        "ignore-black",
-      ].indexOf(operate),
+      operate: event.operations.indexOf(operate),
       message,
     });
   }
@@ -65,7 +76,7 @@ export class Resp {
    */
   async botInvitedJoinGroupRequest(
     event: EventType.BotInvitedJoinGroupRequestEvent,
-    operate: "allow" | "deny",
+    operate: typeof event["operations"][number],
     message = ""
   ) {
     await this.api.axios.post("/resp/botInvitedJoinGroupRequestEvent", {
@@ -73,7 +84,7 @@ export class Resp {
       eventId: event.eventId,
       fromId: event.fromId,
       groupId: event.groupId,
-      operate: ["allow", "deny"].indexOf(operate),
+      operate: event.operations.indexOf(operate),
       message,
     });
   }

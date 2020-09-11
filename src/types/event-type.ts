@@ -275,8 +275,9 @@ export interface MemberUnmuteEvent extends BaseEvent {
 /**
  * 添加好友申请
  */
-export interface NewFriendRequestEvent extends BaseEvent {
+export interface NewFriendRequestEvent extends BaseRequestEvent {
   type: "NewFriendRequestEvent";
+  operations: ["allow", "deny", "black"];
   eventId: number;
   fromId: number;
   groupId: number;
@@ -287,8 +288,9 @@ export interface NewFriendRequestEvent extends BaseEvent {
 /**
  * 用户入群申请（Bot需要有管理员权限）
  */
-export interface MemberJoinRequestEvent extends BaseEvent {
+export interface MemberJoinRequestEvent extends BaseRequestEvent {
   type: "MemberJoinRequestEvent";
+  operations: ["allow", "deny", "ignore", "deny-black", "ignore-black"];
   eventId: number;
   fromId: number;
   groupId: number;
@@ -300,8 +302,9 @@ export interface MemberJoinRequestEvent extends BaseEvent {
 /**
  * Bot被邀请入群申请
  */
-export interface BotInvitedJoinGroupRequestEvent extends BaseEvent {
+export interface BotInvitedJoinGroupRequestEvent extends BaseRequestEvent {
   type: "BotInvitedJoinGroupRequestEvent";
+  operations: ["allow", "deny"];
   eventId: number;
   fromId: number;
   groupId: number;
@@ -309,6 +312,19 @@ export interface BotInvitedJoinGroupRequestEvent extends BaseEvent {
   nick: string;
   message: string;
 }
+
+interface BaseRequestEvent extends BaseEvent {
+  operations: string[];
+  respond: (
+    operate: this["operations"][number],
+    message?: string
+  ) => Promise<void>;
+}
+
+export type RequestEvent =
+  | NewFriendRequestEvent
+  | MemberJoinRequestEvent
+  | BotInvitedJoinGroupRequestEvent;
 
 export type Event =
   | BotOnlineEvent
