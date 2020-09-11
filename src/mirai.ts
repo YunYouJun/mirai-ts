@@ -234,6 +234,12 @@ export default class Mirai {
     // reply 不同的目标
     switch (srcMsg.type) {
       case "TempMessage":
+        return this.api.sendTempMessage(
+          msgChain,
+          srcMsg.sender.id,
+          srcMsg.sender.group.id,
+          messageId
+        );
       case "FriendMessage":
         type = "friend";
         target = srcMsg.sender.id;
