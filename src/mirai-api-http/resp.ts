@@ -15,7 +15,7 @@ export class Resp {
    * @param operate 操作 allow 同意添加好友, deny 拒绝添加好友, black 拒绝添加好友并添加黑名单，不再接收该用户的好友申请
    * @param message 响应消息
    */
-  async mewFriendRequest(
+  async newFriendRequest(
     event: EventType.NewFriendRequestEvent,
     operate: "allow" | "deny" | "black",
     message = ""
