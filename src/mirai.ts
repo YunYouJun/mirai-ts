@@ -311,9 +311,13 @@ export default class Mirai {
     };
 
     // 为请求类事件添加 respond 辅助函数
-    if (((e): e is EventType.RequestEvent => true)(msg)) {
+    if (
+      msg.type === "NewFriendRequestEvent" ||
+      msg.type === "MemberJoinRequestEvent" ||
+      msg.type === "BotInvitedJoinGroupRequestEvent"
+    ) {
       msg.respond = async (operate: any, message?: string) => {
-        this.api.resp.mapper[msg.type](msg as any, operate, message);
+        this.api.resp._request(msg, operate, message);
       };
     }
   }
