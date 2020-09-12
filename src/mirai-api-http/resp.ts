@@ -2,79 +2,79 @@ import MiraiApiHttp from "./index";
 import { EventType } from "..";
 
 /**
+ * 0 同意添加好友, 1 拒绝添加好友, 2 拒绝添加好友并添加黑名单，不再接收该用户的好友申请
+ */
+export type NewFriendRequestOperationType = 0 | 1 | 2;
+/**
+ * 0 同意入群, 1 拒绝入群, 2 忽略请求, 3 拒绝入群并添加黑名单，不再接收该用户的入群申请, 4 忽略入群并添加黑名单，不再接收该用户的入群申请
+ */
+export type MemberJoinRequestOperationType = 0 | 1 | 2 | 3 | 4;
+/**
+ * 1 同意邀请, 2 拒绝邀请
+ */
+export type BotInvitedJoinGroupRequestOperationType = 0 | 1;
+
+/**
  * https://github.com/project-mirai/mirai-api-http/blob/master/EventType.md
  * EventType 中的请求
- * resp.xxx 以与 mirai-api-http URL 保持一致
+ * resp.xxx 与 mirai-api-http URL 保持一致
  */
 export class Resp {
-  constructor(public api: MiraiApiHttp) {}
+  constructor(private api: MiraiApiHttp) {}
+
+  async _request(event: EventType.RequestEvent, operate: number, message = "") {
+    await this.api.axios.post(
+      `/resp/${event.type[0].toLowerCase()}${event.type.substring(1)}`,
+      {
+        sessionKey: this.api.sessionKey,
+        eventId: event.eventId,
+        fromId: event.fromId,
+        groupId: event.groupId,
+        operate,
+        message,
+      }
+    );
+  }
 
   /**
    * 响应新朋友请求
    * @param event 请求的事件
-   * @param operate 操作 allow 同意添加好友, deny 拒绝添加好友, black 拒绝添加好友并添加黑名单，不再接收该用户的好友申请
+   * @param operate 操作：0 同意添加好友, 1 拒绝添加好友, 2 拒绝添加好友并添加黑名单，不再接收该用户的好友申请
    * @param message 响应消息
    */
-  async newFriendRequest(
+  newFriendRequest(
     event: EventType.NewFriendRequestEvent,
-    operate: "allow" | "deny" | "black",
-    message = ""
+    operate: NewFriendRequestOperationType,
+    message?: string
   ) {
-    await this.api.axios.post("/resp/newFriendRequestEvent", {
-      sessionKey: this.api.sessionKey,
-      eventId: event.eventId,
-      fromId: event.fromId,
-      groupId: event.groupId,
-      operate: ["allow", "deny", "black"].indexOf(operate),
-      message,
-    });
+    return this._request(event, operate, message);
   }
 
   /**
    * 响应新入群请求
    * @param event 请求的事件
-   * @param operate 操作 allow 同意入群, deny 拒绝入群, ignore 忽略请求, deny-black 拒绝入群并添加黑名单，不再接收该用户的入群申请, ignore-black 忽略入群并添加黑名单，不再接收该用户的入群申请
+   * @param operate 操作: 0 同意入群, 1 拒绝入群, 2 忽略请求, 3 拒绝入群并添加黑名单，不再接收该用户的入群申请, 4 忽略入群并添加黑名单，不再接收该用户的入群申请
    * @param message 响应消息
    */
-  async memberJoinRequest(
+  memberJoinRequest(
     event: EventType.MemberJoinRequestEvent,
-    operate: "allow" | "deny" | "ignore" | "deny-black" | "ignore-black",
-    message = ""
+    operate: MemberJoinRequestOperationType,
+    message?: string
   ) {
-    await this.api.axios.post("/resp/memberJoinRequestEvent", {
-      sessionKey: this.api.sessionKey,
-      eventId: event.eventId,
-      fromId: event.fromId,
-      groupId: event.groupId,
-      operate: [
-        "allow",
-        "deny",
-        "ignore",
-        "deny-black",
-        "ignore-black",
-      ].indexOf(operate),
-      message,
-    });
+    return this._request(event, operate, message);
   }
 
   /**
    * 响应被邀请入群申请
    * @param event 请求的事件
-   * @param operate 操作 allow 同意邀请, deny 拒绝邀请
+   * @param operate 操作：1 同意邀请, 2 拒绝邀请
    * @param message 响应消息
    */
-  async botInvitedJoinGroupRequest(
+  botInvitedJoinGroupRequest(
     event: EventType.BotInvitedJoinGroupRequestEvent,
-    operate: "allow" | "deny",
-    message = ""
+    operate: BotInvitedJoinGroupRequestOperationType,
+    message?: string
   ) {
-    await this.api.axios.post("/resp/botInvitedJoinGroupRequestEvent", {
-      sessionKey: this.api.sessionKey,
-      eventId: event.eventId,
-      fromId: event.fromId,
-      groupId: event.groupId,
-      operate: ["allow", "deny"].indexOf(operate),
-      message,
-    });
+    return this._request(event, operate, message);
   }
 }

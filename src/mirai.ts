@@ -11,6 +11,11 @@ import * as log from "./utils/log";
 import { getPlain } from "./utils";
 import { isMessage } from "./utils/check";
 import ora from "ora";
+import {
+  NewFriendRequestOperationType,
+  MemberJoinRequestOperationType,
+  BotInvitedJoinGroupRequestOperationType,
+} from "./mirai-api-http/resp";
 
 // 所有消息
 export type MessageAndEvent = MessageType.ChatMessage | EventType.Event;
@@ -294,7 +299,7 @@ export default class Mirai {
   }
 
   /**
-   * 为消息类型挂载辅助函数
+   * 为消息和事件类型挂载辅助函数
    * @param msg
    */
   addHelperForMsg(msg: MessageType.ChatMessage | EventType.Event) {
@@ -315,6 +320,30 @@ export default class Mirai {
     ) => {
       this.reply(msgChain, msg, quote);
     };
+
+    // 为请求类事件添加 respond 辅助函数
+    if (msg.type === "NewFriendRequestEvent") {
+      msg.respond = async (
+        operate: NewFriendRequestOperationType,
+        message?: string
+      ) => {
+        this.api.resp.newFriendRequest(msg, operate, message);
+      };
+    } else if (msg.type === "MemberJoinRequestEvent") {
+      msg.respond = async (
+        operate: MemberJoinRequestOperationType,
+        message?: string
+      ) => {
+        this.api.resp.memberJoinRequest(msg, operate, message);
+      };
+    } else if (msg.type === "BotInvitedJoinGroupRequestEvent") {
+      msg.respond = async (
+        operate: BotInvitedJoinGroupRequestOperationType,
+        message?: string
+      ) => {
+        this.api.resp.botInvitedJoinGroupRequest(msg, operate, message);
+      };
+    }
   }
 
   /**

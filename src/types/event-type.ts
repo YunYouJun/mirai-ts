@@ -5,6 +5,11 @@
 
 import * as Contact from "./contact";
 import { MessageChain } from "./message-type";
+import {
+  NewFriendRequestOperationType,
+  MemberJoinRequestOperationType,
+  BotInvitedJoinGroupRequestOperationType,
+} from "src/mirai-api-http/resp";
 
 /**
  * 内部基类
@@ -273,42 +278,108 @@ export interface MemberUnmuteEvent extends BaseEvent {
 }
 
 /**
+ * 基础请求事件格式
+ */
+interface BaseRequestEvent extends BaseEvent {
+  /**
+   * 事件标识，响应该事件时的标识
+   */
+  eventId: number;
+}
+
+/**
  * 添加好友申请
  */
-export interface NewFriendRequestEvent extends BaseEvent {
+export interface NewFriendRequestEvent extends BaseRequestEvent {
   type: "NewFriendRequestEvent";
-  eventId: number;
+  /**
+   * 申请人QQ号
+   */
   fromId: number;
+  /**
+   * 申请人如果通过某个群添加好友，该项为该群群号；否则为 0
+   */
   groupId: number;
+  /**
+   * 	申请人的昵称或群名片
+   */
   nick: string;
+  /**
+   * 申请消息
+   */
   message: string;
+  respond: (
+    operate: NewFriendRequestOperationType,
+    message?: string
+  ) => Promise<void>;
 }
 
 /**
  * 用户入群申请（Bot需要有管理员权限）
  */
-export interface MemberJoinRequestEvent extends BaseEvent {
+export interface MemberJoinRequestEvent extends BaseRequestEvent {
   type: "MemberJoinRequestEvent";
-  eventId: number;
+  /**
+   * 申请人 QQ号
+   */
   fromId: number;
+  /**
+   * 申请人申请入群的群号
+   */
   groupId: number;
+  /**
+   * 申请人申请入群的群名称
+   */
   groupName: string;
+  /**
+   * 申请人的昵称或群名片
+   */
   nick: string;
+  /**
+   * 申请消息
+   */
   message: string;
+  respond: (
+    operate: MemberJoinRequestOperationType,
+    message?: string
+  ) => Promise<void>;
 }
 
 /**
  * Bot被邀请入群申请
  */
-export interface BotInvitedJoinGroupRequestEvent extends BaseEvent {
+export interface BotInvitedJoinGroupRequestEvent extends BaseRequestEvent {
   type: "BotInvitedJoinGroupRequestEvent";
-  eventId: number;
+  /**
+   * 邀请人（好友）的 QQ号
+   */
   fromId: number;
+  /**
+   * 被邀请进入群的群号
+   */
   groupId: number;
+  /**
+   * 被邀请进入群的群名称
+   */
   groupName: string;
+  /**
+   * 邀请人（好友）的昵称
+   */
   nick: string;
+  /**
+   * 邀请消息
+   */
   message: string;
+  respond: (
+    operate: BotInvitedJoinGroupRequestOperationType,
+    message?: string
+  ) => Promise<void>;
 }
+
+export type RequestEvent =
+  | NewFriendRequestEvent
+  | MemberJoinRequestEvent
+  | BotInvitedJoinGroupRequestEvent;
 
 export type Event =
   | BotOnlineEvent
@@ -372,6 +443,7 @@ export type EventMap = {
   MemberPermissionChangeEvent: MemberPermissionChangeEvent;
   MemberMuteEvent: MemberMuteEvent;
   MemberUnmuteEvent: MemberUnmuteEvent;
+  // 请求事件
   NewFriendRequestEvent: NewFriendRequestEvent;
   MemberJoinRequestEvent: MemberJoinRequestEvent;
   BotInvitedJoinGroupRequestEvent: BotInvitedJoinGroupRequestEvent;
