@@ -45,7 +45,7 @@ export class Resp {
   newFriendRequest(
     event: EventType.NewFriendRequestEvent,
     operate: NewFriendRequestOperationType,
-    message = ""
+    message?: string
   ) {
     return this._request(event, operate, message);
   }
@@ -59,7 +59,7 @@ export class Resp {
   memberJoinRequest(
     event: EventType.MemberJoinRequestEvent,
     operate: MemberJoinRequestOperationType,
-    message = ""
+    message?: string
   ) {
     return this._request(event, operate, message);
   }
@@ -73,7 +73,7 @@ export class Resp {
   botInvitedJoinGroupRequest(
     event: EventType.BotInvitedJoinGroupRequestEvent,
     operate: BotInvitedJoinGroupRequestOperationType,
-    message = ""
+    message?: string
   ) {
     return this._request(event, operate, message);
   }

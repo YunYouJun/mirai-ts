@@ -319,21 +319,21 @@ export default class Mirai {
     if (msg.type === "NewFriendRequestEvent") {
       msg.respond = async (
         operate: NewFriendRequestOperationType,
-        message = ""
+        message?: string
       ) => {
         this.api.resp.newFriendRequest(msg, operate, message);
       };
     } else if (msg.type === "MemberJoinRequestEvent") {
       msg.respond = async (
         operate: MemberJoinRequestOperationType,
-        message = ""
+        message?: string
       ) => {
         this.api.resp.memberJoinRequest(msg, operate, message);
       };
     } else if (msg.type === "BotInvitedJoinGroupRequestEvent") {
       msg.respond = async (
         operate: BotInvitedJoinGroupRequestOperationType,
-        message = ""
+        message?: string
       ) => {
         this.api.resp.botInvitedJoinGroupRequest(msg, operate, message);
       };
