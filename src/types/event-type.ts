@@ -5,7 +5,6 @@
 
 import * as Contact from "./contact";
 import { MessageChain } from "./message-type";
-import { RequestEventOperation } from "../mirai-api-http/resp";
 
 /**
  * 内部基类
@@ -274,14 +273,36 @@ export interface MemberUnmuteEvent extends BaseEvent {
 }
 
 /**
+ * 基础请求事件格式
+ */
+interface BaseRequestEvent extends BaseEvent {
+  respond: (operate: 0 | 1 | 2 | 3 | 4, message?: string) => Promise<void>;
+}
+
+/**
  * 添加好友申请
  */
 export interface NewFriendRequestEvent extends BaseRequestEvent {
   type: "NewFriendRequestEvent";
+  /**
+   * 事件标识，响应该事件时的标识
+   */
   eventId: number;
+  /**
+   * 申请人QQ号
+   */
   fromId: number;
+  /**
+   * 申请人如果通过某个群添加好友，该项为该群群号；否则为0
+   */
   groupId: number;
+  /**
+   * 	申请人的昵称或群名片
+   */
   nick: string;
+  /**
+   * 申请消息
+   */
   message: string;
 }
 
@@ -290,11 +311,29 @@ export interface NewFriendRequestEvent extends BaseRequestEvent {
  */
 export interface MemberJoinRequestEvent extends BaseRequestEvent {
   type: "MemberJoinRequestEvent";
+  /**
+   * 事件标识，响应该事件时的标识
+   */
   eventId: number;
+  /**
+   * 申请人QQ号
+   */
   fromId: number;
+  /**
+   * 申请人申请入群的群号
+   */
   groupId: number;
+  /**
+   * 申请人申请入群的群名称
+   */
   groupName: string;
+  /**
+   * 申请人的昵称或群名片
+   */
   nick: string;
+  /**
+   * 申请消息
+   */
   message: string;
 }
 
@@ -303,20 +342,30 @@ export interface MemberJoinRequestEvent extends BaseRequestEvent {
  */
 export interface BotInvitedJoinGroupRequestEvent extends BaseRequestEvent {
   type: "BotInvitedJoinGroupRequestEvent";
+  /**
+   * 事件标识，响应该事件时的标识
+   */
   eventId: number;
+  /**
+   * 邀请人（好友）的QQ号
+   */
   fromId: number;
+  /**
+   * 被邀请进入群的群号
+   */
   groupId: number;
+  /**
+   * 被邀请进入群的群名称
+   */
   groupName: string;
+  /**
+   * 邀请人（好友）的昵称
+   */
   nick: string;
+  /**
+   * 邀请消息
+   */
   message: string;
-}
-
-interface BaseRequestEvent extends BaseEvent {
-  type: any;
-  respond: (
-    operate: RequestEventOperation<this["type"]>,
-    message?: string
-  ) => Promise<void>;
 }
 
 export type RequestEvent =
@@ -386,6 +435,7 @@ export type EventMap = {
   MemberPermissionChangeEvent: MemberPermissionChangeEvent;
   MemberMuteEvent: MemberMuteEvent;
   MemberUnmuteEvent: MemberUnmuteEvent;
+  // 请求事件
   NewFriendRequestEvent: NewFriendRequestEvent;
   MemberJoinRequestEvent: MemberJoinRequestEvent;
   BotInvitedJoinGroupRequestEvent: BotInvitedJoinGroupRequestEvent;

@@ -1,46 +1,15 @@
 import MiraiApiHttp from "./index";
 import { EventType } from "..";
 
-enum NewFriendRequestEventEnum {
-  "allow",
-  "deny",
-  "black",
-}
-enum MemberJoinRequestEventEnum {
-  "allow",
-  "deny",
-  "ignore",
-  "deny-black",
-  "ignore-black",
-}
-enum DefaultRequestEventEnum {
-  "allow",
-  "deny",
-}
-
-const operations = {
-  NewFriendRequestEvent: NewFriendRequestEventEnum,
-  MemberJoinRequestEvent: MemberJoinRequestEventEnum,
-  BotInvitedJoinGroupRequestEvent: DefaultRequestEventEnum,
-};
-
-export type RequestEventOperation<
-  T extends EventType.RequestEvent["type"]
-> = keyof typeof operations[T];
-
 /**
  * https://github.com/project-mirai/mirai-api-http/blob/master/EventType.md
  * EventType 中的请求
- * resp.xxx 以与 mirai-api-http URL 保持一致
+ * resp.xxx 与 mirai-api-http URL 保持一致
  */
 export class Resp {
   constructor(private api: MiraiApiHttp) {}
 
-  async _request<E extends EventType.RequestEvent>(
-    event: E,
-    operate: keyof typeof operations[E["type"]],
-    message = ""
-  ) {
+  async _request(event: EventType.RequestEvent, operate: number, message = "") {
     await this.api.axios.post(
       `/resp/${event.type[0].toLowerCase()}${event.type.substring(1)}`,
       {
@@ -48,7 +17,7 @@ export class Resp {
         eventId: event.eventId,
         fromId: event.fromId,
         groupId: event.groupId,
-        operate: operations[event.type][operate as any],
+        operate,
         message,
       }
     );
@@ -57,13 +26,13 @@ export class Resp {
   /**
    * 响应新朋友请求
    * @param event 请求的事件
-   * @param operate 操作 allow 同意添加好友, deny 拒绝添加好友, black 拒绝添加好友并添加黑名单，不再接收该用户的好友申请
+   * @param operate 0 同意添加好友, 1 拒绝添加好友, 2 拒绝添加好友并添加黑名单，不再接收该用户的好友申请
    * @param message 响应消息
    */
   newFriendRequest(
     event: EventType.NewFriendRequestEvent,
-    operate: keyof typeof operations[typeof event["type"]],
-    message?: string
+    operate: 0 | 1 | 2,
+    message = ""
   ) {
     return this._request(event, operate, message);
   }
@@ -71,13 +40,13 @@ export class Resp {
   /**
    * 响应新入群请求
    * @param event 请求的事件
-   * @param operate 操作 allow 同意入群, deny 拒绝入群, ignore 忽略请求, deny-black 拒绝入群并添加黑名单，不再接收该用户的入群申请, ignore-black 忽略入群并添加黑名单，不再接收该用户的入群申请
+   * @param operate 操作: 0 同意入群, 1 拒绝入群, 2 忽略请求, 3 拒绝入群并添加黑名单，不再接收该用户的入群申请, 4 忽略入群并添加黑名单，不再接收该用户的入群申请
    * @param message 响应消息
    */
-  async memberJoinRequest(
+  memberJoinRequest(
     event: EventType.MemberJoinRequestEvent,
-    operate: keyof typeof operations[typeof event["type"]],
-    message?: string
+    operate: 0 | 1 | 2 | 3 | 4,
+    message = ""
   ) {
     return this._request(event, operate, message);
   }
@@ -85,13 +54,13 @@ export class Resp {
   /**
    * 响应被邀请入群申请
    * @param event 请求的事件
-   * @param operate 操作 allow 同意邀请, deny 拒绝邀请
+   * @param operate 操作：1 同意邀请, 2 拒绝邀请
    * @param message 响应消息
    */
-  async botInvitedJoinGroupRequest(
+  botInvitedJoinGroupRequest(
     event: EventType.BotInvitedJoinGroupRequestEvent,
-    operate: keyof typeof operations[typeof event["type"]],
-    message?: string
+    operate: 0 | 1,
+    message = ""
   ) {
     return this._request(event, operate, message);
   }
