@@ -5,6 +5,11 @@
 
 import * as Contact from "./contact";
 import { MessageChain } from "./message-type";
+import {
+  NewFriendRequestOperationType,
+  MemberJoinRequestOperationType,
+  BotInvitedJoinGroupRequestOperationType,
+} from "src/mirai-api-http/resp";
 
 /**
  * 内部基类
@@ -276,7 +281,10 @@ export interface MemberUnmuteEvent extends BaseEvent {
  * 基础请求事件格式
  */
 interface BaseRequestEvent extends BaseEvent {
-  respond: (operate: 0 | 1 | 2 | 3 | 4, message?: string) => Promise<void>;
+  /**
+   * 事件标识，响应该事件时的标识
+   */
+  eventId: number;
 }
 
 /**
@@ -285,15 +293,11 @@ interface BaseRequestEvent extends BaseEvent {
 export interface NewFriendRequestEvent extends BaseRequestEvent {
   type: "NewFriendRequestEvent";
   /**
-   * 事件标识，响应该事件时的标识
-   */
-  eventId: number;
-  /**
    * 申请人QQ号
    */
   fromId: number;
   /**
-   * 申请人如果通过某个群添加好友，该项为该群群号；否则为0
+   * 申请人如果通过某个群添加好友，该项为该群群号；否则为 0
    */
   groupId: number;
   /**
@@ -304,6 +308,10 @@ export interface NewFriendRequestEvent extends BaseRequestEvent {
    * 申请消息
    */
   message: string;
+  respond: (
+    operate: NewFriendRequestOperationType,
+    message?: string
+  ) => Promise<void>;
 }
 
 /**
@@ -312,11 +320,7 @@ export interface NewFriendRequestEvent extends BaseRequestEvent {
 export interface MemberJoinRequestEvent extends BaseRequestEvent {
   type: "MemberJoinRequestEvent";
   /**
-   * 事件标识，响应该事件时的标识
-   */
-  eventId: number;
-  /**
-   * 申请人QQ号
+   * 申请人 QQ号
    */
   fromId: number;
   /**
@@ -335,6 +339,10 @@ export interface MemberJoinRequestEvent extends BaseRequestEvent {
    * 申请消息
    */
   message: string;
+  respond: (
+    operate: MemberJoinRequestOperationType,
+    message?: string
+  ) => Promise<void>;
 }
 
 /**
@@ -343,11 +351,7 @@ export interface MemberJoinRequestEvent extends BaseRequestEvent {
 export interface BotInvitedJoinGroupRequestEvent extends BaseRequestEvent {
   type: "BotInvitedJoinGroupRequestEvent";
   /**
-   * 事件标识，响应该事件时的标识
-   */
-  eventId: number;
-  /**
-   * 邀请人（好友）的QQ号
+   * 邀请人（好友）的 QQ号
    */
   fromId: number;
   /**
@@ -366,6 +370,10 @@ export interface BotInvitedJoinGroupRequestEvent extends BaseRequestEvent {
    * 邀请消息
    */
   message: string;
+  respond: (
+    operate: BotInvitedJoinGroupRequestOperationType,
+    message?: string
+  ) => Promise<void>;
 }
 
 export type RequestEvent =

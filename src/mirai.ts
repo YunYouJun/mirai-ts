@@ -11,6 +11,11 @@ import * as log from "./utils/log";
 import { getPlain } from "./utils";
 import { isMessage } from "./utils/check";
 import ora from "ora";
+import {
+  NewFriendRequestOperationType,
+  MemberJoinRequestOperationType,
+  BotInvitedJoinGroupRequestOperationType,
+} from "./mirai-api-http/resp";
 
 // 所有消息
 export type MessageAndEvent = MessageType.ChatMessage | EventType.Event;
@@ -311,13 +316,26 @@ export default class Mirai {
     };
 
     // 为请求类事件添加 respond 辅助函数
-    if (
-      msg.type === "NewFriendRequestEvent" ||
-      msg.type === "MemberJoinRequestEvent" ||
-      msg.type === "BotInvitedJoinGroupRequestEvent"
-    ) {
-      msg.respond = async (operate: any, message?: string) => {
-        this.api.resp._request(msg, operate, message);
+    if (msg.type === "NewFriendRequestEvent") {
+      msg.respond = async (
+        operate: NewFriendRequestOperationType,
+        message = ""
+      ) => {
+        this.api.resp.newFriendRequest(msg, operate, message);
+      };
+    } else if (msg.type === "MemberJoinRequestEvent") {
+      msg.respond = async (
+        operate: MemberJoinRequestOperationType,
+        message = ""
+      ) => {
+        this.api.resp.memberJoinRequest(msg, operate, message);
+      };
+    } else if (msg.type === "BotInvitedJoinGroupRequestEvent") {
+      msg.respond = async (
+        operate: BotInvitedJoinGroupRequestOperationType,
+        message = ""
+      ) => {
+        this.api.resp.botInvitedJoinGroupRequest(msg, operate, message);
       };
     }
   }
