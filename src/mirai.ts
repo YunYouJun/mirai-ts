@@ -17,9 +17,14 @@ import {
   BotInvitedJoinGroupRequestOperationType,
 } from "./mirai-api-http/resp";
 
-// 所有消息
+/**
+ * 所有消息
+ */
 export type MessageAndEvent = MessageType.ChatMessage | EventType.Event;
-// 所有消息类型
+
+/**
+ * 所有消息类型
+ */
 export type MessageAndEventType =
   | MessageType.ChatMessageType
   | EventType.EventType;

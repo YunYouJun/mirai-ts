@@ -100,6 +100,7 @@ function FlashImage(
 }
 
 /**
+ * 需要 mirai-api-http 1.8.2 以上，mirai-console 1.0 以上
  * 生成语音消息格式
  * @param voiceId 语音的 voiceId，不为空时将忽略 url 属性
  * @param url 语音的URL，发送时可作网络语音的链接；接收时为腾讯语音服务器的链接，可用于语音下载

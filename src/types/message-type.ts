@@ -9,6 +9,9 @@ interface BaseSingleMessage {
   type: string;
 }
 
+/**
+ * 源消息类型
+ */
 export interface Source extends BaseSingleMessage {
   type: "Source";
   /**
@@ -21,6 +24,9 @@ export interface Source extends BaseSingleMessage {
   time: number;
 }
 
+/**
+ * 引用消息类型
+ */
 export interface Quote extends BaseSingleMessage {
   type: "Quote";
   /**
@@ -46,7 +52,7 @@ export interface Quote extends BaseSingleMessage {
 }
 
 /**
- * 艾特某人
+ * 艾特某人消息
  */
 export interface At extends BaseSingleMessage {
   type: "At";
@@ -61,14 +67,14 @@ export interface At extends BaseSingleMessage {
 }
 
 /**
- * 艾特全体成员
+ * 艾特全体成员消息
  */
 export interface AtAll extends BaseSingleMessage {
   type: "AtAll";
 }
 
 /**
- * 原生表情
+ * 原生表情消息
  */
 export interface Face extends BaseSingleMessage {
   type: "Face";
@@ -83,7 +89,7 @@ export interface Face extends BaseSingleMessage {
 }
 
 /**
- * 文本
+ * 文本消息
  */
 export interface Plain extends BaseSingleMessage {
   type: "Plain";
@@ -94,7 +100,7 @@ export interface Plain extends BaseSingleMessage {
 }
 
 /**
- * 图片
+ * 图片消息
  */
 export interface Image extends BaseSingleMessage {
   type: "Image";
@@ -113,7 +119,7 @@ export interface Image extends BaseSingleMessage {
 }
 
 /**
- * 闪照
+ * 闪照消息
  */
 export interface FlashImage extends BaseSingleMessage {
   type: "FlashImage";
@@ -132,7 +138,7 @@ export interface FlashImage extends BaseSingleMessage {
 }
 
 /**
- * 语音
+ * 语音消息
  */
 export interface Voice extends BaseSingleMessage {
   type: "Voice";
@@ -170,7 +176,7 @@ export interface Json extends BaseSingleMessage {
 }
 
 /**
- * 小程序
+ * 小程序消息
  */
 export interface App extends BaseSingleMessage {
   type: "App";
@@ -197,6 +203,9 @@ export enum Pokes {
   FangDaZhao,
 }
 
+/**
+ * 戳一戳消息
+ */
 export interface Poke extends BaseSingleMessage {
   type: "Poke";
   /**
@@ -253,6 +262,9 @@ export interface TempMessage extends BaseChatMessage {
  */
 export type ChatMessage = GroupMessage | TempMessage | FriendMessage;
 
+/**
+ * 聊天消息类型
+ */
 export type ChatMessageType = ChatMessage["type"];
 
 export type ChatMessageMap = {

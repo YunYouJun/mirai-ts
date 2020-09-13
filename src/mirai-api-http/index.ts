@@ -57,8 +57,7 @@ export default class MiraiApiHttp {
   address: string;
   command: Command;
   /**
-   * https://github.com/project-mirai/mirai-api-http/blob/master/EventType.md
-   * EventType 中的请求
+   * [EventType](https://github.com/project-mirai/mirai-api-http/blob/master/EventType.md) 中的请求
    */
   resp: Resp;
 

@@ -6,7 +6,7 @@
 import MiraiApiHttp from "./index";
 
 /**
- * https://github.com/project-mirai/mirai-api-http#%E6%8F%92%E4%BB%B6%E7%9B%B8%E5%85%B3console%E7%9B%B8%E5%85%B3
+ * [插件相关、Console相关 | mirai-api-http](https://github.com/project-mirai/mirai-api-http#%E6%8F%92%E4%BB%B6%E7%9B%B8%E5%85%B3console%E7%9B%B8%E5%85%B3)
  */
 export class Command {
   constructor(public api: MiraiApiHttp) {}
