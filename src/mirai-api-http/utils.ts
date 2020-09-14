@@ -3,7 +3,7 @@
  * @param code Mirai 状态码
  * Todo: to json
  */
-export function handleStatusCode(code: number) {
+export function getMessageFromStatusCode(code: number) {
   let msg = "";
   switch (code) {
     case 0:

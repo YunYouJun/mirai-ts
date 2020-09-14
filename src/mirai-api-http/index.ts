@@ -17,7 +17,7 @@ import { Command } from "./command";
 import { Resp } from "./resp";
 
 // 处理状态码
-import { handleStatusCode } from "./utils";
+import { getMessageFromStatusCode } from "./utils";
 
 /**
  * 与 mirai-api-http [setting.yml](https://github.com/project-mirai/mirai-api-http#settingyml模板) 的配置保持一致
@@ -82,7 +82,7 @@ export default class MiraiApiHttp {
     this.axios.interceptors.response.use(
       async (res: AxiosResponse) => {
         if (res.status === 200 && res.data.code) {
-          const message = handleStatusCode(res.data.code);
+          const message = getMessageFromStatusCode(res.data.code);
           if (message) {
             log.error(`Code ${res.data.code}: ${message}`);
 

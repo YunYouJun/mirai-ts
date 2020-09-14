@@ -57,11 +57,6 @@ export default class Mirai {
    * 请求工具
    */
   axios: AxiosStatic;
-  /**
-   * sessionKey 是使用以下方法必须携带的 sessionKey 使用前必须进行校验和绑定指定的Bot，每个 Session 只能绑定一个 Bot，但一个 Bot 可有多个Session。
-   * sessionKey 在未进行校验的情况下，一定时间后将会被自动释放。
-   */
-  sessionKey: string;
   qq: number;
   /**
    * 是否验证成功
@@ -111,7 +106,6 @@ export default class Mirai {
     this.api = new MiraiApiHttp(this.mahConfig, this.axios);
 
     // default
-    this.sessionKey = "";
     this.qq = 0;
     this.verified = false;
 
@@ -139,9 +133,8 @@ export default class Mirai {
    */
   async link(qq: number) {
     this.qq = qq;
-    // Todo
-    const { session } = await this.auth();
-    this.sessionKey = session;
+    this.api.handleStatusCode();
+    await this.auth();
     return await this.verify();
   }
 
@@ -175,7 +168,7 @@ export default class Mirai {
   async release() {
     const data = await this.api.release();
     if (data.code === 0) {
-      log.success(`释放 ${this.qq} Session: ${this.sessionKey}`);
+      log.success(`释放 ${this.qq} Session: ${this.api.sessionKey}`);
     }
     return data;
   }
