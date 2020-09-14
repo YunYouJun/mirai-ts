@@ -323,7 +323,7 @@ export default class Mirai {
       msgChain: string | MessageType.MessageChain,
       quote = false
     ) => {
-      this.reply(msgChain, msg, quote);
+      return this.reply(msgChain, msg, quote);
     };
 
     // 为请求类事件添加 respond 辅助函数
