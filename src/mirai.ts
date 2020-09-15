@@ -9,7 +9,7 @@ import MiraiApiHttp from "./mirai-api-http";
 import { MessageType, EventType, MiraiApiHttpConfig } from ".";
 import * as log from "./utils/log";
 import { getPlain } from "./utils";
-import { isMessage } from "./utils/check";
+import { isChatMessage } from "./utils/check";
 import ora from "ora";
 import {
   NewFriendRequestOperationType,
@@ -135,7 +135,8 @@ export default class Mirai {
     this.qq = qq;
     this.api.handleStatusCode();
     await this.auth();
-    return await this.verify();
+    const data = await this.verify();
+    return data;
   }
 
   /**
@@ -228,7 +229,7 @@ export default class Mirai {
     let target = 0;
     let type = "friend";
 
-    if (isMessage(srcMsg)) {
+    if (isChatMessage(srcMsg)) {
       if (quote && srcMsg.messageChain[0].type === "Source") {
         messageId = srcMsg.messageChain[0].id;
       }

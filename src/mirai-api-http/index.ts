@@ -96,7 +96,8 @@ export default class MiraiApiHttp {
         return res;
       },
       (err) => {
-        log.error("响应失败");
+        console.log(err);
+        log.error("响应失败：" + err.msg);
         return Promise.reject(err);
       }
     );

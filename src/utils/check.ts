@@ -105,11 +105,11 @@ export function match(
 // helper
 // 检测消息链
 /**
- * 是否是文本信息中的一种
+ * 是否是聊天信息中的一种
  * ['FriendMessage', 'GroupMessage', 'TempMessage']
  * @param msg 消息链
  */
-export function isMessage(
+export function isChatMessage(
   msg: MessageType.ChatMessage | EventType.Event
 ): msg is MessageType.ChatMessage {
   const msgType = ["FriendMessage", "GroupMessage", "TempMessage"];
