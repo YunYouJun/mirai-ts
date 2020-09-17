@@ -227,6 +227,7 @@ export type SingleMessage =
   | Plain
   | Image
   | FlashImage
+  | Voice
   | Xml
   | Json
   | App;
