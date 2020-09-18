@@ -9,7 +9,7 @@ import {
   NewFriendRequestOperationType,
   MemberJoinRequestOperationType,
   BotInvitedJoinGroupRequestOperationType,
-} from "src/mirai-api-http/resp";
+} from "../mirai-api-http/resp";
 
 /**
  * 内部基类
