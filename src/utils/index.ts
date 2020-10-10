@@ -19,4 +19,22 @@ function getPlain(messageChain: MessageType.MessageChain) {
   return msg;
 }
 
-export { getPlain };
+/**
+ * 分离文本
+ * @param text
+ */
+function splitText(text: string): string[] {
+  const sections = [];
+  if (text.length < 900) {
+    sections.push(text);
+  } else {
+    const number = Math.ceil(text.length / 800);
+    for (let i = 0; i < number; i++) {
+      const section = text.slice(i * 800, (i + 1) * 800);
+      sections.push(section);
+    }
+  }
+  return sections;
+}
+
+export { getPlain, splitText };

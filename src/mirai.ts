@@ -8,7 +8,7 @@ import { AxiosStatic } from "axios";
 import MiraiApiHttp from "./mirai-api-http";
 import { MessageType, EventType, MiraiApiHttpConfig } from ".";
 import * as log from "./utils/log";
-import { getPlain } from "./utils";
+import { getPlain, splitText } from "./utils";
 import { isChatMessage } from "./utils/check";
 import ora from "ora";
 import {
@@ -44,6 +44,8 @@ type Data<
   : T extends MessageType.ChatMessageType
   ? MessageType.ChatMessageMap[T]
   : MessageType.ChatMessage;
+
+type SendMessageType = "friend" | "group";
 
 /**
  * Mirai SDK 初始化类
@@ -220,14 +222,14 @@ export default class Mirai {
    * @param srcMsg 回复哪条消息
    * @param quote 是否引用回复（非聊天消息类型时无效）
    */
-  reply(
+  async reply(
     msgChain: string | MessageType.MessageChain,
     srcMsg: EventType.Event | MessageType.ChatMessage,
     quote = false
   ) {
     let messageId = 0;
     let target = 0;
-    let type = "friend";
+    let type: SendMessageType = "friend";
 
     if (isChatMessage(srcMsg)) {
       if (quote && srcMsg.messageChain[0].type === "Source") {
@@ -290,6 +292,29 @@ export default class Mirai {
         break;
     }
 
+    if (typeof msgChain === "string") {
+      const sections = splitText(msgChain);
+      for await (const section of sections) {
+        this._sendMessageByType(type, section, target, messageId);
+      }
+    } else {
+      this._sendMessageByType(type, msgChain, target, messageId);
+    }
+  }
+
+  /**
+   * 根据消息类型发送消息
+   * @param type
+   * @param msgChain
+   * @param target
+   * @param messageId
+   */
+  _sendMessageByType(
+    type: SendMessageType,
+    msgChain: string | MessageType.MessageChain,
+    target: number,
+    messageId: number
+  ) {
     if (type === "friend") {
       return this.api.sendFriendMessage(msgChain, target, messageId);
     } else if (type === "group") {
