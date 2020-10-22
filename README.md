@@ -136,7 +136,9 @@ import { Message, log, check, MessageType, EventType } from "mirai-ts";
 
 ```js
 const { check } = require("mirai-ts");
-check.isAt(qq);
+// msg 为消息链 MessageChain
+// qq 为 QQ 号
+check.isAt(msg, qq);
 ```
 
 ## 结构
