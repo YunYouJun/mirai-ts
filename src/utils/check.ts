@@ -125,7 +125,7 @@ export function isChatMessage(
 export function isAt(
   msg: MessageType.ChatMessage,
   qq?: number
-): boolean | MessageType.At | undefined {
+): boolean | MessageType.At {
   if (qq) {
     return msg.messageChain.some((singleMessage) => {
       return singleMessage.type === "At" && singleMessage.target === qq;
@@ -138,6 +138,6 @@ export function isAt(
         return true;
       }
     });
-    return atMsg;
+    return atMsg ? atMsg : false;
   }
 }

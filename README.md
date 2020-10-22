@@ -139,6 +139,10 @@ const { check } = require("mirai-ts");
 // msg 为消息链 MessageChain
 // qq 为 QQ 号
 check.isAt(msg, qq);
+
+// or just
+msg.isAt(qq);
+// 留空则判断是否艾特机器人自身
 ```
 
 ## 结构

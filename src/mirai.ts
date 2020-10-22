@@ -9,7 +9,7 @@ import MiraiApiHttp from "./mirai-api-http";
 import { MessageType, EventType, MiraiApiHttpConfig } from ".";
 import * as log from "./utils/log";
 import { getPlain, splitText } from "./utils";
-import { isChatMessage } from "./utils/check";
+import { isAt, isChatMessage } from "./utils/check";
 import ora from "ora";
 import {
   NewFriendRequestOperationType,
@@ -335,6 +335,13 @@ export default class Mirai {
       msg.type === "TempMessage"
     ) {
       msg.plain = getPlain(msg.messageChain);
+
+      if (msg.type === "GroupMessage") {
+        // 添加判断是否被艾特的辅助函数
+        msg.isAt = (qq?: number) => {
+          return isAt(msg, qq ? qq : this.qq) as boolean;
+        };
+      }
     }
 
     // 为各类型添加 reply 辅助函数

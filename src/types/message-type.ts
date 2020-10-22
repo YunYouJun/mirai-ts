@@ -252,6 +252,10 @@ export interface FriendMessage extends BaseChatMessage {
 export interface GroupMessage extends BaseChatMessage {
   type: "GroupMessage";
   sender: Contact.Member;
+  /**
+   * 判断是否艾特某人（留空则判断是否艾特自己）
+   */
+  isAt: (qq?: number) => boolean;
 }
 export interface TempMessage extends BaseChatMessage {
   type: "TempMessage";
