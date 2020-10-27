@@ -339,6 +339,12 @@ export default class Mirai {
    */
   addHelperForMsg(msg: MessageType.ChatMessage | EventType.Event) {
     this.curMsg = msg;
+    msg.bubbles = true;
+    msg.stopPropagation = () => {
+      msg.bubbles = false;
+      return msg.bubbles;
+    };
+
     // 消息类型添加直接获取消息内容的参数
     if (
       msg.type === "FriendMessage" ||
@@ -399,8 +405,9 @@ export default class Mirai {
     if (this.active) {
       const set = this.listener.get(msg.type);
       if (set) {
-        set.forEach((callback) => {
-          callback(msg);
+        set.every((cb) => {
+          cb(msg);
+          return msg.bubbles;
         });
       }
     }

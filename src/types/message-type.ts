@@ -3,9 +3,10 @@
  * @packageDocumentation
  */
 
+import { BaseType } from ".";
 import * as Contact from "./contact";
 
-interface BaseSingleMessage {
+interface BaseSingleMessage extends BaseType {
   type: string;
 }
 
@@ -242,9 +243,16 @@ interface BaseChatMessage extends BaseSingleMessage {
     0: Source;
   };
   sender: Contact.User;
+  /**
+   * 快捷回复函数
+   */
   reply: (msgChain: string | MessageChain, quote?: boolean) => Promise<void>;
+  /**
+   * 消息文本
+   */
   plain: string;
 }
+
 export interface FriendMessage extends BaseChatMessage {
   type: "FriendMessage";
   sender: Contact.Friend;

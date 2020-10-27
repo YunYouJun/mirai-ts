@@ -10,11 +10,12 @@ import {
   MemberJoinRequestOperationType,
   BotInvitedJoinGroupRequestOperationType,
 } from "../mirai-api-http/resp";
+import { BaseType } from ".";
 
 /**
  * 内部基类
  */
-export interface BaseEvent {
+export interface BaseEvent extends BaseType {
   type: string;
   /**
    * reply 辅助函数
