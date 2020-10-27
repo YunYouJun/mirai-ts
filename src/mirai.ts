@@ -294,12 +294,23 @@ export default class Mirai {
 
     if (typeof msgChain === "string") {
       const sections = splitText(msgChain);
-      for await (const section of sections) {
-        this._sendMessageByType(type, section, target, messageId);
+
+      if (sections.length > 1) {
+        const responses = [];
+        for await (const section of sections) {
+          const res = await this._sendMessageByType(
+            type,
+            section,
+            target,
+            messageId
+          );
+          responses.push(res);
+        }
+        return responses;
       }
-    } else {
-      this._sendMessageByType(type, msgChain, target, messageId);
     }
+
+    return this._sendMessageByType(type, msgChain, target, messageId);
   }
 
   /**

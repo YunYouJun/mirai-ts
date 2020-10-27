@@ -19,9 +19,9 @@ export function init(baseURL: string, timeout = 0): AxiosStatic {
     function (config) {
       return config;
     },
-    function (error) {
-      log.error("请求发送失败");
-      return Promise.reject(error);
+    function (err) {
+      console.error(err);
+      return Promise.reject(err);
     }
   );
 
