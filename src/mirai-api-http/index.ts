@@ -86,7 +86,7 @@ export default class MiraiApiHttp {
           if (message) {
             log.error(`Code ${res.data.code}: ${message}`);
 
-            if (res.data.code === 3) {
+            if (res.data.code === 3 || res.data.code === 4) {
               log.warning("正在尝试重新建立连接...");
               await this.auth();
               await this.verify(this.qq);
