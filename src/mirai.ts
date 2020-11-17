@@ -89,6 +89,10 @@ export default class Mirai {
    */
   interval: number;
   /**
+   * fetchMessage 重试次数
+   */
+  retries: number;
+  /**
    * 当前处理的消息
    */
   curMsg?: MessageType.ChatMessage | EventType.Event;
@@ -116,6 +120,7 @@ export default class Mirai {
     this.beforeListener = [];
     this.afterListener = [];
     this.interval = 200;
+    this.retries = 10;
 
     const pkg = require("../package.json");
     log.info(`Version ${pkg.version}`);
@@ -452,12 +457,23 @@ export default class Mirai {
       });
     } else {
       log.info("开始监听: http://" + address);
-      setInterval(async () => {
+      let count = 0;
+      const intId = setInterval(async () => {
         const { data } = await this.api.fetchMessage();
         if (data && data.length) {
+          count = 0;
           data.forEach((msg) => {
             this.handle(msg, before, after);
           });
+        } else {
+          count++;
+          // 失败超过十次
+          if (count >= this.retries) {
+            clearInterval(intId);
+            throw new Error(
+              `fetchMessage 已连续 ${this.retries} 次未收到任何消息内容，抛出异常。`
+            );
+          }
         }
       }, this.interval);
     }
