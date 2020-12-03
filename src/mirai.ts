@@ -458,23 +458,29 @@ export default class Mirai {
     } else {
       log.info("开始监听: http://" + address);
       let count = 0;
-      const intId = setInterval(async () => {
-        const { data } = await this.api.fetchMessage();
-        if (data && data.length) {
-          count = 0;
-          data.forEach((msg) => {
-            this.handle(msg, before, after);
+      const intId = setInterval(() => {
+        this.api
+          .fetchMessage()
+          .then((res) => {
+            const { data } = res;
+            if (data && data.length) {
+              count = 0;
+              data.forEach((msg) => {
+                this.handle(msg, before, after);
+              });
+            }
+          })
+          .catch((err) => {
+            console.error(err.message);
+            count++;
+            // 失败超过十次
+            if (count >= this.retries) {
+              clearInterval(intId);
+              throw new Error(
+                `fetchMessage 已连续 ${this.retries} 次未收到任何消息内容，抛出异常。`
+              );
+            }
           });
-        } else {
-          count++;
-          // 失败超过十次
-          if (count >= this.retries) {
-            clearInterval(intId);
-            throw new Error(
-              `fetchMessage 已连续 ${this.retries} 次未收到任何消息内容，抛出异常。`
-            );
-          }
-        }
       }, this.interval);
     }
   }
