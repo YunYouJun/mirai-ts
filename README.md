@@ -28,7 +28,7 @@ const Mirai = require("mirai-ts");
 
 // 你的 QQ 号
 const qq = 114514;
-// 请与 plugins/MiraiAPIHTTP/setting.yml 保持一致
+// 请与 config/MiraiAPIHTTP/setting.yml 保持一致
 const mahConfig = {
   host: "你的 IP 地址" || "127.0.0.1",
   port: 你的端口号 || 4859,
