@@ -114,7 +114,7 @@ export interface Image extends BaseSingleMessage {
    */
   url: string | null;
   /**
-   * 图片的路径，发送本地图片，相对路径于 `data/MiraiAPIHTTP/images`
+   * 图片的路径，发送本地图片，相对路径于 `data/MiraiApiHttp/images`
    */
   path: string | null;
 }
@@ -133,7 +133,7 @@ export interface FlashImage extends BaseSingleMessage {
    */
   url: string | null;
   /**
-   * 图片的路径，发送本地图片，相对路径于 `data/MiraiAPIHTTP/images`
+   * 图片的路径，发送本地图片，相对路径于 `data/MiraiApiHttp/images`
    */
   path: string | null;
 }
@@ -152,7 +152,7 @@ export interface Voice extends BaseSingleMessage {
    */
   url: string | null;
   /**
-   * 语音的路径，发送本地语音，相对路径于 `data/MiraiAPIHTTP/voices`
+   * 语音的路径，发送本地语音，相对路径于 `data/MiraiApiHttp/voices`
    */
   path: string | null;
 }

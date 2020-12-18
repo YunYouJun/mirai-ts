@@ -171,7 +171,7 @@ export default class MiraiApiHttp {
   }
 
   /**
-   * 使用此方法获取bot接收到的最新消息和最新各类事件(会从MiraiApiHttp消息记录中删除)
+   * 使用此方法获取bot接收到的最新消息和最新各类事件(会从 MiraiApiHttp 消息记录中删除)
    * @param count 获取消息和事件的数量
    */
   async fetchLatestMessage(count = 10): Promise<Api.Response.fetchMessage> {
@@ -185,7 +185,7 @@ export default class MiraiApiHttp {
   }
 
   /**
-   * 使用此方法获取bot接收到的最老消息和最老各类事件(不会从MiraiApiHttp消息记录中删除)
+   * 使用此方法获取bot接收到的最老消息和最老各类事件(不会从 MiraiApiHttp 消息记录中删除)
    * @param count 获取消息和事件的数量
    */
   async peekMessage(count = 10): Promise<Api.Response.fetchMessage> {
@@ -199,7 +199,7 @@ export default class MiraiApiHttp {
   }
 
   /**
-   * 使用此方法获取bot接收到的最老消息和最老各类事件(不会从MiraiApiHttp消息记录中删除)
+   * 使用此方法获取bot接收到的最老消息和最老各类事件(不会从 MiraiApiHttp 消息记录中删除)
    * @param count 获取消息和事件的数量
    */
   async peekLatestMessage(count = 10): Promise<Api.Response.fetchMessage> {
