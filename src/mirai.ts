@@ -17,6 +17,8 @@ import {
   BotInvitedJoinGroupRequestOperationType,
 } from "./mirai-api-http/resp";
 
+import EventEmtter from "./event";
+
 /**
  * 所有消息
  */
@@ -73,10 +75,6 @@ export default class Mirai {
    */
   active: boolean;
   /**
-   * 监听者（回调函数）
-   */
-  listener: Listener;
-  /**
    * 监听者之前执行的函数
    */
   beforeListener: Function[];
@@ -116,7 +114,6 @@ export default class Mirai {
     this.verified = false;
 
     this.active = true;
-    this.listener = new Map();
     this.beforeListener = [];
     this.afterListener = [];
     this.interval = 200;
@@ -179,46 +176,6 @@ export default class Mirai {
       log.success(`释放 ${this.qq} Session: ${this.api.sessionKey}`);
     }
     return data;
-  }
-
-  /**
-   * 绑定事件列表
-   * message: FriendMessage | GroupMessage | TempMessage
-   * [mirai-api-http事件类型一览](https://github.com/project-mirai/mirai-api-http/blob/master/EventType.md)
-   * mirai.on('MemberMuteEvent', ()=>{})
-   * @param type
-   * @param callback
-   */
-  on<T extends "message" | EventType.EventType | MessageType.ChatMessageType>(
-    type: T,
-    callback: (data: Data<T>) => any
-  ) {
-    // too complex for typescript so that in some case it cannot identify the type correctly
-    // 说明监听所有
-    if (type === "message") {
-      this.addListener("FriendMessage", callback);
-      this.addListener("GroupMessage", callback);
-      this.addListener("TempMessage", callback);
-    } else {
-      this.addListener(type as Exclude<T, "message">, callback);
-    }
-  }
-
-  /**
-   * 添加监听者
-   * @param type
-   * @param callback
-   */
-  addListener<T extends EventType.EventType | MessageType.ChatMessageType>(
-    type: T,
-    callback: Function
-  ) {
-    const set = this.listener.get(type);
-    if (set) {
-      set.push(callback);
-    } else {
-      this.listener.set(type, [callback]);
-    }
   }
 
   /**
@@ -408,13 +365,7 @@ export default class Mirai {
       cb(msg);
     });
     if (this.active) {
-      const set = this.listener.get(msg.type);
-      if (set) {
-        set.every((cb) => {
-          cb(msg);
-          return msg.bubbles;
-        });
-      }
+      EventEmtter[msg.type].post(msg as never);
     }
     this.afterListener.forEach((cb) => {
       cb(msg);
