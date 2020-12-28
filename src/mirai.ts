@@ -17,7 +17,7 @@ import {
   BotInvitedJoinGroupRequestOperationType,
 } from "./mirai-api-http/resp";
 
-import EventEmtter from "./event";
+import { EventEmtter } from "./event";
 
 /**
  * 所有消息
@@ -30,22 +30,6 @@ export type MessageAndEvent = MessageType.ChatMessage | EventType.Event;
 export type MessageAndEventType =
   | MessageType.ChatMessageType
   | EventType.EventType;
-
-type Listener = Map<
-  MessageType.ChatMessageType | EventType.EventType,
-  Function[]
->;
-
-/**
- * 数据类型
- */
-type Data<
-  T extends "message" | EventType.EventType | MessageType.ChatMessageType
-> = T extends EventType.EventType
-  ? EventType.EventMap[T]
-  : T extends MessageType.ChatMessageType
-  ? MessageType.ChatMessageMap[T]
-  : MessageType.ChatMessage;
 
 type SendMessageType = "friend" | "group";
 
@@ -74,6 +58,10 @@ export default class Mirai {
    * 监听器状态（false 则不执行监听器回调函数）
    */
   active: boolean;
+  /**
+   * 事件监听器
+   */
+  Listener = new EventEmtter();
   /**
    * 监听者之前执行的函数
    */
@@ -123,6 +111,8 @@ export default class Mirai {
     log.info(`Version ${pkg.version}`);
     log.info(`Docs: ${pkg.homepage}`);
     log.info(`GitHub: ${pkg.repository.url}`);
+
+    // 注册message事件
   }
 
   /**
@@ -365,7 +355,7 @@ export default class Mirai {
       cb(msg);
     });
     if (this.active) {
-      EventEmtter[msg.type].post(msg as never);
+      this.Listener[msg.type].post(msg as never);
     }
     this.afterListener.forEach((cb) => {
       cb(msg);
