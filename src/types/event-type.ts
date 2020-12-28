@@ -416,36 +416,36 @@ export type Event =
 
 export type EventType = Event["type"];
 
-export type EventMap = {
-  BotOnlineEvent: BotOnlineEvent;
-  BotOfflineEventActive: BotOfflineEventActive;
-  BotOfflineEventForce: BotOfflineEventForce;
-  BotOfflineEventDropped: BotOfflineEventDropped;
-  BotReloginEvent: BotReloginEvent;
-  GroupRecallEvent: GroupRecallEvent;
-  FriendRecallEvent: FriendRecallEvent;
-  BotGroupPermissionChangeEvent: BotGroupPermissionChangeEvent;
-  BotMuteEvent: BotMuteEvent;
-  BotUnmuteEvent: BotUnmuteEvent;
-  BotJoinGroupEvent: BotJoinGroupEvent;
-  BotLeaveEventActive: BotLeaveEventActive;
-  BotLeaveEventKick: BotLeaveEventKick;
-  GroupNameChangeEvent: GroupNameChangeEvent;
-  GroupEntranceAnnouncementChangeEvent: GroupEntranceAnnouncementChangeEvent;
-  GroupMuteAllEvent: GroupMuteAllEvent;
-  GroupAllowAnonymousChatEvent: GroupAllowAnonymousChatEvent;
-  GroupAllowConfessTalkEvent: GroupAllowConfessTalkEvent;
-  GroupAllowMemberInviteEvent: GroupAllowMemberInviteEvent;
-  MemberJoinEvent: MemberJoinEvent;
-  MemberLeaveEventKick: MemberLeaveEventKick;
-  MemberLeaveEventQuit: MemberLeaveEventQuit;
-  MemberCardChangeEvent: MemberCardChangeEvent;
-  MemberSpecialTitleChangeEvent: MemberSpecialTitleChangeEvent;
-  MemberPermissionChangeEvent: MemberPermissionChangeEvent;
-  MemberMuteEvent: MemberMuteEvent;
-  MemberUnmuteEvent: MemberUnmuteEvent;
-  // 请求事件
-  NewFriendRequestEvent: NewFriendRequestEvent;
-  MemberJoinRequestEvent: MemberJoinRequestEvent;
-  BotInvitedJoinGroupRequestEvent: BotInvitedJoinGroupRequestEvent;
-};
+// export type EventMap = {
+//   BotOnlineEvent: BotOnlineEvent;
+//   BotOfflineEventActive: BotOfflineEventActive;
+//   BotOfflineEventForce: BotOfflineEventForce;
+//   BotOfflineEventDropped: BotOfflineEventDropped;
+//   BotReloginEvent: BotReloginEvent;
+//   GroupRecallEvent: GroupRecallEvent;
+//   FriendRecallEvent: FriendRecallEvent;
+//   BotGroupPermissionChangeEvent: BotGroupPermissionChangeEvent;
+//   BotMuteEvent: BotMuteEvent;
+//   BotUnmuteEvent: BotUnmuteEvent;
+//   BotJoinGroupEvent: BotJoinGroupEvent;
+//   BotLeaveEventActive: BotLeaveEventActive;
+//   BotLeaveEventKick: BotLeaveEventKick;
+//   GroupNameChangeEvent: GroupNameChangeEvent;
+//   GroupEntranceAnnouncementChangeEvent: GroupEntranceAnnouncementChangeEvent;
+//   GroupMuteAllEvent: GroupMuteAllEvent;
+//   GroupAllowAnonymousChatEvent: GroupAllowAnonymousChatEvent;
+//   GroupAllowConfessTalkEvent: GroupAllowConfessTalkEvent;
+//   GroupAllowMemberInviteEvent: GroupAllowMemberInviteEvent;
+//   MemberJoinEvent: MemberJoinEvent;
+//   MemberLeaveEventKick: MemberLeaveEventKick;
+//   MemberLeaveEventQuit: MemberLeaveEventQuit;
+//   MemberCardChangeEvent: MemberCardChangeEvent;
+//   MemberSpecialTitleChangeEvent: MemberSpecialTitleChangeEvent;
+//   MemberPermissionChangeEvent: MemberPermissionChangeEvent;
+//   MemberMuteEvent: MemberMuteEvent;
+//   MemberUnmuteEvent: MemberUnmuteEvent;
+//   // 请求事件
+//   NewFriendRequestEvent: NewFriendRequestEvent;
+//   MemberJoinRequestEvent: MemberJoinRequestEvent;
+//   BotInvitedJoinGroupRequestEvent: BotInvitedJoinGroupRequestEvent;
+// };

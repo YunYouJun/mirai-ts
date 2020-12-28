@@ -113,6 +113,15 @@ export default class Mirai {
     log.info(`GitHub: ${pkg.repository.url}`);
 
     // 注册message事件
+    this.Listener.TempMessage.attachSync((data) => {
+      this.Listener.message.post(data);
+    });
+    this.Listener.FriendMessage.attachSync((data) => {
+      this.Listener.message.post(data);
+    });
+    this.Listener.GroupMessage.attachSync((data) => {
+      this.Listener.message.post(data);
+    });
   }
 
   /**
