@@ -21,7 +21,6 @@ import MiraiApiHttp from "./mirai-api-http";
 export { Message, MiraiApiHttp };
 
 // 工具
-export * as log from "./utils/log";
 export * as check from "./utils/check";
 export * as template from "./utils/template";
 
