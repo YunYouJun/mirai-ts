@@ -3,7 +3,7 @@
  * @packageDocumentation
  */
 
-import * as log from "../utils/log";
+import * as log from "../utils/logger";
 import { AxiosStatic, AxiosResponse } from "axios";
 import { MessageType, Api, Config, EventType } from "..";
 import Message from "../message";
@@ -18,6 +18,8 @@ import { Resp } from "./resp";
 
 // 处理状态码
 import { getMessageFromStatusCode } from "./utils";
+import Logger from "../utils/logger";
+import chalk from "chalk";
 
 /**
  * 与 mirai-api-http [setting.yml](https://github.com/project-mirai/mirai-api-http#settingyml模板) 的配置保持一致
@@ -61,6 +63,8 @@ export default class MiraiApiHttp {
    */
   resp: Resp;
 
+  logger: Logger;
+
   constructor(public config: MiraiApiHttpConfig, public axios: AxiosStatic) {
     this.sessionKey = "";
     this.qq = 0;
@@ -73,6 +77,8 @@ export default class MiraiApiHttp {
     }
     this.command = new Command(this);
     this.resp = new Resp(this);
+
+    this.logger = new Logger(chalk.cyan("[mirai-api-http]"));
   }
 
   /**
@@ -84,10 +90,10 @@ export default class MiraiApiHttp {
         if (res.status === 200 && res.data.code) {
           const message = getMessageFromStatusCode(res.data.code);
           if (message) {
-            log.error(`Code ${res.data.code}: ${message}`);
+            this.logger.error(`Code ${res.data.code}: ${message}`);
 
             if (res.data.code === 3 || res.data.code === 4) {
-              log.warning("正在尝试重新建立连接...");
+              this.logger.warning("正在尝试重新建立连接...");
               await this.auth();
               await this.verify(this.qq);
             }
@@ -96,7 +102,7 @@ export default class MiraiApiHttp {
         return res;
       },
       (err) => {
-        log.error(`响应失败：${err.message}`);
+        this.logger.error(`响应失败：${err.message}`);
         console.error(err);
         return Promise.reject(err);
       }
@@ -573,7 +579,7 @@ export default class MiraiApiHttp {
    * @param callback 回调函数
    */
   message(callback: (msg: MessageType.ChatMessage) => any): void {
-    log.info(`监听消息: ${this.address}`);
+    this.logger.info(`监听消息: ${this.address}`);
     const ws = new WebSocket(
       this.address + "/message?sessionKey=" + this.sessionKey
     );
@@ -588,7 +594,7 @@ export default class MiraiApiHttp {
    * @param callback 回调函数
    */
   event(callback: (event: EventType.Event) => any) {
-    log.info(`监听事件: ${this.address}`);
+    this.logger.info(`监听事件: ${this.address}`);
     const ws = new WebSocket(
       this.address + "/event?sessionKey=" + this.sessionKey
     );
@@ -603,7 +609,7 @@ export default class MiraiApiHttp {
    * @param callback 回调函数
    */
   all(callback: (data: EventType.Event | MessageType.ChatMessage) => any) {
-    log.info(`监听消息和事件: ${this.address}`);
+    this.logger.info(`监听消息和事件: ${this.address}`);
     const ws = new WebSocket(
       this.address + "/all?sessionKey=" + this.sessionKey
     );

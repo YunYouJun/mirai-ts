@@ -4,7 +4,6 @@
  */
 
 import axios, { AxiosStatic } from "axios";
-import * as log from "./utils/log";
 
 /**
  * 初始化 axios

@@ -7,7 +7,8 @@ import * as axios from "./axios";
 import { AxiosStatic } from "axios";
 import MiraiApiHttp from "./mirai-api-http";
 import { MessageType, EventType, MiraiApiHttpConfig } from ".";
-import * as log from "./utils/log";
+import Logger from "./utils/logger";
+
 import { getPlain, splitText } from "./utils";
 import { isAt, isChatMessage } from "./utils/check";
 import ora from "ora";
@@ -16,7 +17,6 @@ import {
   MemberJoinRequestOperationType,
   BotInvitedJoinGroupRequestOperationType,
 } from "./mirai-api-http/resp";
-import { ILog } from "./interfaces";
 
 /**
  * 所有消息
@@ -59,7 +59,7 @@ export default class Mirai {
   /**
    * 日志模块
    */
-  log: ILog = log;
+  logger = new Logger();
   /**
    * 请求工具
    */
@@ -128,16 +128,16 @@ export default class Mirai {
     this.retries = 10;
 
     const pkg = require("../package.json");
-    this.log.info(`Version ${pkg.version}`);
-    this.log.info(`Docs: ${pkg.homepage}`);
-    this.log.info(`GitHub: ${pkg.repository.url}`);
+    this.logger.info(`Version ${pkg.version}`);
+    this.logger.info(`Docs: ${pkg.homepage}`);
+    this.logger.info(`GitHub: ${pkg.repository.url}`);
   }
 
   /**
    * @deprecated since version v0.5.0
    */
   login(qq: number) {
-    this.log.error(`mirai.login(qq) 请使用 miria.link(${qq}) 替代`);
+    this.logger.error(`mirai.login(qq) 请使用 miria.link(${qq}) 替代`);
   }
 
   /**
@@ -181,7 +181,7 @@ export default class Mirai {
   async release() {
     const data = await this.api.release();
     if (data.code === 0) {
-      this.log.success(`释放 ${this.qq} Session: ${this.api.sessionKey}`);
+      this.logger.success(`释放 ${this.qq} Session: ${this.api.sessionKey}`);
     }
     return data;
   }
@@ -461,7 +461,7 @@ export default class Mirai {
         this.handle(msg, before, after);
       });
     } else {
-      this.log.info("开始监听: http://" + address);
+      this.logger.info("开始监听: http://" + address);
       let count = 0;
       const intId = setInterval(() => {
         this.api
