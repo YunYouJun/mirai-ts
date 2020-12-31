@@ -124,9 +124,13 @@ import { Message, log, check, MessageType, EventType } from "mirai-ts";
 
 > 消息链应当是一个数组，如 `messageChain = [Message.At(qq), Message.Plain('来点色图')]`
 
-### [log](https://www.yunyoujun.cn/mirai-ts/modules/_src_utils_log_.html)
+### [logger](https://www.yunyoujun.cn/mirai-ts/modules/_src_utils_logger_.html)
 
-- `log`: 彩色日志，如 `log.success('We are free!')`
+```ts
+import { Logger } from "mirai-ts";
+const logger = new Logger();
+logger.success("We are free!");
+```
 
 ### [check](https://www.yunyoujun.cn/mirai-ts/modules/_src_utils_check_.html)
 

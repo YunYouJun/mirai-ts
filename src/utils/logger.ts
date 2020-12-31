@@ -5,18 +5,53 @@
 
 import chalk from "chalk";
 
+type Color = "green" | "yellow" | "red" | "blue";
+interface ColorMap {
+  [propName: string]: Color;
+}
+
 /**
  * 日志工具类
  */
 export default class Logger {
+  /**
+   * 启用
+   */
+  enable = true;
   constructor(public prefix = chalk.cyan("[mirai-ts]")) {}
+
+  /**
+   * 打印消息
+   * @param type 类型
+   * @param msg 消息
+   */
+  print(type: string, msg: any) {
+    if (!this.enable) return;
+
+    const color: ColorMap = {
+      success: "green",
+      warning: "yellow",
+      error: "red",
+      info: "blue",
+    };
+
+    const typeColor = color[type];
+    const typeName = `[${type}]`;
+    const content = [chalk[typeColor as Color](typeName), msg];
+
+    if (this.prefix) {
+      content.unshift(this.prefix);
+    }
+
+    console.log(...content);
+  }
 
   /**
    * 输出成功信息（绿色）
    * @param msg 文本
    */
   success(msg: any) {
-    console.log(this.prefix, chalk.green("[success]"), msg);
+    this.print("success", msg);
   }
 
   /**
@@ -24,7 +59,7 @@ export default class Logger {
    * @param msg 文本
    */
   warning(msg: any) {
-    console.log(this.prefix, chalk.yellow("[warning]"), msg);
+    this.print("warning", msg);
   }
 
   /**
@@ -32,7 +67,7 @@ export default class Logger {
    * @param msg 文本
    */
   error(msg: any) {
-    console.log(this.prefix, chalk.red("[error]"), msg);
+    this.print("error", msg);
   }
 
   /**
@@ -40,6 +75,6 @@ export default class Logger {
    * @param msg 文本
    */
   info(msg: any) {
-    console.log(this.prefix, chalk.blue("[info]"), msg);
+    this.print("info", msg);
   }
 }
