@@ -553,7 +553,7 @@ export default class MiraiApiHttp {
    * @param memberId 群员QQ号
    * @param info 群员资料
    */
-  async memberInfo(target: number, memberId: number, info: Config.MemberInfo) {
+  async memberInfo(target: number, memberId: number, info?: Config.MemberInfo) {
     if (info) {
       const { data } = await this.axios.post("/groupConfig", {
         sessionKey: this.sessionKey,

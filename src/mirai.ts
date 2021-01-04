@@ -7,7 +7,7 @@ import * as axios from "./axios";
 import { AxiosStatic } from "axios";
 import MiraiApiHttp from "./mirai-api-http";
 import { MessageType, EventType, MiraiApiHttpConfig } from ".";
-import Logger from "./utils/logger";
+import { Logger } from "mirai-ts";
 
 import { getPlain, splitText } from "./utils";
 import { isAt, isChatMessage } from "./utils/check";

@@ -18,10 +18,9 @@ export type MiraiInstance = Mirai;
 
 import Message from "./message";
 import MiraiApiHttp from "./mirai-api-http";
-export { Message, MiraiApiHttp };
 
 // 工具
-export * as Logger from "./utils/logger";
+import Logger from "./utils/logger";
 export * as check from "./utils/check";
 export * as template from "./utils/template";
 
@@ -32,3 +31,6 @@ export * as Contact from "./types/contact";
 export * as MessageType from "./types/message-type";
 export * as EventType from "./types/event-type";
 export { MiraiApiHttpConfig } from "./mirai-api-http";
+
+// export
+export { Message, MiraiApiHttp, Logger };
