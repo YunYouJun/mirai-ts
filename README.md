@@ -1,10 +1,12 @@
 # [mirai-ts](https://github.com/YunYouJun/mirai-ts)
 
 [![docs](https://github.com/YunYouJun/mirai-ts/workflows/docs/badge.svg)](https://www.yunyoujun.cn/mirai-ts/)
-[![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/project-mirai/mirai-api-http?label=mirai-api-http)](https://github.com/project-mirai/mirai-api-http)
+[![Compatible Version](https://img.shields.io/badge/mirai--api--http-v1.9.5-blue)](https://github.com/project-mirai/mirai-api-http)
 [![npm](https://img.shields.io/npm/v/mirai-ts)](https://www.npmjs.com/package/mirai-ts)
 ![GitHub top language](https://img.shields.io/github/languages/top/YunYouJun/mirai-ts)
 [![GitHub](https://img.shields.io/github/license/YunYouJun/mirai-ts)](https://github.com/YunYouJun/mirai-ts)
+
+<!-- [![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/project-mirai/mirai-api-http?label=mirai-api-http)](https://github.com/project-mirai/mirai-api-http) -->
 
 [mirai-api-http](https://github.com/mamoe/mirai-api-http) 的 TypeScript SDK，编译为 JavaScript 发布。附带声明文件，拥有良好的注释和类型提示。
 
@@ -28,7 +30,7 @@ const Mirai = require("mirai-ts");
 
 // 你的 QQ 号
 const qq = 114514;
-// 请与 config/MiraiApiHttp/setting.yml 保持一致
+// 请与 `mcl/config/net.mamoe.mirai-api-http/setting.yml` 保持一致
 const mahConfig = {
   host: "你的 IP 地址" || "127.0.0.1",
   port: 你的端口号 || 4859,

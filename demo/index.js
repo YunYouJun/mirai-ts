@@ -2,7 +2,7 @@ const Mirai = require("mirai-ts");
 
 // 你的 QQ 号
 const qq = 712727946;
-// 请与 `config/MiraiApiHttp/setting.yml` 保持一致
+// 请与 `mcl/config/net.mamoe.mirai-api-http/setting.yml` 保持一致
 const mahConfig = {
   host: "localhost",
   port: 4859,
