@@ -20,6 +20,9 @@ import { getMessageFromStatusCode } from "./utils";
 import Logger from "../utils/logger";
 import chalk from "chalk";
 
+// utils
+import { toMessageChain } from "./message";
+
 /**
  * 与 mirai-api-http [setting.yml](https://github.com/project-mirai/mirai-api-http#settingyml模板) 的配置保持一致
  */
@@ -249,9 +252,7 @@ export default class MiraiApiHttp {
     target: number,
     quote?: number
   ): Promise<Api.Response.sendMessage> {
-    if (typeof messageChain === "string") {
-      messageChain = [Message.Plain(messageChain)];
-    }
+    messageChain = toMessageChain(messageChain);
     const payload: Api.SendFriendMessage = {
       sessionKey: this.sessionKey,
       target,
@@ -276,9 +277,7 @@ export default class MiraiApiHttp {
     target: number,
     quote?: number
   ): Promise<Api.Response.sendMessage> {
-    if (typeof messageChain === "string") {
-      messageChain = [Message.Plain(messageChain)];
-    }
+    messageChain = toMessageChain(messageChain);
     const payload: Api.SendGroupMessage = {
       sessionKey: this.sessionKey,
       target,
@@ -304,9 +303,7 @@ export default class MiraiApiHttp {
     group: number,
     quote?: number
   ): Promise<Api.Response.sendMessage> {
-    if (typeof messageChain === "string") {
-      messageChain = [Message.Plain(messageChain)];
-    }
+    messageChain = toMessageChain(messageChain);
     const payload: Api.SendTempMessage = {
       sessionKey: this.sessionKey,
       qq,
