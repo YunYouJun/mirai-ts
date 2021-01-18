@@ -11,7 +11,6 @@ import Logger from "./utils/logger";
 
 import { getPlain, splitText } from "./utils";
 import { isAt, isChatMessage } from "./utils/check";
-import ora from "ora";
 import {
   NewFriendRequestOperationType,
   MemberJoinRequestOperationType,
@@ -69,10 +68,6 @@ export default class Mirai {
    * 是否验证成功
    */
   verified: boolean;
-  /**
-   * 旋转进度
-   */
-  spinner?: ora.Ora;
   /**
    * 监听器状态（false 则不执行监听器回调函数）
    */
@@ -134,13 +129,6 @@ export default class Mirai {
   }
 
   /**
-   * @deprecated since version v0.5.0
-   */
-  login(qq: number) {
-    this.logger.error(`mirai.login(qq) 请使用 miria.link(${qq}) 替代`);
-  }
-
-  /**
    * link 链接 mirai 已经登录的 QQ 号
    */
   async link(qq: number) {
@@ -153,24 +141,27 @@ export default class Mirai {
 
   /**
    * 获取 Session
+   * data.code === 0 成功
    */
   async auth() {
     const data = await this.api.auth();
     if (data.code === 0) {
-      this.spinner = ora(`验证 Session: ${data.session}`).start();
+      this.logger.info(`获取 Session: ${data.session}`);
     }
     return data;
   }
 
   /**
    * 激活 Session，绑定 QQ
+   * data.code === 0 成功
    */
   async verify() {
     const data = await this.api.verify(this.qq);
     if (data.code === 0) {
-      this.spinner?.succeed();
+      this.logger.success("验证成功");
+      this.verified = true;
     } else {
-      this.spinner?.fail();
+      this.logger.error("验证失败");
     }
     return data;
   }
@@ -438,15 +429,23 @@ export default class Mirai {
     after?: Function
   ) {
     this.addHelperForMsg(msg);
-    if (before) {
-      before(msg);
-    }
     this.execListener(msg);
-    if (after) {
-      after(msg);
-    }
     // 清空当前 curMsg
     delete this.curMsg;
+  }
+
+  /**
+   * 在监听器函数执行前执行
+   */
+  before(callback: Function) {
+    this.beforeListener.push(callback);
+  }
+
+  /**
+   * 在监听器函数执行后执行
+   */
+  after(callback: Function) {
+    this.afterListener.push(callback);
   }
 
   /**
@@ -454,11 +453,11 @@ export default class Mirai {
    * @param before 在监听器函数执行前执行
    * @param after 在监听器函数执行后执行
    */
-  listen(before?: Function, after?: Function) {
+  listen() {
     const address = this.mahConfig.host + ":" + this.mahConfig.port;
     if (this.mahConfig.enableWebsocket) {
       this.api.all((msg) => {
-        this.handle(msg, before, after);
+        this.handle(msg);
       });
     } else {
       this.logger.info("开始监听: http://" + address);
@@ -471,7 +470,7 @@ export default class Mirai {
             if (data && data.length) {
               count = 0;
               data.forEach((msg) => {
-                this.handle(msg, before, after);
+                this.handle(msg);
               });
             }
           })

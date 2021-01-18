@@ -33,4 +33,4 @@ export * as EventType from "./types/event-type";
 export { MiraiApiHttpConfig } from "./mirai-api-http";
 
 // export
-export { Message, MiraiApiHttp, Logger };
+export { Mirai, Message, MiraiApiHttp, Logger };

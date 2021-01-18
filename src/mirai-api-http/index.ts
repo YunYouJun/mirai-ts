@@ -5,7 +5,6 @@
 
 import { AxiosStatic, AxiosResponse } from "axios";
 import { MessageType, Api, Config, EventType } from "..";
-import Message from "../message";
 
 // for upload image
 import FormData from "form-data";
@@ -343,13 +342,9 @@ export default class MiraiApiHttp {
   /**
    * 使用此方法上传图片文件至服务器并返回 ImageId
    * @param type
-   * @param img 图片文件
+   * @param img 图片文件 fs.createReadStream(img)
    */
-  async uploadImage(type: "friend" | "group" | "temp", img: string | File) {
-    if (typeof img === "string") {
-      const fs = require("fs");
-      img = fs.createReadStream(img);
-    }
+  async uploadImage(type: "friend" | "group" | "temp", img: File) {
     const form = new FormData();
     form.append("sessionKey", this.sessionKey);
     form.append("type", type);
@@ -363,13 +358,9 @@ export default class MiraiApiHttp {
   /**
    * 使用此方法上传语音文件至服务器并返回 VoiceId
    * @param type 当前仅支持 "group"
-   * @param voice 语音文件
+   * @param voice 语音文件 fs.createReadStream(voice)
    */
-  async uploadVoice(type: "friend" | "group" | "temp", voice: string | File) {
-    if (typeof voice === "string") {
-      const fs = require("fs");
-      voice = fs.createReadStream(voice);
-    }
+  async uploadVoice(type: "friend" | "group" | "temp", voice: File) {
     const form = new FormData();
     form.append("sessionKey", this.sessionKey);
     form.append("type", type);

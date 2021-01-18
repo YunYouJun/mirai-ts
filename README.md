@@ -1,7 +1,7 @@
 # [mirai-ts](https://github.com/YunYouJun/mirai-ts)
 
 [![docs](https://github.com/YunYouJun/mirai-ts/workflows/docs/badge.svg)](https://www.yunyoujun.cn/mirai-ts/)
-[![Compatible Version](https://img.shields.io/badge/mirai--api--http-v1.9.5-blue)](https://github.com/project-mirai/mirai-api-http)
+[![Compatible Version](https://img.shields.io/badge/mirai--api--http-v1.9.6-blue)](https://github.com/project-mirai/mirai-api-http)
 [![npm](https://img.shields.io/npm/v/mirai-ts)](https://www.npmjs.com/package/mirai-ts)
 ![GitHub top language](https://img.shields.io/github/languages/top/YunYouJun/mirai-ts)
 [![GitHub](https://img.shields.io/github/license/YunYouJun/mirai-ts)](https://github.com/YunYouJun/mirai-ts)
