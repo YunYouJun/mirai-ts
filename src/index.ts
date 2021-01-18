@@ -7,7 +7,7 @@ import Mirai from "./mirai";
 export default Mirai;
 
 // 必须放在最前面，适配 js require
-if (typeof module !== "undefined") {
+if (typeof window === "undefined" && typeof module !== "undefined") {
   module.exports = Mirai;
   module.exports.default = Mirai;
   module.exports.Mirai = Mirai;
