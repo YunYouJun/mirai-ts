@@ -4,8 +4,11 @@ const Mirai = require("mirai-ts");
 const qq = 712727946;
 // 请与 `mcl/config/net.mamoe.mirai-api-http/setting.yml` 保持一致
 const mahConfig = {
-  host: "localhost",
+  // 你的 IP 地址
+  host: "127.0.0.1",
+  // 你的端口号
   port: 4859,
+  // 你的密钥
   authKey: "el-psy-congroo",
   // 推荐 true，websocket 无须轮询，更少占用资源。
   enableWebsocket: true,
@@ -22,13 +25,14 @@ async function app() {
   // 你也可以单独对某一类消息进行监听
   // console.log("on message");
   mirai.on("message", (msg) => {
+    console.log(msg);
     // 复读
     msg.reply(msg.messageChain);
   });
 
   // 调用 mirai-ts 封装的 mirai-api-http 发送指令
   console.log("send command help");
-  const data = await mirai.api.command.send("help", []);
+  const data = await mirai.api.command.send("/help", []);
   console.log("帮助信息:" + data);
 
   // 处理各种事件类型

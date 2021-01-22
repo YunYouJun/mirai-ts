@@ -423,11 +423,7 @@ export default class Mirai {
    * @param before 在监听器函数执行前执行
    * @param after 在监听器函数执行后执行
    */
-  handle(
-    msg: MessageType.ChatMessage | EventType.Event,
-    before?: Function,
-    after?: Function
-  ) {
+  handle(msg: MessageType.ChatMessage | EventType.Event) {
     this.addHelperForMsg(msg);
     this.execListener(msg);
     // 清空当前 curMsg

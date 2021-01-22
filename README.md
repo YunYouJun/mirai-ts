@@ -25,89 +25,18 @@ npm install mirai-ts
 
 ### JavaScript
 
-```js
-const Mirai = require("mirai-ts");
+[示例代码](./demo/index.js)
 
-// 你的 QQ 号
-const qq = 114514;
-// 请与 `mcl/config/net.mamoe.mirai-api-http/setting.yml` 保持一致
-const mahConfig = {
-  host: "你的 IP 地址" || "127.0.0.1",
-  port: 你的端口号 || 4859,
-  authKey: "你的 authKey" || "el-psy-congroo",
-  // 推荐 true，websocket 无须轮询，更少占用资源。
-  enableWebsocket: false,
-};
-
-const mirai = new Mirai(mahConfig);
-
-async function app() {
-  // 登录 QQ
-  await mirai.link(qq);
-
-  // 对收到的消息进行处理
-  // message 本质相当于同时绑定了 FriendMessage GroupMessage TempMessage
-  // 你也可以单独对某一类消息进行监听
-  // console.log("on message");
-  mirai.on("message", (msg) => {
-    console.log(msg);
-    // 复读
-    msg.reply(msg.messageChain);
-  });
-
-  // 调用 mirai-ts 封装的 mirai-api-http 发送指令
-  console.log("send command help");
-  const data = await mirai.api.command.send("help", []);
-  console.log("帮助信息:" + data);
-
-  // 处理各种事件类型
-  // 事件订阅说明（名称均与 mirai-api-http 中事件名一致）
-  // https://github.com/RedBeanN/node-mirai/blob/master/event.md
-  // console.log("on other event");
-  // https://github.com/project-mirai/mirai-api-http/blob/master/EventType.md#群消息撤回
-  mirai.on("GroupRecallEvent", ({ operator }) => {
-    const text = `${operator.memberName} 撤回了一条消息，并拜托你不要再发色图了。`;
-    console.log(text);
-    mirai.api.sendGroupMessage(text, operator.group.id);
-  });
-
-  // 开始监听
-  mirai.listen();
-  // 可传入回调函数对监听的函数进行处理，如：
-  // mirai.listen((msg) => {
-  //   console.log(msg)
-  // })
-}
-
-app();
+```sh
+node demo/index.js
 ```
 
 ### TypeScript
 
-```ts
-import Mirai from "mirai-ts";
+[示例代码](./demo/index.ts)
 
-const qq = 114514;
-const mahConfig = {
-  host: "你的 IP 地址" || "127.0.0.1",
-  port: 你的端口号 || 8080,
-  authKey: "你的 authKey" || "el-psy-congroo",
-  enableWebsocket: false,
-};
-
-const mirai = new Mirai(mahConfig);
-
-async function app() {
-  await mirai.link(qq);
-  mirai.on("message", (msg) => {
-    console.log(msg);
-    // 复读
-    msg.reply(msg.messageChain);
-  });
-  mirai.listen();
-}
-
-app();
+```sh
+ts-node demo/index.ts
 ```
 
 ## 其他
