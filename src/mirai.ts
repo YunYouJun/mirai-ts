@@ -121,7 +121,9 @@ export default class Mirai {
     this.afterListener = [];
     this.interval = 200;
     this.retries = 10;
+  }
 
+  async about() {
     const pkg = require("../package.json");
     this.logger.info(`Version ${pkg.version}`);
     this.logger.info(`Docs: ${pkg.homepage}`);
@@ -201,7 +203,27 @@ export default class Mirai {
   }
 
   /**
-   * 添加监听者
+   * 绑定事件列表
+   * message: FriendMessage | GroupMessage | TempMessage
+   * [mirai-api-http事件类型一览](https://github.com/project-mirai/mirai-api-http/blob/master/EventType.md)
+   * mirai.on('MemberMuteEvent', ()=>{})
+   * @param type
+   * @param callback
+   */
+  remove<
+    T extends "message" | EventType.EventType | MessageType.ChatMessageType
+  >(type: T, callback: (data: Data<T>) => any) {
+    if (type === "message") {
+      this.removeListener("FriendMessage", callback);
+      this.removeListener("GroupMessage", callback);
+      this.removeListener("TempMessage", callback);
+    } else {
+      this.removeListener(type as Exclude<T, "message">, callback);
+    }
+  }
+
+  /**
+   * 添加监听器
    * @param type
    * @param callback
    */
@@ -215,6 +237,28 @@ export default class Mirai {
     } else {
       this.listener.set(type, [callback]);
     }
+  }
+
+  /**
+   * 移除监听器
+   * @param type
+   * @param callback
+   */
+  removeListener<T extends EventType.EventType | MessageType.ChatMessageType>(
+    type: T,
+    callback: Function
+  ): Boolean {
+    const set = this.listener.get(type);
+    if (set) {
+      for (let i = 0; i < set.length; i++) {
+        const fn = set[i];
+        if (fn === callback) {
+          set.splice(i, 1);
+          return true;
+        }
+      }
+    }
+    return false;
   }
 
   /**
