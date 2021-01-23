@@ -39,6 +39,15 @@ node demo/index.js
 ts-node demo/index.ts
 ```
 
+### Browser
+
+基于 mirai-ts 开发面向浏览器端的应用程序时，您还需要安装 [events](https://github.com/browserify/events) 以在浏览器端替代 Node.js 原生 events 模块。
+
+```sh
+yarn add events
+# npm install events mirai-ts
+```
+
 ## 其他
 
 ```js

@@ -17,6 +17,8 @@ import {
   BotInvitedJoinGroupRequestOperationType,
 } from "./mirai-api-http/resp";
 
+import events from "events";
+
 /**
  * 所有消息
  */
@@ -28,11 +30,6 @@ export type MessageAndEvent = MessageType.ChatMessage | EventType.Event;
 export type MessageAndEventType =
   | MessageType.ChatMessageType
   | EventType.EventType;
-
-type Listener = Map<
-  MessageType.ChatMessageType | EventType.EventType,
-  Function[]
->;
 
 /**
  * 数据类型
@@ -73,10 +70,6 @@ export default class Mirai {
    */
   active: boolean;
   /**
-   * 监听者（回调函数）
-   */
-  listener: Listener;
-  /**
    * 监听者之前执行的函数
    */
   beforeListener: Function[];
@@ -96,6 +89,10 @@ export default class Mirai {
    * 当前处理的消息
    */
   curMsg?: MessageType.ChatMessage | EventType.Event;
+  /**
+   * 事件触发器
+   */
+  eventEmitter = new events.EventEmitter();
   constructor(
     public mahConfig: MiraiApiHttpConfig = {
       host: "0.0.0.0",
@@ -116,7 +113,6 @@ export default class Mirai {
     this.verified = false;
 
     this.active = true;
-    this.listener = new Map();
     this.beforeListener = [];
     this.afterListener = [];
     this.interval = 200;
@@ -180,6 +176,21 @@ export default class Mirai {
   }
 
   /**
+   * message 展开为 FriendMessage | GroupMessage | TempMessage
+   * @param method
+   * @param callback
+   */
+  _adaptMessageForAll<
+    T extends "message" | EventType.EventType | MessageType.ChatMessageType
+  >(method: "on" | "off" | "once", callback: (data: Data<T>) => any) {
+    const emitter = this.eventEmitter;
+    const messageType = ["FriendMessage", "GroupMessage", "TempMessage"];
+    messageType.forEach((message) => {
+      emitter[method](message, callback);
+    });
+  }
+
+  /**
    * 绑定事件列表
    * message: FriendMessage | GroupMessage | TempMessage
    * [mirai-api-http事件类型一览](https://github.com/project-mirai/mirai-api-http/blob/master/EventType.md)
@@ -191,74 +202,47 @@ export default class Mirai {
     type: T,
     callback: (data: Data<T>) => any
   ) {
-    // too complex for typescript so that in some case it cannot identify the type correctly
-    // 说明监听所有
+    const emitter = this.eventEmitter;
+    // 监听所有消息类型
     if (type === "message") {
-      this.addListener("FriendMessage", callback);
-      this.addListener("GroupMessage", callback);
-      this.addListener("TempMessage", callback);
+      this._adaptMessageForAll("on", callback);
     } else {
-      this.addListener(type as Exclude<T, "message">, callback);
+      emitter.on(type, callback);
     }
   }
 
   /**
-   * 绑定事件列表
-   * message: FriendMessage | GroupMessage | TempMessage
-   * [mirai-api-http事件类型一览](https://github.com/project-mirai/mirai-api-http/blob/master/EventType.md)
-   * mirai.on('MemberMuteEvent', ()=>{})
+   * 仅处理事件一次
    * @param type
    * @param callback
    */
-  remove<
-    T extends "message" | EventType.EventType | MessageType.ChatMessageType
-  >(type: T, callback: (data: Data<T>) => any) {
-    if (type === "message") {
-      this.removeListener("FriendMessage", callback);
-      this.removeListener("GroupMessage", callback);
-      this.removeListener("TempMessage", callback);
-    } else {
-      this.removeListener(type as Exclude<T, "message">, callback);
-    }
-  }
-
-  /**
-   * 添加监听器
-   * @param type
-   * @param callback
-   */
-  addListener<T extends EventType.EventType | MessageType.ChatMessageType>(
+  once<T extends "message" | EventType.EventType | MessageType.ChatMessageType>(
     type: T,
-    callback: Function
+    callback: (data: Data<T>) => any
   ) {
-    const set = this.listener.get(type);
-    if (set) {
-      set.push(callback);
+    const emitter = this.eventEmitter;
+    if (type === "message") {
+      this._adaptMessageForAll("once", callback);
     } else {
-      this.listener.set(type, [callback]);
+      emitter.once(type, callback);
     }
   }
 
   /**
-   * 移除监听器
+   * 取消监听器
    * @param type
    * @param callback
    */
-  removeListener<T extends EventType.EventType | MessageType.ChatMessageType>(
+  off<T extends "message" | EventType.EventType | MessageType.ChatMessageType>(
     type: T,
-    callback: Function
-  ): Boolean {
-    const set = this.listener.get(type);
-    if (set) {
-      for (let i = 0; i < set.length; i++) {
-        const fn = set[i];
-        if (fn === callback) {
-          set.splice(i, 1);
-          return true;
-        }
-      }
+    callback: (data: Data<T>) => any
+  ) {
+    const emitter = this.eventEmitter;
+    if (type === "message") {
+      this._adaptMessageForAll("off", callback);
+    } else {
+      emitter.off(type, callback);
     }
-    return false;
   }
 
   /**
@@ -440,28 +424,6 @@ export default class Mirai {
   }
 
   /**
-   * 执行所有事件监听回调函数
-   * @param msg
-   */
-  execListener(msg: MessageType.ChatMessage | EventType.Event) {
-    this.beforeListener.forEach((cb) => {
-      cb(msg);
-    });
-    if (this.active) {
-      const set = this.listener.get(msg.type);
-      if (set) {
-        set.every((cb) => {
-          cb(msg);
-          return msg.bubbles;
-        });
-      }
-    }
-    this.afterListener.forEach((cb) => {
-      cb(msg);
-    });
-  }
-
-  /**
    * 处理消息
    * @param msg
    * @param before 在监听器函数执行前执行
@@ -469,7 +431,20 @@ export default class Mirai {
    */
   handle(msg: MessageType.ChatMessage | EventType.Event) {
     this.addHelperForMsg(msg);
-    this.execListener(msg);
+
+    this.beforeListener.forEach((cb) => {
+      cb(msg);
+    });
+
+    if (this.active) {
+      const emitter = this.eventEmitter;
+      emitter.emit(msg.type, msg);
+    }
+
+    this.afterListener.forEach((cb) => {
+      cb(msg);
+    });
+
     // 清空当前 curMsg
     delete this.curMsg;
   }
