@@ -50,6 +50,10 @@ export interface MiraiApiHttpConfig {
    * 可选，配置CORS跨域，默认为*，即允许所有域名
    */
   cors?: string[];
+  /**
+   * 自定义连接 URL
+   */
+  url?: string;
 }
 
 export default class MiraiApiHttp {
@@ -72,9 +76,11 @@ export default class MiraiApiHttp {
     this.verified = false;
 
     if (this.config.enableWebsocket) {
-      this.address = `ws://${this.config.host}:${this.config.port}`;
+      this.address =
+        this.config.url || `ws://${this.config.host}:${this.config.port}`;
     } else {
-      this.address = `http://${this.config.host}:${this.config.port}`;
+      this.address =
+        this.config.url || `http://${this.config.host}:${this.config.port}`;
     }
     this.command = new Command(this);
     this.resp = new Resp(this);
