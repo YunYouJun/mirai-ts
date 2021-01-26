@@ -51,11 +51,11 @@ yarn add events
 ## 其他
 
 ```js
-const { Message, log, check, MessageType, EventType } = require("mirai-ts");
+const { Message, Logger, check, MessageType, EventType } = require("mirai-ts");
 ```
 
 ```ts
-import { Message, log, check, MessageType, EventType } from "mirai-ts";
+import { Message, Logger, check, MessageType, EventType } from "mirai-ts";
 ```
 
 ### [Message](https://www.yunyoujun.cn/mirai-ts/modules/_src_message_.html)
@@ -112,7 +112,7 @@ el-bot 展示了整个 mirai-ts 的使用流程，并内置了一些如自动应
 
 ## Why Typescript & mirai-ts?
 
-- 更友好的控制台消息错误提示
+- 更友好的提示
 - 更清晰的语义
 - 更易懂的注释
 - 更优雅的结构

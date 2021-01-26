@@ -1,4 +1,5 @@
 const Mirai = require("mirai-ts");
+// const { Message } = require("mirai-ts");
 
 // 你的 QQ 号
 const qq = 712727946;
