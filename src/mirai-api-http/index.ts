@@ -50,6 +50,9 @@ export interface MiraiApiHttpConfig {
    * 可选，配置CORS跨域，默认为*，即允许所有域名
    */
   cors?: string[];
+  /**
+   * 自定义连接 URL
+   */
   url?: string;
 }
 
