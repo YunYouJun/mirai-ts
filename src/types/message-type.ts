@@ -3,10 +3,9 @@
  * @packageDocumentation
  */
 
-import { BaseType } from ".";
 import * as Contact from "./contact";
 
-interface BaseSingleMessage extends BaseType {
+interface BaseSingleMessage {
   type: string;
 }
 
@@ -251,6 +250,16 @@ interface BaseChatMessage extends BaseSingleMessage {
    * 消息文本
    */
   plain: string;
+  /**
+   * 是否为某群 groupId 发送
+   * msg.group(114514)
+   */
+  group: (...groupIds: number[]) => Boolean;
+  /**
+   * 是否为某个好友 qq 发送
+   * msg.friend(114514)
+   */
+  friend: (...qqs: number[]) => Boolean;
 }
 
 export interface FriendMessage extends BaseChatMessage {

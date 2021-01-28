@@ -9,15 +9,11 @@ import MiraiApiHttp from "./mirai-api-http";
 import { MessageType, EventType, MiraiApiHttpConfig } from ".";
 import Logger from "./utils/logger";
 
-import { getPlain, splitText } from "./utils";
-import { isAt, isChatMessage } from "./utils/check";
-import {
-  NewFriendRequestOperationType,
-  MemberJoinRequestOperationType,
-  BotInvitedJoinGroupRequestOperationType,
-} from "./mirai-api-http/resp";
+import { splitText } from "./utils";
+import { isChatMessage } from "./utils/check";
 
 import events from "events";
+import { createHelperForMsg } from "./helper";
 
 /**
  * 所有消息
@@ -363,74 +359,13 @@ export default class Mirai {
   }
 
   /**
-   * 为消息和事件类型挂载辅助函数
-   * @param msg
-   */
-  addHelperForMsg(msg: MessageType.ChatMessage | EventType.Event) {
-    this.curMsg = msg;
-    msg.bubbles = true;
-    msg.stopPropagation = () => {
-      msg.bubbles = false;
-      return msg.bubbles;
-    };
-
-    // 消息类型添加直接获取消息内容的参数
-    if (
-      msg.type === "FriendMessage" ||
-      msg.type === "GroupMessage" ||
-      msg.type === "TempMessage"
-    ) {
-      msg.plain = getPlain(msg.messageChain);
-
-      if (msg.type === "GroupMessage") {
-        // 添加判断是否被艾特的辅助函数
-        msg.isAt = (qq?: number) => {
-          return isAt(msg, qq ? qq : this.qq) as boolean;
-        };
-      }
-    }
-
-    // 为各类型添加 reply 辅助函数
-    (msg as any).reply = async (
-      msgChain: string | MessageType.MessageChain,
-      quote = false
-    ) => {
-      return this.reply(msgChain, msg, quote);
-    };
-
-    // 为请求类事件添加 respond 辅助函数
-    if (msg.type === "NewFriendRequestEvent") {
-      msg.respond = async (
-        operate: NewFriendRequestOperationType,
-        message?: string
-      ) => {
-        this.api.resp.newFriendRequest(msg, operate, message);
-      };
-    } else if (msg.type === "MemberJoinRequestEvent") {
-      msg.respond = async (
-        operate: MemberJoinRequestOperationType,
-        message?: string
-      ) => {
-        this.api.resp.memberJoinRequest(msg, operate, message);
-      };
-    } else if (msg.type === "BotInvitedJoinGroupRequestEvent") {
-      msg.respond = async (
-        operate: BotInvitedJoinGroupRequestOperationType,
-        message?: string
-      ) => {
-        this.api.resp.botInvitedJoinGroupRequest(msg, operate, message);
-      };
-    }
-  }
-
-  /**
    * 处理消息
    * @param msg
    * @param before 在监听器函数执行前执行
    * @param after 在监听器函数执行后执行
    */
   handle(msg: MessageType.ChatMessage | EventType.Event) {
-    this.addHelperForMsg(msg);
+    createHelperForMsg(this, msg);
 
     this.beforeListener.forEach((cb) => {
       cb(msg);
