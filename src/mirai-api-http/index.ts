@@ -548,7 +548,7 @@ export default class MiraiApiHttp {
    */
   async memberInfo(target: number, memberId: number, info?: Config.MemberInfo) {
     if (info) {
-      const { data } = await this.axios.post("/groupConfig", {
+      const { data } = await this.axios.post("/memberInfo", {
         sessionKey: this.sessionKey,
         target,
         memberId,
@@ -556,7 +556,7 @@ export default class MiraiApiHttp {
       });
       return data;
     } else {
-      const { data } = await this.axios.get("/groupConfig", {
+      const { data } = await this.axios.get("/memberInfo", {
         params: {
           target,
           memberId,
