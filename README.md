@@ -48,7 +48,28 @@ yarn add events
 # npm install events mirai-ts
 ```
 
-## 其他
+## Why Typescript & mirai-ts?
+
+> Make JavaScript Great Again!
+
+- 更友好的提示：TypeScript 配合 VSCode 代码提示有奇效。
+- 更清晰的语义：函数命名与 mirai-api-http 保持一致。
+- 更易懂的注释：因为会用到 QQ 机器人 99.99% 是国人，所以是全中文注释。
+- 更优雅的结构：看起来是在自吹自擂，但自我感觉良好。
+- 更广泛的平台：支持 Node.js 与浏览器端，以及 WebSocket。
+
+## 简介
+
+### 结构
+
+`types` 目录下为对应类型定义
+
+- `api`: API 发送与响应格式
+- `contact`: 用户信息格式（如 Friend, Member, Group 等）
+- `event-type`: 事件类型
+- `message-type`: 消息类型
+
+### 工具类
 
 ```js
 const { Message, Logger, check, MessageType, EventType } = require("mirai-ts");
@@ -89,15 +110,6 @@ msg.isAt(qq);
 // 留空则判断是否艾特机器人自身
 ```
 
-## 结构
-
-`types` 目录下为对应类型定义
-
-- `api`: API 发送与响应格式
-- `contact`: 用户信息格式（如 Friend, Member, Group 等）
-- `event-type`: 事件类型
-- `message-type`: 消息类型
-
 ## 示例模版
 
 - [el-bot](https://github.com/YunYouJun/el-bot/)：你可以参考它的使用方式，你也可以直接使用它。
@@ -109,10 +121,3 @@ el-bot 展示了整个 mirai-ts 的使用流程，并内置了一些如自动应
 但这并不是束缚，在插件系统中你仍然可以调用机器人所有的上下文，并通过编写插件的形式快速实现你想要的功能。
 
 > 更多请参见文档 [el-bot | El Bot Docs](https://docs.bot.elpsy.cn/)
-
-## Why Typescript & mirai-ts?
-
-- 更友好的提示
-- 更清晰的语义
-- 更易懂的注释
-- 更优雅的结构
