@@ -9,7 +9,6 @@ import {
   MemberJoinRequestOperationType,
   BotInvitedJoinGroupRequestOperationType,
 } from "./mirai-api-http/resp";
-import { group } from "console";
 
 /**
  * 为消息和事件类型挂载辅助函数
