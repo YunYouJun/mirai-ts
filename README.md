@@ -3,8 +3,8 @@
 [![docs](https://github.com/YunYouJun/mirai-ts/workflows/docs/badge.svg)](https://www.yunyoujun.cn/mirai-ts/)
 [![Compatible Version](https://img.shields.io/badge/mirai--api--http-v1.9.6-blue)](https://github.com/project-mirai/mirai-api-http)
 [![npm](https://img.shields.io/npm/v/mirai-ts)](https://www.npmjs.com/package/mirai-ts)
-![GitHub top language](https://img.shields.io/github/languages/top/YunYouJun/mirai-ts)
 [![GitHub](https://img.shields.io/github/license/YunYouJun/mirai-ts)](https://github.com/YunYouJun/mirai-ts)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/9b332231afb643df83b59cc8b4188278)](https://www.codacy.com/gh/YunYouJun/mirai-ts/dashboard?utm_source=github.com&utm_medium=referral&utm_content=YunYouJun/mirai-ts&utm_campaign=Badge_Grade)
 
 <!-- [![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/project-mirai/mirai-api-http?label=mirai-api-http)](https://github.com/project-mirai/mirai-api-http) -->
 
