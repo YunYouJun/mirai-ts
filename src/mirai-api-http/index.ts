@@ -558,6 +558,7 @@ export default class MiraiApiHttp {
     } else {
       const { data } = await this.axios.get("/memberInfo", {
         params: {
+          sessionKey: this.sessionKey,
           target,
           memberId,
         },
