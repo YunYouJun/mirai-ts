@@ -113,6 +113,9 @@ export default class Mirai {
     this.afterListener = [];
     this.interval = 200;
     this.retries = 10;
+
+    // set default max listeners
+    this.eventEmitter.setMaxListeners(9999);
   }
 
   async about() {
