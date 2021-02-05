@@ -6,7 +6,20 @@ import { EventType } from "..";
  * - `1` 拒绝添加好友
  * - `2` 拒绝添加好友并添加黑名单，不再接收该用户的好友申请
  */
-export type NewFriendRequestOperationType = 0 | 1 | 2;
+export enum NewFriendRequestOperationType {
+  /**
+   * 同意添加好友
+   */
+  Accept = 0,
+  /**
+   * 拒绝添加好友
+   */
+  Refuse = 1,
+  /**
+   * 拒绝添加好友并添加黑名单，不再接收该用户的好友申请
+   */
+  RefuseAndBlock = 2,
+}
 
 /**
  * - `0` 同意入群
@@ -15,13 +28,43 @@ export type NewFriendRequestOperationType = 0 | 1 | 2;
  * - `3` 拒绝入群并添加黑名单，不再接收该用户的入群申请
  * - `4` 忽略入群并添加黑名单，不再接收该用户的入群申请
  */
-export type MemberJoinRequestOperationType = 0 | 1 | 2 | 3 | 4;
+export enum MemberJoinRequestOperationType {
+  /**
+   * 同意入群
+   */
+  Accept = 0,
+  /**
+   * 拒绝入群
+   */
+  Refuse = 1,
+  /**
+   * 忽略请求
+   */
+  Ignore = 2,
+  /**
+   * 拒绝入群并添加黑名单，不再接收该用户的入群申请
+   */
+  RefuseAndBlock = 3,
+  /**
+   * 忽略入群并添加黑名单，不再接收该用户的入群申请
+   */
+  IgnoreAndBlock = 4,
+}
 
 /**
- * - `1` 同意邀请
- * - `2` 拒绝邀请
+ * - `0` 同意邀请
+ * - `1` 拒绝邀请
  */
-export type BotInvitedJoinGroupRequestOperationType = 0 | 1;
+export enum BotInvitedJoinGroupRequestOperationType {
+  /**
+   * 同意邀请
+   */
+  Accept = 0,
+  /**
+   * 拒绝邀请
+   */
+  Refuse = 1,
+}
 
 /**
  * [EventType](https://github.com/project-mirai/mirai-api-http/blob/master/EventType.md) 中的请求
@@ -75,7 +118,7 @@ export class Resp {
   /**
    * 响应被邀请入群申请
    * @param event 请求的事件
-   * @param operate 操作：1 同意邀请, 2 拒绝邀请
+   * @param operate 操作：0 同意邀请, 1 拒绝邀请
    * @param message 响应消息
    */
   botInvitedJoinGroupRequest(

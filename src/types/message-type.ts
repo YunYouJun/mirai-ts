@@ -94,7 +94,7 @@ export interface Face extends BaseSingleMessage {
 export interface Plain extends BaseSingleMessage {
   type: "Plain";
   /**
-   * 	文字消息
+   * 文字消息
    */
   text: string;
 }
@@ -105,11 +105,11 @@ export interface Plain extends BaseSingleMessage {
 export interface Image extends BaseSingleMessage {
   type: "Image";
   /**
-   * 图片的imageId，群图片与好友图片格式不同。不为空时将忽略url属性
+   * 图片的 imageId，群图片与好友图片格式不同。不为空时将忽略 url 属性
    */
   imageId: string | null;
   /**
-   * 图片的URL，发送时可作网络图片的链接；接收时为腾讯图片服务器的链接，可用于图片下载
+   * 图片的 URL，发送时可作网络图片的链接；接收时为腾讯图片服务器的链接，可用于图片下载
    */
   url: string | null;
   /**

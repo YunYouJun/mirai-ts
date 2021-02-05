@@ -4,6 +4,7 @@
  */
 
 import Mirai from "./mirai";
+export * from "./mirai";
 export default Mirai;
 
 // 必须放在最前面，适配 js require
