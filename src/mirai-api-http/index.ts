@@ -577,6 +577,10 @@ export default class MiraiApiHttp {
     const ws = new WebSocket(
       this.address + "/message?sessionKey=" + this.sessionKey
     );
+    ws.on("open", () => {
+      const interval = setInterval(() => ws.ping(), 60000);
+      ws.on("close", () => clearInterval(interval));
+    });
     ws.on("message", (data: WebSocket.Data) => {
       const msg = JSON.parse(data.toString());
       callback(msg);
@@ -592,6 +596,10 @@ export default class MiraiApiHttp {
     const ws = new WebSocket(
       this.address + "/event?sessionKey=" + this.sessionKey
     );
+    ws.on("open", () => {
+      const interval = setInterval(() => ws.ping(), 60000);
+      ws.on("close", () => clearInterval(interval));
+    });
     ws.on("message", (data: WebSocket.Data) => {
       const msg = JSON.parse(data.toString());
       callback(msg);
@@ -607,6 +615,10 @@ export default class MiraiApiHttp {
     const ws = new WebSocket(
       this.address + "/all?sessionKey=" + this.sessionKey
     );
+    ws.on("open", () => {
+      const interval = setInterval(() => ws.ping(), 60000);
+      ws.on("close", () => clearInterval(interval));
+    });
     ws.on("message", (data: WebSocket.Data) => {
       const msg = JSON.parse(data.toString());
       callback(msg);
