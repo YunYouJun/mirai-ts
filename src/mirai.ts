@@ -192,7 +192,7 @@ export default class Mirai {
   /**
    * 绑定事件列表
    * message: FriendMessage | GroupMessage | TempMessage
-   * [mirai-api-http事件类型一览](https://github.com/project-mirai/mirai-api-http/blob/master/EventType.md)
+   * [mirai-api-http事件类型一览](https://github.com/project-mirai/mirai-api-http/blob/master/docs/EventType.md)
    * mirai.on('MemberMuteEvent', ()=>{})
    * @param type
    * @param callback

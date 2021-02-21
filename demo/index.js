@@ -38,9 +38,8 @@ async function app() {
 
   // 处理各种事件类型
   // 事件订阅说明（名称均与 mirai-api-http 中事件名一致）
-  // https://github.com/RedBeanN/node-mirai/blob/master/event.md
   // console.log("on other event");
-  // https://github.com/project-mirai/mirai-api-http/blob/master/EventType.md#群消息撤回
+  // https://github.com/project-mirai/mirai-api-http/blob/master/docs/EventType.md#群消息撤回
   mirai.on("GroupRecallEvent", ({ operator }) => {
     const text = `${operator.memberName} 撤回了一条消息，并拜托你不要再发色图了。`;
     mirai.api.sendGroupMessage(text, operator.group.id);

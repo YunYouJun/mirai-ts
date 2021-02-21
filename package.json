@@ -1,6 +1,6 @@
 {
   "name": "mirai-ts",
-  "version": "1.0.0-beta.1",
+  "version": "1.0.0-beta.2",
   "description": "Mirai TypeScript SDK",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -60,7 +60,7 @@
     "lint-staged": "^10.5.4",
     "prettier": "^2.2.1",
     "ts-node": "^9.1.1",
-    "typedoc": "^0.20.26",
+    "typedoc": "^0.20.27",
     "typescript": "^4.1.5"
   },
   "dependencies": {
