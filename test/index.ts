@@ -1,4 +1,4 @@
-import Mirai from "../src/index";
+import Mirai, { MessageType } from "../src/index";
 import { getPokeMessage, getVoiceMessage } from "./message";
 
 const qq = 712727946;
@@ -16,17 +16,21 @@ async function app() {
   mirai.on("message", (msg) => {
     console.log(msg);
 
+    let msgChain: MessageType.MessageChain;
     // send message to test
     switch (msg.plain) {
       case "Poke":
-        msg.reply(getPokeMessage());
+        msgChain = getPokeMessage();
         break;
       case "Voice":
-        msg.reply(getVoiceMessage());
+        msgChain = getVoiceMessage();
         break;
       default:
+        msgChain = msg.messageChain;
         break;
     }
+    console.log(msgChain);
+    msg.reply(msgChain);
   });
   mirai.listen();
 }

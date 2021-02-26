@@ -200,7 +200,7 @@ export enum PokeName {
   Like = "Like",
   Heartbroken = "Heartbroken",
   SixSixSix = "SixSixSix",
-  FangDaZhao = "SixSixSix",
+  FangDaZhao = "FangDaZhao",
 }
 
 /**
