@@ -195,12 +195,12 @@ export interface App extends BaseSingleMessage {
  * "FangDaZhao": 放大招
  */
 export enum Pokes {
-  Poke,
-  ShowLove,
-  Like,
-  Heartbroken,
-  SixSixSix,
-  FangDaZhao,
+  Poke = "Poke",
+  ShowLove = "ShowLove",
+  Like = "Like",
+  Heartbroken = "Heartbroken",
+  SixSixSix = "SixSixSix",
+  FangDaZhao = "SixSixSix",
 }
 
 /**
@@ -230,7 +230,8 @@ export type SingleMessage =
   | Voice
   | Xml
   | Json
-  | App;
+  | App
+  | Poke;
 /**
  * 消息链
  */
