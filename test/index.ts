@@ -1,5 +1,5 @@
 import Mirai from "../src/index";
-// import { sendVoiceMessage } from "./voice";
+import { getPokeMessage, getVoiceMessage } from "./message";
 
 const qq = 712727946;
 const mahConfig = {
@@ -15,12 +15,20 @@ async function app() {
   await mirai.link(qq);
   mirai.on("message", (msg) => {
     console.log(msg);
-    // 复读
-    msg.reply(msg.messageChain);
+
+    // send message to test
+    switch (msg.plain) {
+      case "Poke":
+        msg.reply(getPokeMessage());
+        break;
+      case "Voice":
+        msg.reply(getVoiceMessage());
+        break;
+      default:
+        break;
+    }
   });
   mirai.listen();
-
-  // sendVoiceMessage(mirai);
 }
 
 app();

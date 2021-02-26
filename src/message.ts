@@ -161,7 +161,7 @@ function App(content: string): MessageType.App {
  * - "FangDaZhao": 放大招
  * @param name 戳一戳的类型
  */
-function Poke(name: MessageType.Pokes): MessageType.Poke {
+function Poke(name: MessageType.PokeName): MessageType.Poke {
   return {
     type: "Poke",
     name,

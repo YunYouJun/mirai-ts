@@ -16,7 +16,7 @@ export enum StatusCode {
   ERROR_SERVER = 500,
 }
 
-const StatusCodeMap = new Map([
+export const StatusCodeMap = new Map([
   [StatusCode.NORMAL, "正常"],
   [StatusCode.ERROR_AUTH_KEY, "错误的 auth key"],
   [StatusCode.BOT_NOT_EXIST, "指定的 Bot 不存在"],

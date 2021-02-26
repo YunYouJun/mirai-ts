@@ -194,7 +194,7 @@ export interface App extends BaseSingleMessage {
  * "SixSixSix": 666
  * "FangDaZhao": 放大招
  */
-export enum Pokes {
+export enum PokeName {
   Poke = "Poke",
   ShowLove = "ShowLove",
   Like = "Like",
@@ -211,7 +211,7 @@ export interface Poke extends BaseSingleMessage {
   /**
    * 	戳一戳的类型
    */
-  name: Pokes;
+  name: PokeName;
 }
 
 /**
