@@ -16,7 +16,7 @@ import * as EventType from "../types/event-type";
  */
 export interface Re {
   pattern: string;
-  flags: string;
+  flags?: string;
 }
 
 /**
