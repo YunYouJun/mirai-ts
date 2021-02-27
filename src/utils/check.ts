@@ -23,7 +23,7 @@ export interface Re {
  * 匹配配置
  */
 export interface Match {
-  re?: Re;
+  re?: Re | string;
   is?: string | string[];
   includes?: string | string[];
 }
