@@ -10,7 +10,7 @@ import {
   MemberJoinRequestOperationType,
   BotInvitedJoinGroupRequestOperationType,
 } from "../mirai-api-http/resp";
-import { Api } from "src";
+import { Api } from "../index";
 
 /**
  * 内部基类

@@ -10,7 +10,7 @@ import {
   BotInvitedJoinGroupRequestOperationType,
   MemberJoinRequestOperationType,
   NewFriendRequestOperationType,
-} from "src/mirai-api-http/resp";
+} from "../../mirai-api-http/resp";
 
 export interface FetchMessage {
   code: number;
