@@ -10,6 +10,7 @@ import {
   MemberJoinRequestOperationType,
   BotInvitedJoinGroupRequestOperationType,
 } from "../mirai-api-http/resp";
+import { Api } from "src";
 
 /**
  * 内部基类
@@ -311,7 +312,7 @@ export interface NewFriendRequestEvent extends BaseRequestEvent {
   respond: (
     operate: NewFriendRequestOperationType,
     message?: string
-  ) => Promise<void>;
+  ) => Promise<Api.Response.NewFriendRequestEvent>;
 }
 
 /**
@@ -342,7 +343,7 @@ export interface MemberJoinRequestEvent extends BaseRequestEvent {
   respond: (
     operate: MemberJoinRequestOperationType,
     message?: string
-  ) => Promise<void>;
+  ) => Promise<Api.Response.MemberJoinRequestEvent>;
 }
 
 /**
@@ -373,7 +374,7 @@ export interface BotInvitedJoinGroupRequestEvent extends BaseRequestEvent {
   respond: (
     operate: BotInvitedJoinGroupRequestOperationType,
     message?: string
-  ) => Promise<void>;
+  ) => Promise<Api.Response.BotInvitedJoinGroupRequestEvent>;
 }
 
 export type RequestEvent =

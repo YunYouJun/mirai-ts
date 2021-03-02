@@ -56,21 +56,21 @@ export function createHelperForMsg(
       operate: NewFriendRequestOperationType,
       message?: string
     ) => {
-      mirai.api.resp.newFriendRequest(msg, operate, message);
+      return mirai.api.resp.newFriendRequest(msg, operate, message);
     };
   } else if (msg.type === "MemberJoinRequestEvent") {
     msg.respond = async (
       operate: MemberJoinRequestOperationType,
       message?: string
     ) => {
-      mirai.api.resp.memberJoinRequest(msg, operate, message);
+      return mirai.api.resp.memberJoinRequest(msg, operate, message);
     };
   } else if (msg.type === "BotInvitedJoinGroupRequestEvent") {
     msg.respond = async (
       operate: BotInvitedJoinGroupRequestOperationType,
       message?: string
     ) => {
-      mirai.api.resp.botInvitedJoinGroupRequest(msg, operate, message);
+      return mirai.api.resp.botInvitedJoinGroupRequest(msg, operate, message);
     };
   }
 }

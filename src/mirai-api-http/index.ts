@@ -120,7 +120,7 @@ export default class MiraiApiHttp {
    * 使用此方法获取插件的信息，如版本号
    * data.data: { "version": "v1.0.0" }
    */
-  async about() {
+  async about(): Promise<Api.Response.About> {
     const { data } = await this.axios.get("/about");
     return data;
   }
@@ -128,7 +128,7 @@ export default class MiraiApiHttp {
   /**
    * 使用此方法验证你的身份，并返回一个会话
    */
-  async auth(authKey = this.config.authKey) {
+  async auth(authKey = this.config.authKey): Promise<Api.Response.Auth> {
     const { data } = await this.axios.post("/auth", {
       authKey,
     });
@@ -142,7 +142,7 @@ export default class MiraiApiHttp {
   /**
    * 使用此方法校验并激活你的Session，同时将Session与一个已登录的Bot绑定
    */
-  async verify(qq: number) {
+  async verify(qq: number): Promise<Api.Response.BaseResponse> {
     this.qq = qq;
     const { data } = await this.axios.post("/verify", {
       sessionKey: this.sessionKey,
@@ -156,7 +156,7 @@ export default class MiraiApiHttp {
    * 使用此方式释放 session 及其相关资源（Bot不会被释放） 不使用的 Session 应当被释放，长时间（30分钟）未使用的 Session 将自动释放。
    * 否则 Session 持续保存Bot收到的消息，将会导致内存泄露(开启websocket后将不会自动释放)
    */
-  async release(qq = this.qq) {
+  async release(qq = this.qq): Promise<Api.Response.BaseResponse> {
     const { data } = await this.axios.post("/release", {
       sessionKey: this.sessionKey,
       qq,
@@ -173,7 +173,7 @@ export default class MiraiApiHttp {
    * { code: 0, data: [] }
    * @param count 获取消息和事件的数量
    */
-  async fetchMessage(count = 10): Promise<Api.Response.fetchMessage> {
+  async fetchMessage(count = 10): Promise<Api.Response.FetchMessage> {
     const { data } = await this.axios.get("/fetchMessage", {
       params: {
         sessionKey: this.sessionKey,
@@ -187,7 +187,7 @@ export default class MiraiApiHttp {
    * 使用此方法获取 bot 接收到的最新消息和最新各类事件(会从 MiraiApiHttp 消息记录中删除)
    * @param count 获取消息和事件的数量
    */
-  async fetchLatestMessage(count = 10): Promise<Api.Response.fetchMessage> {
+  async fetchLatestMessage(count = 10): Promise<Api.Response.FetchMessage> {
     const { data } = await this.axios.get("/fetchLatestMessage", {
       params: {
         sessionKey: this.sessionKey,
@@ -201,7 +201,7 @@ export default class MiraiApiHttp {
    * 使用此方法获取 bot 接收到的最老消息和最老各类事件(不会从 MiraiApiHttp 消息记录中删除)
    * @param count 获取消息和事件的数量
    */
-  async peekMessage(count = 10): Promise<Api.Response.fetchMessage> {
+  async peekMessage(count = 10): Promise<Api.Response.FetchMessage> {
     const { data } = await this.axios.get("/peekMessage", {
       params: {
         sessionKey: this.sessionKey,
@@ -215,7 +215,7 @@ export default class MiraiApiHttp {
    * 使用此方法获取 bot 接收到的最老消息和最老各类事件(不会从 MiraiApiHttp 消息记录中删除)
    * @param count 获取消息和事件的数量
    */
-  async peekLatestMessage(count = 10): Promise<Api.Response.fetchMessage> {
+  async peekLatestMessage(count = 10): Promise<Api.Response.FetchMessage> {
     const { data } = await this.axios.get("/peekLatestMessage", {
       params: {
         sessionKey: this.sessionKey,
@@ -231,7 +231,7 @@ export default class MiraiApiHttp {
    */
   async messageFromId(
     id: number
-  ): Promise<Api.Response.messageFromId | MessageType.ChatMessage> {
+  ): Promise<Api.Response.MessageFromId | MessageType.ChatMessage> {
     const { data } = await this.axios.get("/messageFromId", {
       params: {
         sessionKey: this.sessionKey,
@@ -256,7 +256,7 @@ export default class MiraiApiHttp {
     messageChain: string | MessageType.MessageChain,
     target: number,
     quote?: number
-  ): Promise<Api.Response.sendMessage> {
+  ): Promise<Api.Response.SendMessage> {
     messageChain = toMessageChain(messageChain);
     const payload: Api.SendFriendMessage = {
       sessionKey: this.sessionKey,
@@ -281,7 +281,7 @@ export default class MiraiApiHttp {
     messageChain: string | MessageType.MessageChain,
     target: number,
     quote?: number
-  ): Promise<Api.Response.sendMessage> {
+  ): Promise<Api.Response.SendMessage> {
     messageChain = toMessageChain(messageChain);
     const payload: Api.SendGroupMessage = {
       sessionKey: this.sessionKey,
@@ -307,7 +307,7 @@ export default class MiraiApiHttp {
     qq: number,
     group: number,
     quote?: number
-  ): Promise<Api.Response.sendMessage> {
+  ): Promise<Api.Response.SendMessage> {
     messageChain = toMessageChain(messageChain);
     const payload: Api.SendTempMessage = {
       sessionKey: this.sessionKey,
@@ -334,7 +334,7 @@ export default class MiraiApiHttp {
     target?: number,
     qq?: number,
     group?: number
-  ) {
+  ): Promise<string[]> {
     const { data } = await this.axios.post("/sendImageMessage", {
       sessionKey: this.sessionKey,
       target,
@@ -350,7 +350,10 @@ export default class MiraiApiHttp {
    * @param type
    * @param img 图片文件 fs.createReadStream(img)
    */
-  async uploadImage(type: "friend" | "group" | "temp", img: File) {
+  async uploadImage(
+    type: "friend" | "group" | "temp",
+    img: File
+  ): Promise<Api.Response.UploadImage> {
     const form = new FormData();
     form.append("sessionKey", this.sessionKey);
     form.append("type", type);
@@ -366,7 +369,10 @@ export default class MiraiApiHttp {
    * @param type 当前仅支持 "group"
    * @param voice 语音文件 fs.createReadStream(voice)
    */
-  async uploadVoice(type: "friend" | "group" | "temp", voice: File) {
+  async uploadVoice(
+    type: "friend" | "group" | "temp",
+    voice: File
+  ): Promise<Api.Response.UploadVoice> {
     const form = new FormData();
     form.append("sessionKey", this.sessionKey);
     form.append("type", type);
@@ -382,7 +388,9 @@ export default class MiraiApiHttp {
    * 使用此方法撤回指定消息。对于bot发送的消息，有2分钟时间限制。对于撤回群聊中群员的消息，需要有相应权限
    * @param target 需要撤回的消息的messageId
    */
-  async recall(target: number | MessageType.ChatMessage) {
+  async recall(
+    target: number | MessageType.ChatMessage
+  ): Promise<Api.Response.BaseResponse> {
     let messageId = target;
     if (typeof target !== "number" && target.messageChain[0].id) {
       messageId = target.messageChain[0].id;
@@ -397,7 +405,7 @@ export default class MiraiApiHttp {
   /**
    * 获取 bot 的好友列表
    */
-  async friendList() {
+  async friendList(): Promise<Api.Response.FriendList> {
     const { data } = await this.axios.get("/friendList", {
       params: {
         sessionKey: this.sessionKey,
@@ -409,7 +417,7 @@ export default class MiraiApiHttp {
   /**
    * 获取 bot 的群列表
    */
-  async groupList() {
+  async groupList(): Promise<Api.Response.GroupList> {
     const { data } = await this.axios.get("/groupList", {
       params: {
         sessionKey: this.sessionKey,
@@ -422,7 +430,7 @@ export default class MiraiApiHttp {
    * 获取 BOT 的群成员列表
    * @param target 指定群的群号
    */
-  async memberList(target: number) {
+  async memberList(target: number): Promise<Api.Response.MemberList> {
     const { data } = await this.axios.get("/memberList", {
       params: {
         sessionKey: this.sessionKey,
@@ -436,7 +444,7 @@ export default class MiraiApiHttp {
    * 指定群进行全体禁言
    * @param target 指定群的群号
    */
-  async muteAll(target: number) {
+  async muteAll(target: number): Promise<Api.Response.BaseResponse> {
     const { data } = await this.axios.post("/muteAll", {
       sessionKey: this.sessionKey,
       target,
@@ -448,7 +456,7 @@ export default class MiraiApiHttp {
    * 指定群解除全体禁言
    * @param target 指定群的群号
    */
-  async unmuteAll(target: number) {
+  async unmuteAll(target: number): Promise<Api.Response.BaseResponse> {
     const { data } = await this.axios.post("/unmuteAll", {
       sessionKey: this.sessionKey,
       target,
@@ -462,7 +470,11 @@ export default class MiraiApiHttp {
    * @param memberId 指定群员QQ号
    * @param time 禁言时长，单位为秒，最多30天，默认为 60 秒
    */
-  async mute(target: number, memberId: number, time = 60) {
+  async mute(
+    target: number,
+    memberId: number,
+    time = 60
+  ): Promise<Api.Response.BaseResponse> {
     const { data } = await this.axios.post("/mute", {
       sessionKey: this.sessionKey,
       target,
@@ -477,7 +489,10 @@ export default class MiraiApiHttp {
    * @param target	指定群的群号
    * @param memberId 指定群员QQ号
    */
-  async unmute(target: number, memberId: number) {
+  async unmute(
+    target: number,
+    memberId: number
+  ): Promise<Api.Response.BaseResponse> {
     const { data } = await this.axios.post("/unmute", {
       sessionKey: this.sessionKey,
       target,
@@ -492,7 +507,11 @@ export default class MiraiApiHttp {
    * @param memberId 指定群员QQ号
    * @param msg 信息
    */
-  async kick(target: number, memberId: number, msg = "您已被移出群聊") {
+  async kick(
+    target: number,
+    memberId: number,
+    msg = "您已被移出群聊"
+  ): Promise<Api.Response.BaseResponse> {
     const { data } = await this.axios.post("/kick", {
       sessionKey: this.sessionKey,
       target,
@@ -507,7 +526,7 @@ export default class MiraiApiHttp {
    * @param target 群号
    * bot为该群群主时退出失败并返回code 10(无操作权限)
    */
-  async quit(target: number) {
+  async quit(target: number): Promise<Api.Response.BaseResponse> {
     const { data } = await this.axios.post("/quit", {
       sessionKey: this.sessionKey,
       target,
@@ -521,7 +540,10 @@ export default class MiraiApiHttp {
    * @param target 指定群的群号
    * @param config 群设置
    */
-  async groupConfig(target: number, config?: Config.GroupConfig) {
+  async groupConfig(
+    target: number,
+    config?: Config.GroupConfig
+  ): Promise<Api.Response.BaseResponse | Config.GroupConfig> {
     if (config) {
       const { data } = await this.axios.post("/groupConfig", {
         sessionKey: this.sessionKey,
@@ -546,7 +568,11 @@ export default class MiraiApiHttp {
    * @param memberId 群员QQ号
    * @param info 群员资料
    */
-  async memberInfo(target: number, memberId: number, info?: Config.MemberInfo) {
+  async memberInfo(
+    target: number,
+    memberId: number,
+    info?: Config.MemberInfo
+  ): Promise<Api.Response.BaseResponse | Config.MemberInfo> {
     if (info) {
       const { data } = await this.axios.post("/memberInfo", {
         sessionKey: this.sessionKey,
@@ -629,7 +655,7 @@ export default class MiraiApiHttp {
   /**
    * 获取 Mangers
    */
-  async managers() {
+  async managers(): Promise<number[]> {
     const { data } = await this.axios.get("/managers", {
       params: {
         qq: this.qq,

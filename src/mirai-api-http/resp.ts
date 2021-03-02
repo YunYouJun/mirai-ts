@@ -1,5 +1,5 @@
 import MiraiApiHttp from "./index";
-import { EventType } from "..";
+import { Api, EventType } from "..";
 
 /**
  * - `0` 同意添加好友
@@ -74,7 +74,7 @@ export class Resp {
   constructor(private api: MiraiApiHttp) {}
 
   async _request(event: EventType.RequestEvent, operate: number, message = "") {
-    await this.api.axios.post(
+    const { data } = await this.api.axios.post(
       `/resp/${event.type[0].toLowerCase()}${event.type.substring(1)}`,
       {
         sessionKey: this.api.sessionKey,
@@ -85,6 +85,7 @@ export class Resp {
         message,
       }
     );
+    return data;
   }
 
   /**
@@ -97,7 +98,7 @@ export class Resp {
     event: EventType.NewFriendRequestEvent,
     operate: NewFriendRequestOperationType,
     message?: string
-  ) {
+  ): Promise<Api.Response.NewFriendRequestEvent> {
     return this._request(event, operate, message);
   }
 
@@ -111,7 +112,7 @@ export class Resp {
     event: EventType.MemberJoinRequestEvent,
     operate: MemberJoinRequestOperationType,
     message?: string
-  ) {
+  ): Promise<Api.Response.MemberJoinRequestEvent> {
     return this._request(event, operate, message);
   }
 
@@ -125,7 +126,7 @@ export class Resp {
     event: EventType.BotInvitedJoinGroupRequestEvent,
     operate: BotInvitedJoinGroupRequestOperationType,
     message?: string
-  ) {
+  ): Promise<Api.Response.BotInvitedJoinGroupRequestEvent> {
     return this._request(event, operate, message);
   }
 }
