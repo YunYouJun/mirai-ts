@@ -1,7 +1,7 @@
 # [mirai-ts](https://github.com/YunYouJun/mirai-ts)
 
 [![docs](https://github.com/YunYouJun/mirai-ts/workflows/docs/badge.svg)](https://www.yunyoujun.cn/mirai-ts/)
-[![Compatible Version](https://img.shields.io/badge/mirai--api--http-v1.9.6-blue)](https://github.com/project-mirai/mirai-api-http)
+[![Compatible Version](https://img.shields.io/badge/mirai--api--http-v1.9.8-blue)](https://github.com/project-mirai/mirai-api-http)
 [![npm](https://img.shields.io/npm/v/mirai-ts)](https://www.npmjs.com/package/mirai-ts)
 [![GitHub](https://img.shields.io/github/license/YunYouJun/mirai-ts)](https://github.com/YunYouJun/mirai-ts)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/9b332231afb643df83b59cc8b4188278)](https://www.codacy.com/gh/YunYouJun/mirai-ts/dashboard?utm_source=github.com&utm_medium=referral&utm_content=YunYouJun/mirai-ts&utm_campaign=Badge_Grade)
@@ -64,7 +64,8 @@ yarn add events
 
 `types` 目录下为对应类型定义
 
-- `api`: API 发送与响应格式
+- `api`: API 发送与响应
+  - `response`: API 响应格式
 - `contact`: 用户信息格式（如 Friend, Member, Group 等）
 - `event-type`: 事件类型
 - `message-type`: 消息类型
@@ -79,13 +80,17 @@ const { Message, Logger, check, MessageType, EventType } = require("mirai-ts");
 import { Message, Logger, check, MessageType, EventType } from "mirai-ts";
 ```
 
-### [Message](https://www.yunyoujun.cn/mirai-ts/modules/_src_message_.html)
+> 详情请参见 [API 文档](https://www.yunyoujun.cn/mirai-ts/)。
+
+#### [Message](https://www.yunyoujun.cn/mirai-ts/modules.html#message)
 
 - `Message`: 生成对应消息的辅助方法，如生成艾特某人的消息 `Message.At(qq)`
 
 > 消息链应当是一个数组，如 `messageChain = [Message.At(qq), Message.Plain('来点色图')]`
 
-### [logger](https://www.yunyoujun.cn/mirai-ts/modules/_src_utils_logger_.html)
+#### [Logger](https://www.yunyoujun.cn/mirai-ts/classes/logger.html)
+
+简单的日志工具，当然你可以自由使用其他工具替代它。
 
 ```ts
 import { Logger } from "mirai-ts";
@@ -93,7 +98,7 @@ const logger = new Logger();
 logger.success("We are free!");
 ```
 
-### [check](https://www.yunyoujun.cn/mirai-ts/modules/_src_utils_check_.html)
+#### [check](https://www.yunyoujun.cn/mirai-ts/modules/check.html)
 
 消息匹配与检测。
 
