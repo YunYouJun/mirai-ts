@@ -1,5 +1,6 @@
 import Mirai, { MessageType } from "../src/index";
 import { getPokeMessage, getVoiceMessage } from "./message";
+import { miraiApiTest } from "./api";
 
 const qq = 712727946;
 const mahConfig = {
@@ -32,6 +33,9 @@ async function app() {
     console.log(msgChain);
     msg.reply(msgChain);
   });
+
+  await miraiApiTest(mirai);
+
   mirai.listen();
 }
 
