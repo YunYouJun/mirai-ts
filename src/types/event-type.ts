@@ -382,6 +382,8 @@ export type RequestEvent =
   | MemberJoinRequestEvent
   | BotInvitedJoinGroupRequestEvent;
 
+export type RequestEventType = RequestEvent["type"];
+
 export type Event =
   | BotOnlineEvent
   | BotOfflineEventActive
