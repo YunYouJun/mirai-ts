@@ -40,6 +40,17 @@ export function createHelperForMsg(
     msg.friend = (...qqs) => {
       return qqs.includes(msg.sender.id);
     };
+
+    msg.get = (type) => {
+      let curSingleMessage: MessageType.SingleMessage | null = null;
+      msg.messageChain.some((singleMessage) => {
+        if (singleMessage.type === type) {
+          curSingleMessage = singleMessage;
+          return true;
+        }
+      });
+      return curSingleMessage;
+    };
   }
 
   // 为各类型添加 reply 辅助函数

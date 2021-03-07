@@ -261,6 +261,11 @@ interface BaseChatMessage extends BaseSingleMessage {
    * msg.friend(114514)
    */
   friend: (...qqs: number[]) => Boolean;
+  /**
+   * 获取消息链中第一次出现的消息类型
+   * msg.get('Quote')
+   */
+  get: (type: SingleMessage["type"]) => SingleMessage | null;
 }
 
 export interface FriendMessage extends BaseChatMessage {
