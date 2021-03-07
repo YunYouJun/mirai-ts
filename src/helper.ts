@@ -9,6 +9,7 @@ import {
   MemberJoinRequestOperationType,
   BotInvitedJoinGroupRequestOperationType,
 } from "./mirai-api-http/resp";
+import { SingleMessage } from "./types/message-type";
 
 /**
  * 为消息和事件类型挂载辅助函数
@@ -42,7 +43,7 @@ export function createHelperForMsg(
     };
 
     msg.get = (type) => {
-      let curSingleMessage: MessageType.SingleMessage | null = null;
+      let curSingleMessage: SingleMessage | null = null;
       msg.messageChain.some((singleMessage) => {
         if (singleMessage.type === type) {
           curSingleMessage = singleMessage;

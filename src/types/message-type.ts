@@ -232,6 +232,23 @@ export type SingleMessage =
   | Json
   | App
   | Poke;
+
+export type SingleMessageMap = {
+  Source: Source;
+  Quote: Quote;
+  At: At;
+  AtAll: AtAll;
+  Face: Face;
+  Plain: Plain;
+  Image: Image;
+  FlashImage: FlashImage;
+  Voice: Voice;
+  Xml: Xml;
+  Json: Json;
+  App: App;
+  Poke: Poke;
+};
+
 /**
  * 消息链
  */
@@ -263,9 +280,9 @@ interface BaseChatMessage extends BaseSingleMessage {
   friend: (...qqs: number[]) => Boolean;
   /**
    * 获取消息链中第一次出现的消息类型
-   * msg.get('Quote')
+   * 例如：msg.get('Quote')
    */
-  get: (type: SingleMessage["type"]) => SingleMessage | null;
+  get: <T extends SingleMessage["type"]>(type: T) => SingleMessageMap[T] | null;
 }
 
 export interface FriendMessage extends BaseChatMessage {
