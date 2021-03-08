@@ -1,6 +1,6 @@
 {
   "name": "mirai-ts",
-  "version": "1.0.0-rc.3",
+  "version": "1.0.0",
   "description": "Mirai TypeScript SDK",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -51,7 +51,7 @@
   },
   "license": "AGPL-3.0",
   "devDependencies": {
-    "@types/node": "^14.14.31",
+    "@types/node": "^14.14.32",
     "@types/ws": "^7.4.0",
     "@typescript-eslint/eslint-plugin": "^4.16.1",
     "@typescript-eslint/parser": "^4.16.1",
