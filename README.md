@@ -8,9 +8,11 @@
 
 <!-- [![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/project-mirai/mirai-api-http?label=mirai-api-http)](https://github.com/project-mirai/mirai-api-http) -->
 
-[mirai-api-http](https://github.com/mamoe/mirai-api-http) 的 TypeScript SDK，编译为 JavaScript 发布。附带声明文件，拥有良好的注释和类型提示。
+[mirai-api-http](https://github.com/mamoe/mirai-api-http) 的 JavaScript/TypeScript SDK，附带声明文件，拥有良好的注释和类型提示。可运行于 Node.js 与浏览器端。
 
-> 除此之外，它还兼容浏览器端。这意味着你可以使用它来开发 Web 界面与你的 mirai 机器人进行交互。（可以参考还在咕的 [el-bot-web](https://github.com/ElpsyCN/el-bot-web)）
+![shindo-ai.gif](https://user-images.githubusercontent.com/25154432/110353530-1f9de280-8072-11eb-94b0-addcd8ca1ca4.png)
+
+> 除了 Node.js，它还兼容浏览器端。这意味着你可以使用它来开发 Web 界面与你的 mirai 机器人进行交互。（可以参考还在咕的 [el-bot-web](https://github.com/ElpsyCN/el-bot-web)）
 
 ## 如何使用
 
