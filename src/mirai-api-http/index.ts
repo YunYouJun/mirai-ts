@@ -110,7 +110,9 @@ export default class MiraiApiHttp {
       },
       (err) => {
         this.logger.error(`响应失败：${err.message}`);
-        console.error(err);
+        if (process.env.NODE_ENV !== "production") {
+          console.error(err);
+        }
         return Promise.reject(err);
       }
     );

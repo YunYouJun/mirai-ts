@@ -428,7 +428,7 @@ export default class Mirai {
             }
           })
           .catch((err) => {
-            console.error(err.message);
+            this.logger.error(err.message);
             count++;
             // 失败超过十次
             if (count >= this.retries) {

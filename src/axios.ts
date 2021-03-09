@@ -19,7 +19,9 @@ export function init(baseURL: string, timeout = 0): AxiosStatic {
       return config;
     },
     function (err) {
-      console.error(err);
+      if (process.env.NODE_ENV !== "production") {
+        console.error(err);
+      }
       return Promise.reject(err);
     }
   );
