@@ -16,6 +16,8 @@
 
 ## 如何使用
 
+> 自行配置好你的 [mirai](https://github.com/mamoe/mirai) 与 [mirai-api-http](https://github.com/project-mirai/mirai-api-http)，确保 `localhost:你配置的端口号/about` 是可访问的。
+
 ```sh
 npm install mirai-ts
 # yarn add mirai-ts
