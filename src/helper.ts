@@ -1,3 +1,8 @@
+/**
+ * mirai-ts 内部 helper
+ * @packageDocumentation
+ */
+
 import Mirai from "./mirai";
 import type { MessageType, EventType } from ".";
 
