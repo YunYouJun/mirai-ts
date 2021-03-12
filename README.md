@@ -98,7 +98,8 @@ import { Message, Logger, check, MessageType, EventType } from "mirai-ts";
 
 ```ts
 import { Logger } from "mirai-ts";
-const logger = new Logger();
+// 你可以自定义你的前缀
+const logger = new Logger({ prefix: "[mirai-ts]" });
 logger.success("We are free!");
 ```
 

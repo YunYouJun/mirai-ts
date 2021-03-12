@@ -16,7 +16,7 @@ import { Resp } from "./resp";
 
 // 处理状态码
 import { getMessageFromStatusCode } from "./utils";
-import Logger from "../utils/logger";
+import Logger from "@yunyoujun/logger";
 import chalk from "chalk";
 
 // utils
@@ -85,7 +85,7 @@ export default class MiraiApiHttp {
     this.command = new Command(this);
     this.resp = new Resp(this);
 
-    this.logger = new Logger(chalk.cyan("[mirai-api-http]"));
+    this.logger = new Logger({ prefix: chalk.cyan("[mirai-api-http]") });
   }
 
   /**

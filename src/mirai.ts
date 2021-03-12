@@ -3,13 +3,14 @@
  * @packageDocumentation
  */
 
+import chalk from "chalk";
 import * as axios from "./axios";
 import { AxiosStatic } from "axios";
 import MiraiApiHttp from "./mirai-api-http";
 import { MessageType, EventType, MiraiApiHttpConfig } from ".";
-import Logger from "./utils/logger";
+import Logger from "@yunyoujun/logger";
 
-import { splitText } from "./utils";
+import { splitText } from "./utils/internal";
 import { isChatMessage } from "./utils/check";
 
 import events from "events";
@@ -51,7 +52,7 @@ export default class Mirai {
   /**
    * 日志模块
    */
-  logger = new Logger();
+  logger = new Logger({ prefix: chalk.cyan("[mirai-ts]") });
   /**
    * 请求工具
    */

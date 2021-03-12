@@ -6,7 +6,7 @@
 import Mirai from "./mirai";
 import type { MessageType, EventType } from ".";
 
-import { getPlain } from "./utils";
+import { getPlain } from "./utils/internal";
 import { isAt, isChatMessage } from "./utils/check";
 
 import {
