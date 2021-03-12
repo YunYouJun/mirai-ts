@@ -1,0 +1,287 @@
+<!doctype html>
+<html class="default no-js">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>mirai-ts</title>
+	<meta name="description" content="Documentation for mirai-ts">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="assets/css/main.css">
+	<script async src="assets/js/search.js" id="search-script"></script>
+</head>
+<body>
+<header>
+	<div class="tsd-page-toolbar">
+		<div class="container">
+			<div class="table-wrap">
+				<div class="table-cell" id="tsd-search" data-index="assets/js/search.json" data-base=".">
+					<div class="field">
+						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
+						<input id="tsd-search-field" type="text" />
+					</div>
+					<ul class="results">
+						<li class="state loading">Preparing search index...</li>
+						<li class="state failure">The search index is not available</li>
+					</ul>
+					<a href="index.html" class="title">mirai-ts</a>
+				</div>
+				<div class="table-cell" id="tsd-widgets">
+					<div id="tsd-filter">
+						<a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a>
+						<div class="tsd-filter-group">
+							<div class="tsd-select" id="tsd-filter-visibility">
+								<span class="tsd-select-label">All</span>
+								<ul class="tsd-select-list">
+									<li data-value="public">Public</li>
+									<li data-value="protected">Public/Protected</li>
+									<li data-value="private" class="selected">All</li>
+								</ul>
+							</div>
+							<input type="checkbox" id="tsd-filter-inherited" checked />
+							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
+							<input type="checkbox" id="tsd-filter-externals" checked />
+							<label class="tsd-widget" for="tsd-filter-externals">Externals</label>
+						</div>
+					</div>
+					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="tsd-page-title">
+		<div class="container">
+			<h1>mirai-ts</h1>
+		</div>
+	</div>
+</header>
+<div class="container container-main">
+	<div class="row">
+		<div class="col-8 col-content">
+			<div class="tsd-panel tsd-typography">
+				<a href="#mirai-ts" id="mirai-ts" style="color: inherit; text-decoration: none;">
+					<h1><a href="https://github.com/YunYouJun/mirai-ts">mirai-ts</a></h1>
+				</a>
+				<p><a href="https://www.yunyoujun.cn/mirai-ts/"><img src="https://github.com/YunYouJun/mirai-ts/workflows/docs/badge.svg" alt="docs"></a>
+					<a href="https://github.com/project-mirai/mirai-api-http"><img src="https://img.shields.io/badge/mirai--api--http-v1.9.8-blue" alt="Compatible Version"></a>
+					<a href="https://www.npmjs.com/package/mirai-ts"><img src="https://img.shields.io/npm/v/mirai-ts" alt="npm"></a>
+					<a href="https://github.com/YunYouJun/mirai-ts"><img src="https://img.shields.io/github/license/YunYouJun/mirai-ts" alt="GitHub"></a>
+				<a href="https://www.codacy.com/gh/YunYouJun/mirai-ts/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=YunYouJun/mirai-ts&amp;utm_campaign=Badge_Grade"><img src="https://app.codacy.com/project/badge/Grade/9b332231afb643df83b59cc8b4188278" alt="Codacy Badge"></a></p>
+				<!-- [![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/project-mirai/mirai-api-http?label=mirai-api-http)](https://github.com/project-mirai/mirai-api-http) -->
+				<p><a href="https://github.com/mamoe/mirai-api-http">mirai-api-http</a> 的 JavaScript/TypeScript SDK，附带声明文件，拥有良好的注释和类型提示。可运行于 Node.js 与浏览器端。</p>
+				<p><img src="https://user-images.githubusercontent.com/25154432/110353530-1f9de280-8072-11eb-94b0-addcd8ca1ca4.png" alt="shindo-ai.gif"></p>
+				<blockquote>
+					<p>除了 Node.js，它还兼容浏览器端。这意味着你可以使用它来开发 Web 界面与你的 mirai 机器人进行交互。（可以参考还在咕的 <a href="https://github.com/ElpsyCN/el-bot-web">el-bot-web</a>）</p>
+				</blockquote>
+				<a href="#如何使用" id="如何使用" style="color: inherit; text-decoration: none;">
+					<h2>如何使用</h2>
+				</a>
+				<blockquote>
+					<p>自行配置好你的 <a href="https://github.com/mamoe/mirai">mirai</a> 与 <a href="https://github.com/project-mirai/mirai-api-http">mirai-api-http</a>，确保 <code>localhost:你配置的端口号/about</code> 是可访问的。</p>
+				</blockquote>
+				<pre><code class="language-sh"><span style="color: #000000">npm install mirai-ts</span>
+<span style="color: #008000"># yarn add mirai-ts</span>
+</code></pre>
+				<ul>
+					<li><a href="https://www.yunyoujun.cn/mirai-ts/">API 文档</a></li>
+				</ul>
+				<a href="#快速开始" id="快速开始" style="color: inherit; text-decoration: none;">
+					<h2>快速开始</h2>
+				</a>
+				<a href="#javascript" id="javascript" style="color: inherit; text-decoration: none;">
+					<h3>JavaScript</h3>
+				</a>
+				<p><a href="./demo/index.js">示例代码</a></p>
+				<pre><code class="language-sh"><span style="color: #000000">node demo/index.js</span>
+</code></pre>
+				<a href="#typescript" id="typescript" style="color: inherit; text-decoration: none;">
+					<h3>TypeScript</h3>
+				</a>
+				<p><a href="./demo/index.ts">示例代码</a></p>
+				<pre><code class="language-sh"><span style="color: #000000">ts-node demo/index.ts</span>
+</code></pre>
+				<a href="#browser" id="browser" style="color: inherit; text-decoration: none;">
+					<h3>Browser</h3>
+				</a>
+				<p>基于 mirai-ts 开发面向浏览器端的应用程序时，您还需要安装 <a href="https://github.com/browserify/events">events</a> 以在浏览器端替代 Node.js 原生 events 模块。</p>
+				<pre><code class="language-sh"><span style="color: #000000">yarn add events</span>
+<span style="color: #008000"># npm install events mirai-ts</span>
+</code></pre>
+				<a href="#why-typescript-amp-mirai-ts" id="why-typescript-amp-mirai-ts" style="color: inherit; text-decoration: none;">
+					<h2>Why Typescript &amp; mirai-ts?</h2>
+				</a>
+				<blockquote>
+					<p>Make JavaScript Great Again!</p>
+				</blockquote>
+				<ul>
+					<li>更友好的提示：TypeScript 配合 VSCode 代码提示有奇效。</li>
+					<li>更清晰的语义：函数命名与 mirai-api-http 保持一致。</li>
+					<li>更易懂的注释：因为会用到 QQ 机器人 99.99% 是国人，所以是全中文注释。</li>
+					<li>更优雅的结构：看起来是在自吹自擂，但自我感觉良好。</li>
+					<li>更广泛的平台：支持 Node.js 与浏览器端，以及 WebSocket。</li>
+				</ul>
+				<a href="#简介" id="简介" style="color: inherit; text-decoration: none;">
+					<h2>简介</h2>
+				</a>
+				<a href="#结构" id="结构" style="color: inherit; text-decoration: none;">
+					<h3>结构</h3>
+				</a>
+				<p><code>types</code> 目录下为对应类型定义</p>
+				<ul>
+					<li><code>api</code>: API 发送与响应<ul>
+							<li><code>response</code>: API 响应格式</li>
+						</ul>
+					</li>
+					<li><code>contact</code>: 用户信息格式（如 Friend, Member, Group 等）</li>
+					<li><code>event-type</code>: 事件类型</li>
+					<li><code>message-type</code>: 消息类型</li>
+				</ul>
+				<a href="#工具类" id="工具类" style="color: inherit; text-decoration: none;">
+					<h3>工具类</h3>
+				</a>
+				<pre><code class="language-js"><span style="color: #0000FF">const</span><span style="color: #000000"> { </span><span style="color: #0070C1">Message</span><span style="color: #000000">, </span><span style="color: #0070C1">Logger</span><span style="color: #000000">, </span><span style="color: #0070C1">check</span><span style="color: #000000">, </span><span style="color: #0070C1">MessageType</span><span style="color: #000000">, </span><span style="color: #0070C1">EventType</span><span style="color: #000000"> } = </span><span style="color: #795E26">require</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;mirai-ts&quot;</span><span style="color: #000000">);</span>
+</code></pre>
+				<pre><code class="language-ts"><span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">Message</span><span style="color: #000000">, </span><span style="color: #001080">Logger</span><span style="color: #000000">, </span><span style="color: #001080">check</span><span style="color: #000000">, </span><span style="color: #001080">MessageType</span><span style="color: #000000">, </span><span style="color: #001080">EventType</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&quot;mirai-ts&quot;</span><span style="color: #000000">;</span>
+</code></pre>
+				<blockquote>
+					<p>详情请参见 <a href="https://www.yunyoujun.cn/mirai-ts/">API 文档</a>。</p>
+				</blockquote>
+				<a href="#message" id="message" style="color: inherit; text-decoration: none;">
+					<h4><a href="https://www.yunyoujun.cn/mirai-ts/modules.html#message">Message</a></h4>
+				</a>
+				<ul>
+					<li><code>Message</code>: 生成对应消息的辅助方法，如生成艾特某人的消息 <code>Message.At(qq)</code></li>
+				</ul>
+				<blockquote>
+					<p>消息链应当是一个数组，如 <code>messageChain = [Message.At(qq), Message.Plain(&#39;来点色图&#39;)]</code></p>
+				</blockquote>
+				<a href="#logger" id="logger" style="color: inherit; text-decoration: none;">
+					<h4><a href="https://www.yunyoujun.cn/mirai-ts/classes/logger.html">Logger</a></h4>
+				</a>
+				<p>简单的日志工具，当然你可以自由使用其他工具替代它。</p>
+				<pre><code class="language-ts"><span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">Logger</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&quot;mirai-ts&quot;</span><span style="color: #000000">;</span>
+<span style="color: #008000">// 你可以自定义你的前缀</span>
+<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">logger</span><span style="color: #000000"> = </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">Logger</span><span style="color: #000000">({ </span><span style="color: #001080">prefix:</span><span style="color: #000000"> </span><span style="color: #A31515">&quot;[mirai-ts]&quot;</span><span style="color: #000000"> });</span>
+<span style="color: #001080">logger</span><span style="color: #000000">.</span><span style="color: #795E26">success</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;We are free!&quot;</span><span style="color: #000000">);</span>
+</code></pre>
+				<a href="#check" id="check" style="color: inherit; text-decoration: none;">
+					<h4><a href="https://www.yunyoujun.cn/mirai-ts/modules/check.html">check</a></h4>
+				</a>
+				<p>消息匹配与检测。</p>
+				<p>如判断消息链是否有艾特某人：</p>
+				<pre><code class="language-js"><span style="color: #0000FF">const</span><span style="color: #000000"> { </span><span style="color: #0070C1">check</span><span style="color: #000000"> } = </span><span style="color: #795E26">require</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;mirai-ts&quot;</span><span style="color: #000000">);</span>
+<span style="color: #008000">// msg 为消息链 MessageChain</span>
+<span style="color: #008000">// qq 为 QQ 号</span>
+<span style="color: #001080">check</span><span style="color: #000000">.</span><span style="color: #795E26">isAt</span><span style="color: #000000">(</span><span style="color: #001080">msg</span><span style="color: #000000">, </span><span style="color: #001080">qq</span><span style="color: #000000">);</span>
+
+<span style="color: #008000">// or just</span>
+<span style="color: #001080">msg</span><span style="color: #000000">.</span><span style="color: #795E26">isAt</span><span style="color: #000000">(</span><span style="color: #001080">qq</span><span style="color: #000000">);</span>
+<span style="color: #008000">// 留空则判断是否艾特机器人自身</span>
+</code></pre>
+				<a href="#示例模版" id="示例模版" style="color: inherit; text-decoration: none;">
+					<h2>示例模版</h2>
+				</a>
+				<ul>
+					<li><a href="https://github.com/YunYouJun/el-bot/">el-bot</a>：你可以参考它的使用方式，你也可以直接使用它。</li>
+				</ul>
+				<p>el-bot 展示了整个 mirai-ts 的使用流程，并内置了一些如自动应答、转发、命令行、RSS 等常用功能（默认插件），开箱即用。</p>
+				<p>你只需要一些自定义的配置，而不再需要编写繁琐的脚本内容。</p>
+				<p>但这并不是束缚，在插件系统中你仍然可以调用机器人所有的上下文，并通过编写插件的形式快速实现你想要的功能。</p>
+				<blockquote>
+					<p>更多请参见文档 <a href="https://docs.bot.elpsy.cn/">el-bot | El Bot Docs</a></p>
+				</blockquote>
+			</div>
+		</div>
+		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
+			<nav class="tsd-navigation primary">
+				<ul>
+					<li class=" ">
+						<a href="modules.html">Exports</a>
+					</li>
+					<li class=" tsd-kind-namespace">
+						<a href="modules/api.html">Api</a>
+					</li>
+					<li class=" tsd-kind-namespace tsd-parent-kind-namespace">
+						<a href="modules/api.response.html">Api.<wbr>Response</a>
+					</li>
+					<li class=" tsd-kind-namespace">
+						<a href="modules/config.html">Config</a>
+					</li>
+					<li class=" tsd-kind-namespace">
+						<a href="modules/contact.html">Contact</a>
+					</li>
+					<li class=" tsd-kind-namespace">
+						<a href="modules/eventtype.html">Event<wbr>Type</a>
+					</li>
+					<li class=" tsd-kind-namespace">
+						<a href="modules/messagetype.html">Message<wbr>Type</a>
+					</li>
+					<li class=" tsd-kind-namespace">
+						<a href="modules/check.html">check</a>
+					</li>
+					<li class=" tsd-kind-namespace">
+						<a href="modules/template.html">template</a>
+					</li>
+				</ul>
+			</nav>
+			<nav class="tsd-navigation secondary menu-sticky">
+				<ul class="before-current">
+					<li class=" tsd-kind-reference">
+						<a href="modules.html#mirai" class="tsd-kind-icon">Mirai</a>
+					</li>
+					<li class=" tsd-kind-class tsd-is-external">
+						<a href="classes/logger.html" class="tsd-kind-icon">Logger</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/miraiapihttp.html" class="tsd-kind-icon">Mirai<wbr>Api<wbr>Http</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/default.html" class="tsd-kind-icon">default</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/miraiapihttpconfig.html" class="tsd-kind-icon">Mirai<wbr>Api<wbr>Http<wbr>Config</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="modules.html#avatarsize" class="tsd-kind-icon">Avatar<wbr>Size</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="modules.html#messageandevent" class="tsd-kind-icon">Message<wbr>And<wbr>Event</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="modules.html#messageandeventtype" class="tsd-kind-icon">Message<wbr>And<wbr>Event<wbr>Type</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="modules.html#miraiinstance" class="tsd-kind-icon">Mirai<wbr>Instance</a>
+					</li>
+					<li class=" tsd-kind-property">
+						<a href="modules.html#message" class="tsd-kind-icon">Message</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="modules.html#getavatarbyid" class="tsd-kind-icon">get<wbr>Avatar<wbr>ById</a>
+					</li>
+				</ul>
+			</nav>
+		</div>
+	</div>
+</div>
+<footer class="with-border-bottom">
+	<div class="container">
+		<h2>Legend</h2>
+		<div class="tsd-legend-group">
+			<ul class="tsd-legend">
+				<li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
+			</ul>
+		</div>
+	</div>
+</footer>
+<div class="container tsd-generator">
+	<p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p>
+</div>
+<div class="overlay"></div>
+<script src="assets/js/main.js"></script>
+</body>
+</html>
