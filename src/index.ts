@@ -22,6 +22,7 @@ import MiraiApiHttp from "./mirai-api-http";
 
 // 工具
 export * from "./utils/index";
+// https://www.npmjs.com/package/@yunyoujun/logger
 import Logger from "@yunyoujun/logger";
 export * as check from "./utils/check";
 export * as template from "./utils/template";

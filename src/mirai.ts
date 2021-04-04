@@ -207,7 +207,11 @@ export default class Mirai {
     if (type === "message") {
       this._adaptMessageForAll("on", callback);
     } else {
-      emitter.on(type, callback);
+      try {
+        emitter.on(type, callback);
+      } catch (e) {
+        console.error(e);
+      }
     }
   }
 
@@ -224,7 +228,11 @@ export default class Mirai {
     if (type === "message") {
       this._adaptMessageForAll("once", callback);
     } else {
-      emitter.once(type, callback);
+      try {
+        emitter.once(type, callback);
+      } catch (e) {
+        console.error(e);
+      }
     }
   }
 
@@ -241,7 +249,11 @@ export default class Mirai {
     if (type === "message") {
       this._adaptMessageForAll("off", callback);
     } else {
-      emitter.off(type, callback);
+      try {
+        emitter.off(type, callback);
+      } catch (e) {
+        console.error(e);
+      }
     }
   }
 
