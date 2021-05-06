@@ -65,6 +65,66 @@ export interface UploadVoice {
   path: string;
 }
 
+/**
+ * 群文件
+ */
+export interface GroupFile {
+  name: string;
+  id: string;
+  path: string;
+  isFile: boolean;
+}
+
+/**
+ * 群文件信息
+ */
+export interface GroupFileInfo {
+  /**
+   * 文件名字
+   */
+  name: string;
+  /**
+   * 文件绝对位置
+   */
+  path: string;
+  /**
+   * 文件唯一ID
+   */
+  id: string;
+  /**
+   * 文件长度
+   */
+  length: number;
+  /**
+   * 下载次数
+   */
+  downloadTimes: number;
+  /**
+   * 上传者QQ
+   */
+  uploaderId: number;
+  /**
+   * 上传时间
+   */
+  uploadTime: number;
+  /**
+   * 最后修改时间
+   */
+  lastModifyTime: number;
+  /**
+   * 文件下载链接
+   */
+  downloadUrl: string;
+  /**
+   * 文件 sha1 值
+   */
+  sha1: string;
+  /**
+   * 文件 md5 值
+   */
+  md5: string;
+}
+
 export type FriendList = Friend[];
 export type GroupList = Group[];
 export type MemberList = Member[];

@@ -384,6 +384,39 @@ export type RequestEvent =
 
 export type RequestEventType = RequestEvent["type"];
 
+export interface NudgeEvent extends BaseEvent {
+  type: "NudgeEvent";
+  /**
+   * 戳一戳发起人 QQ 号
+   */
+  fromId: number;
+  /**
+   * 被戳人的 QQ 号
+   */
+  target: number;
+  /**
+   * 动作，如：戳一戳
+   */
+  action: string;
+  /**
+   * 后缀，如：脸
+   */
+  suffix: string;
+  /**
+   * 戳一戳事件发生的主体 (上下文)
+   */
+  subject: {
+    /**
+     * 事件发生主体的 ID (群号 / 好友 QQ 号)
+     */
+    id: number;
+    /**
+     * 戳一戳事件发生的主体的类型
+     */
+    kind: "Friend" | "Group";
+  };
+}
+
 export type Event =
   | BotOnlineEvent
   | BotOfflineEventActive
@@ -414,7 +447,8 @@ export type Event =
   | MemberUnmuteEvent
   | NewFriendRequestEvent
   | MemberJoinRequestEvent
-  | BotInvitedJoinGroupRequestEvent;
+  | BotInvitedJoinGroupRequestEvent
+  | NudgeEvent;
 
 export type EventType = Event["type"];
 
@@ -450,4 +484,6 @@ export type EventMap = {
   NewFriendRequestEvent: NewFriendRequestEvent;
   MemberJoinRequestEvent: MemberJoinRequestEvent;
   BotInvitedJoinGroupRequestEvent: BotInvitedJoinGroupRequestEvent;
+
+  NudgeEvent: NudgeEvent;
 };

@@ -168,6 +168,41 @@ function Poke(name: MessageType.PokeName): MessageType.Poke {
   };
 }
 
+/**
+ * 音乐分享
+ * @param kind 音乐应用类型
+ * @param title 消息卡片标题
+ * @param summary 消息卡片内容
+ * @param jumpUrl 点击卡片跳转网页 URL
+ * @param pictureUrl 消息卡片图片 URL
+ * @param musicUrl 音乐文件 URL
+ * @param brief 在消息列表显示，可选，默认为 `[分享]$title`
+ * @returns
+ */
+function MusicShare(
+  kind: MessageType.MusicShareKind,
+  title: string,
+  summary: string,
+  jumpUrl: string,
+  pictureUrl: string,
+  musicUrl: string,
+  brief?: string
+): MessageType.MusicShare {
+  const musicShare = {
+    kind,
+    title,
+    summary,
+    jumpUrl,
+    pictureUrl,
+    musicUrl,
+    brief,
+  };
+  if (brief) {
+    musicShare.brief = brief;
+  }
+  return musicShare;
+}
+
 export default {
   Quote,
   At,
@@ -181,4 +216,5 @@ export default {
   Json,
   App,
   Poke,
+  MusicShare,
 };

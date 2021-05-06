@@ -5,11 +5,31 @@
 
 import MiraiApiHttp from "./index";
 
+interface CommandInfo {
+  name: string;
+  sender: number;
+  group: number;
+  args: string[];
+}
+
 /**
  * [插件相关、Console相关 | mirai-api-http](https://github.com/project-mirai/mirai-api-http#%E6%8F%92%E4%BB%B6%E7%9B%B8%E5%85%B3console%E7%9B%B8%E5%85%B3)
  */
 export class Command {
   constructor(public api: MiraiApiHttp) {}
+
+  /**
+   * 监听指令
+   * - 当指令通过好友消息发送时，sender 为好友 QQ 号，group 为 0
+   * - 当指令通过群组消息发送时，sender 为发送人 QQ 号，group 为群号
+   * - 当指令通过其他方式发送时，如控制台、HTTP 接口等，sender 和 group 均为 0
+   */
+  async listen(): Promise<CommandInfo> {
+    const { data } = await this.api.axios.post("/command", {
+      authKey: this.api.config.authKey,
+    });
+    return data;
+  }
 
   /**
    * 注册指令

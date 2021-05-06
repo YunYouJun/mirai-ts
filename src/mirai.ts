@@ -329,6 +329,10 @@ export default class Mirai {
         type = "group";
         target = srcMsg.groupId;
         break;
+      case "NudgeEvent":
+        type = srcMsg.subject.kind.toLowerCase() as SendMessageType;
+        target = srcMsg.subject.id;
+        break;
       default:
         break;
     }

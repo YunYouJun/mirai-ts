@@ -214,6 +214,105 @@ export interface Poke extends BaseSingleMessage {
   name: PokeName;
 }
 
+export interface ForwardNode {
+  /**
+   * 发送者 id
+   */
+  senderId: number;
+  /**
+   * 时间戳, 单位 秒
+   */
+  time: number;
+  /**
+   * 发送者姓名
+   */
+  senderName: string;
+  messageChain: MessageChain;
+}
+
+/**
+ * 转发
+ */
+export interface Forward extends BaseSingleMessage {
+  type: "Forward";
+  /**
+   * 标题，XX的聊天记录
+   */
+  title: string;
+  /**
+   * 简介，[聊天记录]
+   */
+  brief: string;
+  /**
+   * 源
+   */
+  source: string;
+  /**
+   * 摘要，查看 3 条转发消息
+   */
+  summary: string;
+  /**
+   * 转发内容
+   */
+  nodeList: ForwardNode[];
+}
+
+export interface File {
+  type: "File";
+  /**
+   * 文件唯一id
+   */
+  id: string;
+  /**
+   * 服务器需要的ID
+   */
+  internalId: number;
+  /**
+   * 文件名字
+   */
+  name: string;
+  /**
+   * 文件大小
+   */
+  size: number;
+}
+
+export type MusicShareKind = "NeteaseCloudMusic" | "QQMusic" | "MiguMusic";
+
+/**
+ * 音乐分享
+ */
+export interface MusicShare {
+  /**
+   * 音乐应用类型
+   */
+  kind: "NeteaseCloudMusic" | "QQMusic" | "MiguMusic";
+  /**
+   * 消息卡片标题
+   */
+  title: string;
+  /**
+   * 消息卡片内容
+   */
+  summary: string;
+  /**
+   * 点击卡片跳转网页 URL
+   */
+  jumpUrl: string;
+  /**
+   * 消息卡片图片 URL
+   */
+  pictureUrl: string;
+  /**
+   * 音乐文件 URL
+   */
+  musicUrl: string;
+  /**
+   * 简介，在消息列表显示，默认为 `[分享]$title`
+   */
+  brief?: string;
+}
+
 /**
  * FriendMessage | GroupMessage | TempMessage 下的 MessageChain 中的单条消息类型
  * 单条消息 此处命名与 mamoe/mirai-core 保持一致
@@ -231,7 +330,9 @@ export type SingleMessage =
   | Xml
   | Json
   | App
-  | Poke;
+  | Poke
+  | Forward
+  | File;
 
 export type SingleMessageMap = {
   Source: Source;
@@ -247,6 +348,8 @@ export type SingleMessageMap = {
   Json: Json;
   App: App;
   Poke: Poke;
+  Forward: Forward;
+  File: File;
 };
 
 /**

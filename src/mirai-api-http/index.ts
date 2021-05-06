@@ -380,7 +380,32 @@ export default class MiraiApiHttp {
     form.append("type", type);
     form.append("voice", voice);
     const { data } = await this.axios.post("/uploadVoice", form, {
-      headers: form.getHeaders(), // same as post: { 'Content-Type': 'multipart/form-data' }
+      headers: form.getHeaders(),
+    });
+    return data;
+  }
+
+  /**
+   * 文件上传
+   * @param type 当前仅支持 "Group"
+   * @param target 指定群的群号
+   * @param path 文件上传目录与名字
+   * @param file 文件内容
+   */
+  async uploadFileAndSend(
+    type: "Group",
+    target: number,
+    path: string,
+    file: File
+  ) {
+    const form = new FormData();
+    form.append("sessionKey", this.sessionKey);
+    form.append("type", type);
+    form.append("target", target);
+    form.append("path", path);
+    form.append("file", file);
+    const { data } = await this.axios.post("/uploadFileAndSend", form, {
+      headers: form.getHeaders(),
     });
     return data;
   }
@@ -663,6 +688,153 @@ export default class MiraiApiHttp {
       params: {
         qq: this.qq,
       },
+    });
+    return data;
+  }
+
+  /**
+   * 设置群精华消息
+   * @param target 消息ID
+   */
+  async setEssence(target: number): Promise<Api.Response.BaseResponse> {
+    const { data } = await this.axios.post("/setEssence", {
+      sessionKey: this.sessionKey,
+      target,
+    });
+    return data;
+  }
+
+  /**
+   * 戳一戳
+   * @param target 戳一戳的目标, QQ号, 可以为 bot QQ号
+   * @param subject 戳一戳接受主体(上下文), 戳一戳信息会发送至该主体, 为群号/好友QQ号
+   * @param kind 上下文类型
+   */
+  async sendNudge(
+    target: number,
+    subject: number,
+    kind: "Friend" | "Group" = "Group"
+  ): Promise<Api.Response.BaseResponse> {
+    const { data } = await this.axios.post("/sendNudge", {
+      sessionKey: this.sessionKey,
+      target,
+      subject,
+      kind,
+    });
+    return data;
+  }
+
+  // 群文件管理
+  /**
+   * 获取群文件列表
+   * @param target 指定群的群号
+   * @param dir 指定查询目录，不填为根目录
+   */
+  async groupFileList(
+    target: number,
+    dir?: string
+  ): Promise<Api.Response.GroupFile[]> {
+    const { data } = await this.axios.get("/groupFileList", {
+      params: {
+        sessionKey: this.sessionKey,
+        target,
+        dir,
+      },
+    });
+    return data;
+  }
+
+  /**
+   * 获取群文件详细信息
+   * @param target 指定群的群号
+   * @param id 文件唯一ID
+   */
+  async groupFileInfo(
+    target: number,
+    id: string
+  ): Promise<Api.Response.GroupFileInfo> {
+    const { data } = await this.axios.get("/groupFileInfo", {
+      params: {
+        sessionKey: this.sessionKey,
+        target,
+        id,
+      },
+    });
+    return data;
+  }
+
+  /**
+   * 重命名群文件/目录
+   * @param target
+   * @param id
+   * @param rename
+   */
+  async groupFileRename(
+    target: number,
+    id: string,
+    rename: string
+  ): Promise<Api.Response.BaseResponse> {
+    const { data } = await this.axios.post("/groupFileRename", {
+      sessionKey: this.sessionKey,
+      target,
+      id,
+      rename,
+    });
+    return data;
+  }
+
+  /**
+   * 创建群文件目录
+   * @param group
+   * @param dir
+   */
+  async groupMkdir(
+    group: number,
+    dir: string
+  ): Promise<Api.Response.BaseResponse> {
+    const { data } = await this.axios.post("/groupMkdir", {
+      sessionKey: this.sessionKey,
+      group,
+      dir,
+    });
+    return data;
+  }
+
+  /**
+   * 移动群文件
+   * @param target
+   * @param id
+   * @param movePath 移动到的目录，根目录为/，目录不存在时自动创建
+   * @returns
+   */
+  async groupFileMove(
+    target: number,
+    id: string,
+    movePath: string
+  ): Promise<Api.Response.BaseResponse> {
+    const { data } = await this.axios.post("/groupFileMove", {
+      sessionKey: this.sessionKey,
+      target,
+      id,
+      movePath,
+    });
+    return data;
+  }
+
+  /**
+   * 删除群文件/目录
+   * @param target
+   * @param id
+   * @returns
+   */
+  async groupFileDelete(
+    target: number,
+    id: string
+  ): Promise<Api.Response.BaseResponse> {
+    const { data } = await this.axios.post("/groupFileDelete", {
+      sessionKey: this.sessionKey,
+      target,
+      id,
     });
     return data;
   }
