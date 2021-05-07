@@ -283,6 +283,7 @@ export type MusicShareKind = "NeteaseCloudMusic" | "QQMusic" | "MiguMusic";
  * 音乐分享
  */
 export interface MusicShare {
+  type: "MusicShare";
   /**
    * 音乐应用类型
    */
@@ -332,7 +333,8 @@ export type SingleMessage =
   | App
   | Poke
   | Forward
-  | File;
+  | File
+  | MusicShare;
 
 export type SingleMessageMap = {
   Source: Source;
@@ -350,6 +352,7 @@ export type SingleMessageMap = {
   Poke: Poke;
   Forward: Forward;
   File: File;
+  MusicShare: MusicShare;
 };
 
 /**

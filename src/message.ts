@@ -188,7 +188,8 @@ function MusicShare(
   musicUrl: string,
   brief?: string
 ): MessageType.MusicShare {
-  const musicShare = {
+  return {
+    type: "MusicShare",
     kind,
     title,
     summary,
@@ -197,10 +198,6 @@ function MusicShare(
     musicUrl,
     brief,
   };
-  if (brief) {
-    musicShare.brief = brief;
-  }
-  return musicShare;
 }
 
 export default {
