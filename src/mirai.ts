@@ -278,6 +278,11 @@ export default class Mirai {
       }
     }
 
+    // 自动转化为数组
+    if (typeof msgChain !== "string" && !Array.isArray(msgChain)) {
+      msgChain = [msgChain];
+    }
+
     // reply 不同的目标
     switch (srcMsg.type) {
       case "TempMessage":
