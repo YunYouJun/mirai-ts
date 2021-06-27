@@ -417,41 +417,6 @@ export interface NudgeEvent extends BaseEvent {
   };
 }
 
-export type Event =
-  | BotOnlineEvent
-  | BotOfflineEventActive
-  | BotOfflineEventForce
-  | BotOfflineEventDropped
-  | BotReloginEvent
-  | GroupRecallEvent
-  | FriendRecallEvent
-  | BotGroupPermissionChangeEvent
-  | BotMuteEvent
-  | BotUnmuteEvent
-  | BotJoinGroupEvent
-  | BotLeaveEventActive
-  | BotLeaveEventKick
-  | GroupNameChangeEvent
-  | GroupEntranceAnnouncementChangeEvent
-  | GroupMuteAllEvent
-  | GroupAllowAnonymousChatEvent
-  | GroupAllowConfessTalkEvent
-  | GroupAllowMemberInviteEvent
-  | MemberJoinEvent
-  | MemberLeaveEventKick
-  | MemberLeaveEventQuit
-  | MemberCardChangeEvent
-  | MemberSpecialTitleChangeEvent
-  | MemberPermissionChangeEvent
-  | MemberMuteEvent
-  | MemberUnmuteEvent
-  | NewFriendRequestEvent
-  | MemberJoinRequestEvent
-  | BotInvitedJoinGroupRequestEvent
-  | NudgeEvent;
-
-export type EventType = Event["type"];
-
 export type EventMap = {
   BotOnlineEvent: BotOnlineEvent;
   BotOfflineEventActive: BotOfflineEventActive;
@@ -487,3 +452,7 @@ export type EventMap = {
 
   NudgeEvent: NudgeEvent;
 };
+
+// string union of event type
+export type EventType = keyof EventMap;
+export type Event = EventMap[EventType];

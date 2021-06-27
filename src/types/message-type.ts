@@ -314,28 +314,6 @@ export interface MusicShare {
   brief?: string;
 }
 
-/**
- * FriendMessage | GroupMessage | TempMessage 下的 MessageChain 中的单条消息类型
- * 单条消息 此处命名与 mamoe/mirai-core 保持一致
- */
-export type SingleMessage =
-  | Source
-  | Quote
-  | At
-  | AtAll
-  | Face
-  | Plain
-  | Image
-  | FlashImage
-  | Voice
-  | Xml
-  | Json
-  | App
-  | Poke
-  | Forward
-  | File
-  | MusicShare;
-
 export type SingleMessageMap = {
   Source: Source;
   Quote: Quote;
@@ -354,6 +332,13 @@ export type SingleMessageMap = {
   File: File;
   MusicShare: MusicShare;
 };
+
+export type SingleMessageType = keyof SingleMessageMap;
+/**
+ * FriendMessage | GroupMessage | TempMessage 下的 MessageChain 中的单条消息类型
+ * 单条消息 此处命名与 mamoe/mirai-core 保持一致
+ */
+export type SingleMessage = SingleMessageMap[SingleMessageType];
 
 /**
  * 消息链
