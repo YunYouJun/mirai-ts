@@ -25,6 +25,7 @@ npm install mirai-ts
 ```
 
 - [API 文档](https://www.yunyoujun.cn/mirai-ts/)
+- [2.x 迁移指南](./migrate.md)
 
 ## 快速开始
 

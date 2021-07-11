@@ -21,7 +21,7 @@ import chalk from "chalk";
 
 // utils
 import { toMessageChain } from "./message";
-import { MiraiApiHttpSetting } from "src/types";
+import { MiraiApiHttpSetting } from "../types";
 
 type WsCallbackMap = {
   message: (msg: MessageType.ChatMessage) => any;
@@ -631,7 +631,7 @@ export default class MiraiApiHttp {
     });
     ws.on("message", (data: WebSocket.Data) => {
       const msg = JSON.parse(data.toString());
-      callback(msg);
+      callback(msg.data);
     });
   }
 
