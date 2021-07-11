@@ -25,6 +25,12 @@ export interface BaseResponse {
   msg: string;
 }
 
+export interface ResponseType<T> {
+  code: number;
+  msg: string;
+  data?: T;
+}
+
 export interface SendMessage extends BaseResponse {
   /**
    * 一个Int类型属性，标识本条消息，用于撤回和引用回复

@@ -37,7 +37,7 @@ export interface MiraiApiHttpConfig {
   /**
    * 可选，默认由 mirai-api-http 随机生成，建议手动指定。未传入该值时，默认为 'el-psy-congroo'
    */
-  authKey?: string;
+  verifyKey?: string;
   /**
    * 可选，缓存大小，默认4096.缓存过小会导致引用回复与撤回消息失败
    */
@@ -101,8 +101,8 @@ export default class MiraiApiHttp {
 
             if (res.data.code === 3 || res.data.code === 4) {
               this.logger.warning("正在尝试重新建立连接...");
-              await this.auth();
-              await this.verify(this.qq);
+              await this.verify();
+              await this.bind(this.qq);
             }
           }
         }
@@ -130,9 +130,9 @@ export default class MiraiApiHttp {
   /**
    * 使用此方法验证你的身份，并返回一个会话
    */
-  async auth(authKey = this.config.authKey): Promise<Api.Response.Auth> {
-    const { data } = await this.axios.post("/auth", {
-      authKey,
+  async verify(verifyKey = this.config.verifyKey): Promise<Api.Response.Auth> {
+    const { data } = await this.axios.post("/verify", {
+      verifyKey,
     });
 
     if (data.code === 0) {
@@ -144,9 +144,9 @@ export default class MiraiApiHttp {
   /**
    * 使用此方法校验并激活你的Session，同时将Session与一个已登录的Bot绑定
    */
-  async verify(qq: number): Promise<Api.Response.BaseResponse> {
+  async bind(qq: number): Promise<Api.Response.BaseResponse> {
     this.qq = qq;
-    const { data } = await this.axios.post("/verify", {
+    const { data } = await this.axios.post("/bind", {
       sessionKey: this.sessionKey,
       qq,
     });

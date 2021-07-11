@@ -10,7 +10,7 @@ const mahConfig = {
   // 你的端口号
   port: 4859,
   // 你的密钥
-  authKey: "el-psy-congroo",
+  verifyKey: "el-psy-congroo",
   // 推荐 true，websocket 无须轮询，更少占用资源。
   enableWebsocket: true,
 };

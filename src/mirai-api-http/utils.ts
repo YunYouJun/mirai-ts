@@ -3,7 +3,7 @@
  */
 export enum StatusCode {
   NORMAL = 0,
-  ERROR_AUTH_KEY = 1,
+  ERROR_VERIFY_KEY = 1,
   BOT_NOT_EXIST = 2,
   SESSION_INVALID = 3,
   SESSION_INACTIVATED = 4,
@@ -18,7 +18,7 @@ export enum StatusCode {
 
 export const StatusCodeMap = new Map([
   [StatusCode.NORMAL, "正常"],
-  [StatusCode.ERROR_AUTH_KEY, "错误的 auth key"],
+  [StatusCode.ERROR_VERIFY_KEY, "错误的 auth key"],
   [StatusCode.BOT_NOT_EXIST, "指定的 Bot 不存在"],
   [StatusCode.SESSION_INVALID, "Session 失效或不存在"],
   [StatusCode.SESSION_INACTIVATED, "Session 未认证(未激活)"],

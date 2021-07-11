@@ -94,7 +94,7 @@ export default class Mirai {
     public mahConfig: MiraiApiHttpConfig = {
       host: "0.0.0.0",
       port: 8080,
-      authKey: "el-psy-congroo",
+      verifyKey: "el-psy-congroo",
       cacheSize: 4096,
       enableWebsocket: false,
       cors: ["*"],
@@ -132,8 +132,8 @@ export default class Mirai {
   async link(qq: number) {
     this.qq = qq;
     this.api.handleStatusCode();
-    await this.auth();
-    const data = await this.verify();
+    await this.verify();
+    const data = await this.bind();
     return data;
   }
 
@@ -141,8 +141,8 @@ export default class Mirai {
    * 获取 Session
    * data.code === 0 成功
    */
-  async auth() {
-    const data = await this.api.auth();
+  async verify() {
+    const data = await this.api.verify();
     if (data.code === 0) {
       this.logger.info(`获取 Session: ${data.session}`);
     }
@@ -153,8 +153,8 @@ export default class Mirai {
    * 激活 Session，绑定 QQ
    * data.code === 0 成功
    */
-  async verify() {
-    const data = await this.api.verify(this.qq);
+  async bind() {
+    const data = await this.api.bind(this.qq);
     if (data.code === 0) {
       this.logger.success("验证成功");
       this.verified = true;

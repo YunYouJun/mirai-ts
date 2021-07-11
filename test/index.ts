@@ -6,7 +6,7 @@ const qq = 712727946;
 const mahConfig = {
   host: "127.0.0.1",
   port: 4859,
-  authKey: "el-psy-congroo",
+  verifyKey: "el-psy-congroo",
   enableWebsocket: true,
 };
 
