@@ -7,7 +7,7 @@ import chalk from "chalk";
 import * as axios from "./axios";
 import { AxiosStatic } from "axios";
 import MiraiApiHttp from "./mirai-api-http";
-import { MessageType, EventType, MiraiApiHttpConfig } from ".";
+import { MessageType, EventType, MiraiApiHttpSetting } from ".";
 import Logger from "@yunyoujun/logger";
 
 import { splitText } from "./utils/internal";
@@ -90,20 +90,11 @@ export default class Mirai {
    * 事件触发器
    */
   eventEmitter = new events.EventEmitter();
-  constructor(
-    public mahConfig: MiraiApiHttpConfig = {
-      host: "0.0.0.0",
-      port: 8080,
-      verifyKey: "el-psy-congroo",
-      cacheSize: 4096,
-      enableWebsocket: false,
-      cors: ["*"],
-    }
-  ) {
+  constructor(public mahSetting: MiraiApiHttpSetting) {
     this.axios = axios.init(
-      `http://${this.mahConfig.host}:${this.mahConfig.port}`
+      `http://${this.mahSetting.adapterSettings.http.host}:${this.mahSetting.adapterSettings.http.port}`
     );
-    this.api = new MiraiApiHttp(this.mahConfig, this.axios);
+    this.api = new MiraiApiHttp(this.mahSetting, this.axios);
 
     // default
     this.qq = 0;
@@ -144,7 +135,7 @@ export default class Mirai {
   async verify() {
     const data = await this.api.verify();
     if (data.code === 0) {
-      this.logger.info(`获取 Session: ${data.session}`);
+      this.logger.info(`[http] Session: ${data.session}`);
     }
     return data;
   }
@@ -429,13 +420,11 @@ export default class Mirai {
    * @param after 在监听器函数执行后执行
    */
   listen() {
-    const address = this.mahConfig.host + ":" + this.mahConfig.port;
-    if (this.mahConfig.enableWebsocket) {
+    if (this.mahSetting.adapters.includes("ws")) {
       this.api.all((msg) => {
         this.handle(msg);
       });
     } else {
-      this.logger.info("开始监听: http://" + address);
       let count = 0;
       const intId = setInterval(() => {
         this.api

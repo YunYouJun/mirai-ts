@@ -26,7 +26,7 @@ export class Command {
    */
   async listen(): Promise<CommandInfo> {
     const { data } = await this.api.axios.post("/command", {
-      verifyKey: this.api.config.verifyKey,
+      verifyKey: this.api.setting.verifyKey,
     });
     return data;
   }
@@ -45,7 +45,7 @@ export class Command {
     usage?: string
   ) {
     const { data } = await this.api.axios.post("/command/register", {
-      verifyKey: this.api.config.verifyKey,
+      verifyKey: this.api.setting.verifyKey,
       name,
       alias,
       description,
@@ -61,7 +61,7 @@ export class Command {
    */
   async send(name: string, args: string[]) {
     const { data } = await this.api.axios.post("/command/send", {
-      verifyKey: this.api.config.verifyKey,
+      verifyKey: this.api.setting.verifyKey,
       name,
       args,
     });

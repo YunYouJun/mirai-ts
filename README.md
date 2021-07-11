@@ -20,6 +20,7 @@
 
 ```sh
 npm install mirai-ts
+# 如想使用 2.x 版本，请 npm install mirai-ts@next
 # yarn add mirai-ts
 ```
 

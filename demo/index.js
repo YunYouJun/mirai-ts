@@ -1,21 +1,24 @@
 const Mirai = require("mirai-ts");
+const fs = require("fs");
+const path = require("path");
+const yaml = require("js-yaml");
 // const { Message } = require("mirai-ts");
 
 // 你的 QQ 号
 const qq = 712727946;
-// 请与 `mcl/config/net.mamoe.mirai-api-http/setting.yml` 保持一致
-const mahConfig = {
-  // 你的 IP 地址
-  host: "127.0.0.1",
-  // 你的端口号
-  port: 4859,
-  // 你的密钥
-  verifyKey: "el-psy-congroo",
-  // 推荐 true，websocket 无须轮询，更少占用资源。
-  enableWebsocket: true,
-};
+// 读取你的 `mcl/config/net.mamoe.mirai-api-http/setting.yml` 并解析为 JSON
+// 或手动书写对象
+const setting = yaml.load(
+  fs.readFileSync(
+    path.resolve(
+      __dirname,
+      "../mcl/config/net.mamoe.mirai-api-http/setting.yml"
+    ),
+    "utf8"
+  )
+);
 
-const mirai = new Mirai(mahConfig);
+const mirai = new Mirai(setting);
 
 async function app() {
   // 登录 QQ

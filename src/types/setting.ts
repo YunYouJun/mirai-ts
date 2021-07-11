@@ -1,5 +1,5 @@
 /**
- * setting.yml 配置
+ * 与 mirai-api-http [setting.yml](https://github.com/project-mirai/mirai-api-http#settingyml模板) 的配置保持一致
  * @packageDocumentation
  */
 
@@ -20,7 +20,7 @@ export interface HttpAdapter {
    */
   port: number;
   /**
-   * 配置跨域, 默认允许来自所有域名
+   * 配置跨域, * 默认允许来自所有域名
    */
   cors: string[];
 }
@@ -120,7 +120,10 @@ export interface WebhookAdapter {
   };
 }
 
-export interface Setting {
+/**
+ * setting.yml
+ */
+export interface MiraiApiHttpSetting {
   /**
    * 启用的 adapter, 内置有 http, ws, reverse-ws, webhook
    */
@@ -130,6 +133,9 @@ export interface Setting {
    * 是否开启认证流程, 若为 true 则建立连接时需要验证 verifyKey
    */
   enableVerify: boolean;
+  /**
+   * 默认由 mirai-api-http 随机生成，建议手动指定。未传入该值时，默认为 'el-psy-congroo'
+   */
   verifyKey: string;
 
   /**

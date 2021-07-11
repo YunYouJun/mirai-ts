@@ -1,14 +1,21 @@
-import Mirai from "mirai-ts";
+import Mirai, { MiraiApiHttpSetting } from "mirai-ts";
+import fs from "fs";
+import path from "path";
+import yaml from "js-yaml";
 
 const qq = 712727946;
-const mahConfig = {
-  host: "127.0.0.1",
-  port: 4859,
-  verifyKey: "el-psy-congroo",
-  enableWebsocket: true,
-};
+// setting 可直接读取 setting.yml 或参考 `src/types/setting.ts`
+const setting = yaml.load(
+  fs.readFileSync(
+    path.resolve(
+      __dirname,
+      "../mcl/config/net.mamoe.mirai-api-http/setting.yml"
+    ),
+    "utf8"
+  )
+) as MiraiApiHttpSetting;
 
-const mirai = new Mirai(mahConfig);
+const mirai = new Mirai(setting);
 
 async function app() {
   await mirai.link(qq);

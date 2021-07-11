@@ -21,40 +21,13 @@ import chalk from "chalk";
 
 // utils
 import { toMessageChain } from "./message";
+import { MiraiApiHttpSetting } from "src/types";
 
-/**
- * 与 mirai-api-http [setting.yml](https://github.com/project-mirai/mirai-api-http#settingyml模板) 的配置保持一致
- */
-export interface MiraiApiHttpConfig {
-  /**
-   * 可选，默认值为0.0.0.0
-   */
-  host?: string;
-  /**
-   * 可选，默认值为8080
-   */
-  port?: number;
-  /**
-   * 可选，默认由 mirai-api-http 随机生成，建议手动指定。未传入该值时，默认为 'el-psy-congroo'
-   */
-  verifyKey?: string;
-  /**
-   * 可选，缓存大小，默认4096.缓存过小会导致引用回复与撤回消息失败
-   */
-  cacheSize?: number;
-  /**
-   * 可选，是否开启websocket，默认关闭，建议通过Session范围的配置设置
-   */
-  enableWebsocket?: boolean;
-  /**
-   * 可选，配置CORS跨域，默认为*，即允许所有域名
-   */
-  cors?: string[];
-  /**
-   * 自定义连接 URL
-   */
-  url?: string;
-}
+type WsCallbackMap = {
+  message: (msg: MessageType.ChatMessage) => any;
+  event: (event: EventType.Event) => any;
+  all: (data: EventType.Event | MessageType.ChatMessage) => any;
+};
 
 export default class MiraiApiHttp {
   sessionKey: string;
@@ -70,22 +43,23 @@ export default class MiraiApiHttp {
 
   logger: Logger;
 
-  constructor(public config: MiraiApiHttpConfig, public axios: AxiosStatic) {
+  constructor(public setting: MiraiApiHttpSetting, public axios: AxiosStatic) {
     this.sessionKey = "";
     this.qq = 0;
     this.verified = false;
 
-    if (this.config.enableWebsocket) {
-      this.address =
-        this.config.url || `ws://${this.config.host}:${this.config.port}`;
+    if (this.setting.adapters.includes("ws")) {
+      const wsSetting = this.setting.adapterSettings.ws;
+      this.address = `ws://${wsSetting.host}:${wsSetting.port}`;
     } else {
-      this.address =
-        this.config.url || `http://${this.config.host}:${this.config.port}`;
+      const httpSetting = this.setting.adapterSettings.http;
+      this.address = `http://${httpSetting.host}:${httpSetting.port}`;
     }
     this.command = new Command(this);
     this.resp = new Resp(this);
 
     this.logger = new Logger({ prefix: chalk.cyan("[mirai-api-http]") });
+    this.logger.info(`Address: ${this.address}`);
   }
 
   /**
@@ -130,7 +104,7 @@ export default class MiraiApiHttp {
   /**
    * 使用此方法验证你的身份，并返回一个会话
    */
-  async verify(verifyKey = this.config.verifyKey): Promise<Api.Response.Auth> {
+  async verify(verifyKey = this.setting.verifyKey): Promise<Api.Response.Auth> {
     const { data } = await this.axios.post("/verify", {
       verifyKey,
     });
@@ -621,62 +595,69 @@ export default class MiraiApiHttp {
     }
   }
 
-  // Websocket
   /**
-   * 监听该接口，插件将推送 Bot 收到的消息
-   * @param callback 回调函数
+   * 构建 WebSocket 通道
+   * @param type
    */
-  message(callback: (msg: MessageType.ChatMessage) => any): void {
-    this.logger.info(`监听消息: ${this.address}`);
-    const ws = new WebSocket(
-      this.address + "/message?sessionKey=" + this.sessionKey
-    );
+  _buildWsChannel<T extends "message" | "event" | "all">(
+    type: T,
+    callback: WsCallbackMap[T]
+  ) {
+    const typeName = {
+      message: "消息",
+      event: "事件",
+      all: "消息与事件",
+    };
+    this.logger.info(`监听${typeName[type]}: ${this.address}`);
+
+    const wsParams = new URLSearchParams();
+    wsParams.append("verifyKey", this.setting.verifyKey);
+    wsParams.append("qq", this.qq.toString());
+    const ws = new WebSocket(`${this.address}/${type}?${wsParams.toString()}`);
+
     ws.on("open", () => {
       const interval = setInterval(() => ws.ping(), 60000);
       ws.on("close", () => clearInterval(interval));
+    });
+    // 绑定 sessionKey
+    ws.once("message", (data: WebSocket.Data) => {
+      const response = JSON.parse(data.toString());
+      if (response.data.session) {
+        this.sessionKey = response.data.session;
+        this.logger.info(`[ws] Session: ${this.sessionKey}`);
+      } else {
+        this.logger.error(response);
+      }
     });
     ws.on("message", (data: WebSocket.Data) => {
       const msg = JSON.parse(data.toString());
       callback(msg);
     });
+  }
+
+  // Websocket
+  /**
+   * 监听该接口，插件将推送 Bot 收到的消息
+   * @param callback 回调函数
+   */
+  message(callback: WsCallbackMap["message"]): void {
+    this._buildWsChannel("message", callback);
   }
 
   /**
    * 监听该接口，插件将推送 Bot 收到的事件
    * @param callback 回调函数
    */
-  event(callback: (event: EventType.Event) => any) {
-    this.logger.info(`监听事件: ${this.address}`);
-    const ws = new WebSocket(
-      this.address + "/event?sessionKey=" + this.sessionKey
-    );
-    ws.on("open", () => {
-      const interval = setInterval(() => ws.ping(), 60000);
-      ws.on("close", () => clearInterval(interval));
-    });
-    ws.on("message", (data: WebSocket.Data) => {
-      const msg = JSON.parse(data.toString());
-      callback(msg);
-    });
+  event(callback: WsCallbackMap["event"]) {
+    this._buildWsChannel("event", callback);
   }
 
   /**
    * 监听该接口，插件将推送 Bot 收到的消息和事件
    * @param callback 回调函数
    */
-  all(callback: (data: EventType.Event | MessageType.ChatMessage) => any) {
-    this.logger.info(`监听消息和事件: ${this.address}`);
-    const ws = new WebSocket(
-      this.address + "/all?sessionKey=" + this.sessionKey
-    );
-    ws.on("open", () => {
-      const interval = setInterval(() => ws.ping(), 60000);
-      ws.on("close", () => clearInterval(interval));
-    });
-    ws.on("message", (data: WebSocket.Data) => {
-      const msg = JSON.parse(data.toString());
-      callback(msg);
-    });
+  all(callback: WsCallbackMap["all"]) {
+    this._buildWsChannel("all", callback);
   }
 
   // 配置相关
