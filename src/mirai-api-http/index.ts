@@ -70,7 +70,11 @@ export default class MiraiApiHttp {
 
   logger: Logger;
 
-  constructor(public config: MiraiApiHttpConfig, public axios: AxiosStatic) {
+  constructor(
+    public config: MiraiApiHttpConfig,
+    public axios: AxiosStatic,
+    public loggerClass = Logger
+  ) {
     this.sessionKey = "";
     this.qq = 0;
     this.verified = false;
@@ -85,7 +89,7 @@ export default class MiraiApiHttp {
     this.command = new Command(this);
     this.resp = new Resp(this);
 
-    this.logger = new Logger({ prefix: chalk.cyan("[mirai-api-http]") });
+    this.logger = new loggerClass({ prefix: chalk.cyan("[mirai-api-http]") });
   }
 
   /**

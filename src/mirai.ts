@@ -98,12 +98,14 @@ export default class Mirai {
       cacheSize: 4096,
       enableWebsocket: false,
       cors: ["*"],
-    }
+    },
+    // MiraiApiHttp Logger 组件
+    private apiLoggerClass = Logger
   ) {
     this.axios = axios.init(
       `http://${this.mahConfig.host}:${this.mahConfig.port}`
     );
-    this.api = new MiraiApiHttp(this.mahConfig, this.axios);
+    this.api = new MiraiApiHttp(this.mahConfig, this.axios, apiLoggerClass);
 
     // default
     this.qq = 0;
