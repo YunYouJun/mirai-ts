@@ -10,8 +10,10 @@ import axios, { AxiosStatic } from "axios";
  * @param baseURL 请求的基础 URL
  * @param timeout  请求超时时间
  */
-export function init(baseURL: string, timeout = 0): AxiosStatic {
-  axios.defaults.baseURL = baseURL;
+export function init(baseURL?: string, timeout = 0): AxiosStatic {
+  if (baseURL) {
+    axios.defaults.baseURL = baseURL;
+  }
   axios.defaults.timeout = timeout;
 
   axios.interceptors.request.use(

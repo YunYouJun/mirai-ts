@@ -30,11 +30,24 @@ type WsCallbackMap = {
 };
 
 export default class MiraiApiHttp {
-  sessionKey: string;
-  qq: number;
-  verified: boolean;
+  sessionKey = "";
+  /**
+   * WebSocket SessionKey
+   */
+  ws: {
+    sessionKey: string;
+    address: string;
+    client?: WebSocket;
+  } = {
+    sessionKey: "",
+    address: "",
+  };
+
+  qq = 0;
+  verified = false;
 
   address: string;
+
   command: Command;
   /**
    * [申请事件 | EventType](https://github.com/project-mirai/mirai-api-http/blob/master/docs/EventType.md#%E7%94%B3%E8%AF%B7%E4%BA%8B%E4%BB%B6)
@@ -44,22 +57,19 @@ export default class MiraiApiHttp {
   logger: Logger;
 
   constructor(public setting: MiraiApiHttpSetting, public axios: AxiosStatic) {
-    this.sessionKey = "";
-    this.qq = 0;
-    this.verified = false;
+    const wsSetting = this.setting.adapterSettings.ws;
+    this.ws.address = `ws://${wsSetting.host}:${wsSetting.port}`;
 
-    if (this.setting.adapters.includes("ws")) {
-      const wsSetting = this.setting.adapterSettings.ws;
-      this.address = `ws://${wsSetting.host}:${wsSetting.port}`;
-    } else {
-      const httpSetting = this.setting.adapterSettings.http;
-      this.address = `http://${httpSetting.host}:${httpSetting.port}`;
-    }
+    const httpSetting = this.setting.adapterSettings.http;
+    this.address = `http://${httpSetting.host}:${httpSetting.port}`;
+    this.axios.defaults.baseURL = this.address;
+
     this.command = new Command(this);
     this.resp = new Resp(this);
 
     this.logger = new Logger({ prefix: chalk.cyan("[mirai-api-http]") });
-    this.logger.info(`Address: ${this.address}`);
+    this.logger.info(`[http] Address: ${this.address}`);
+    this.logger.info(`[websocket] Address: ${this.ws.address}`);
   }
 
   /**
@@ -111,6 +121,7 @@ export default class MiraiApiHttp {
 
     if (data.code === 0) {
       this.sessionKey = data.session;
+      this.axios.defaults.headers.common["sessionKey"] = this.sessionKey;
     }
     return data;
   }
@@ -476,11 +487,16 @@ export default class MiraiApiHttp {
     memberId: number,
     time = 60
   ): Promise<Api.Response.BaseResponse> {
-    const { data } = await this.axios.post("/mute", {
-      sessionKey: this.sessionKey,
+    console.log(this.sessionKey);
+    const body = {
       target,
       memberId,
       time,
+    };
+    console.log(body);
+    const { data } = await this.axios.post("/mute", body);
+    this.ws?.on("mute", (msg) => {
+      console.log(msg);
     });
     return data;
   }
@@ -608,28 +624,32 @@ export default class MiraiApiHttp {
       event: "事件",
       all: "消息与事件",
     };
-    this.logger.info(`监听${typeName[type]}: ${this.address}`);
+    this.logger.info(`监听${typeName[type]}: ${this.ws.address}`);
 
     const wsParams = new URLSearchParams();
     wsParams.append("verifyKey", this.setting.verifyKey);
     wsParams.append("qq", this.qq.toString());
-    const ws = new WebSocket(`${this.address}/${type}?${wsParams.toString()}`);
 
-    ws.on("open", () => {
-      const interval = setInterval(() => ws.ping(), 60000);
-      ws.on("close", () => clearInterval(interval));
+    const client = new WebSocket(
+      `${this.ws.address}/${type}?${wsParams.toString()}`
+    );
+    this.ws.client = client;
+
+    client.on("open", () => {
+      const interval = setInterval(() => client.ping(), 60000);
+      client.on("close", () => clearInterval(interval));
     });
     // 绑定 sessionKey
-    ws.once("message", (data: WebSocket.Data) => {
+    client.once("message", (data: WebSocket.Data) => {
       const response = JSON.parse(data.toString());
       if (response.data.session) {
-        this.sessionKey = response.data.session;
-        this.logger.info(`[ws] Session: ${this.sessionKey}`);
+        this.ws.sessionKey = response.data.session;
+        this.logger.info(`[ws] Session: ${this.ws.sessionKey}`);
       } else {
         this.logger.error(response);
       }
     });
-    ws.on("message", (data: WebSocket.Data) => {
+    client.on("message", (data: WebSocket.Data) => {
       const msg = JSON.parse(data.toString());
       callback(msg.data);
     });

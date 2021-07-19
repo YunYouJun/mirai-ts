@@ -91,9 +91,7 @@ export default class Mirai {
    */
   eventEmitter = new events.EventEmitter();
   constructor(public mahSetting: MiraiApiHttpSetting) {
-    this.axios = axios.init(
-      `http://${this.mahSetting.adapterSettings.http.host}:${this.mahSetting.adapterSettings.http.port}`
-    );
+    this.axios = axios.init();
     this.api = new MiraiApiHttp(this.mahSetting, this.axios);
 
     // default
