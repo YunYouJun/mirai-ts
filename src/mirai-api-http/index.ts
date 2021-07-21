@@ -54,7 +54,7 @@ export default class MiraiApiHttp {
    */
   resp: Resp;
 
-  logger: Logger;
+  public logger = new Logger({ prefix: chalk.cyan("[mirai-api-http]") });
 
   constructor(public setting: MiraiApiHttpSetting, public axios: AxiosStatic) {
     const wsSetting = this.setting.adapterSettings.ws;
@@ -66,10 +66,6 @@ export default class MiraiApiHttp {
 
     this.command = new Command(this);
     this.resp = new Resp(this);
-
-    this.logger = new Logger({ prefix: chalk.cyan("[mirai-api-http]") });
-    this.logger.info(`[http] Address: ${this.address}`);
-    this.logger.info(`[websocket] Address: ${this.ws.address}`);
   }
 
   /**
@@ -115,6 +111,8 @@ export default class MiraiApiHttp {
    * 使用此方法验证你的身份，并返回一个会话
    */
   async verify(verifyKey = this.setting.verifyKey): Promise<Api.Response.Auth> {
+    this.logger.info(`[http] Address: ${this.address}`);
+
     const { data } = await this.axios.post("/verify", {
       verifyKey,
     });
@@ -487,17 +485,12 @@ export default class MiraiApiHttp {
     memberId: number,
     time = 60
   ): Promise<Api.Response.BaseResponse> {
-    console.log(this.sessionKey);
     const body = {
       target,
       memberId,
       time,
     };
-    console.log(body);
     const { data } = await this.axios.post("/mute", body);
-    this.ws?.on("mute", (msg) => {
-      console.log(msg);
-    });
     return data;
   }
 
@@ -624,7 +617,9 @@ export default class MiraiApiHttp {
       event: "事件",
       all: "消息与事件",
     };
-    this.logger.info(`监听${typeName[type]}: ${this.ws.address}`);
+    this.logger.info(
+      `[websocket] [${type}](${typeName[type]}) ${this.ws.address}`
+    );
 
     const wsParams = new URLSearchParams();
     wsParams.append("verifyKey", this.setting.verifyKey);
