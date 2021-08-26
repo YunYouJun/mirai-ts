@@ -28,7 +28,7 @@ export interface BaseResponse {
 export interface ResponseType<T> {
   code: number;
   msg: string;
-  data?: T;
+  data: T;
 }
 
 export interface SendMessage extends BaseResponse {
@@ -131,9 +131,9 @@ export interface GroupFileInfo {
   md5: string;
 }
 
-export type FriendList = Friend[];
-export type GroupList = Group[];
-export type MemberList = Member[];
+export type FriendList = ResponseType<Friend[]>;
+export type GroupList = ResponseType<Group[]>;
+export type MemberList = ResponseType<Member[]>;
 
 // resp
 export interface BaseRequestEvent {

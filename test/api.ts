@@ -4,7 +4,10 @@ import { logger } from "./logger";
 
 export async function miraiApiTest(mirai: Mirai) {
   const friendList = await mirai.api.friendList();
-  console.log(friendList);
+  console.log(friendList.data);
+
+  const groupList = await mirai.api.groupList();
+  console.log(groupList.data);
 
   const groupConfig = await mirai.api.groupConfig(groupId);
   console.log(groupConfig);
