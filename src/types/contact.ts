@@ -56,9 +56,25 @@ export interface Member extends BaseUser {
    */
   memberName: string;
   /**
-   * 群权限 OWNER、ADMINISTRATOR或MEMBER
+   * 群权限 OWNER、ADMINISTRATOR 或 MEMBER
    */
   permission: Permission;
+  /**
+   * 群头衔
+   */
+  specialTitle: string;
+  /**
+   * 入群时间戳
+   */
+  joinTimestamp: number;
+  /**
+   * 上一次发言时间戳
+   */
+  lastSpeakTimestamp: number;
+  /**
+   * 剩余禁言时间
+   */
+  muteTimeRemaining: number;
   /**
    * 所在的群
    */
