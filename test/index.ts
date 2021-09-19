@@ -5,6 +5,7 @@ import { miraiApiTest } from "./api";
 import fs from "fs";
 import path from "path";
 import yaml from "js-yaml";
+import { botQQ } from "./config";
 
 // setting 可直接读取 setting.yml 或参考 `src/types/setting.ts`
 const setting = yaml.load(
@@ -17,11 +18,10 @@ const setting = yaml.load(
   )
 ) as MiraiApiHttpSetting;
 
-const qq = 712727946;
 const mirai = new Mirai(setting);
 
 async function app() {
-  await mirai.link(qq);
+  await mirai.link(botQQ);
   mirai.on("message", (msg) => {
     console.log(msg);
 

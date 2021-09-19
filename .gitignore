@@ -13,3 +13,6 @@ pnpm-lock.yaml
 
 # mirai
 mcl
+
+# env
+.env
