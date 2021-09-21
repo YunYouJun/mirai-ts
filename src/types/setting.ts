@@ -157,7 +157,7 @@ export interface MiraiApiHttpSetting {
    */
   adapterSettings: {
     http: HttpAdapter;
-    ws?: WebsocketAdapter;
+    ws: WebsocketAdapter;
     "reverse-ws"?: ReverseWebsocketAdapter;
     webhook?: WebhookAdapter;
   };
