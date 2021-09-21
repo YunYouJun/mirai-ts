@@ -20,9 +20,10 @@
 
 ```sh
 npm install mirai-ts
-# 如想使用 2.x 版本，请 npm install mirai-ts@next
 # yarn add mirai-ts
 ```
+
+> 由于 mirai-api-http 2.x 已经稳定，mirai-ts@next 将会移除并修改为 latest 作为稳定版发布，如果您想使用 mirai-api-http 1.x，请安装 mirai-ts@1.x 版本。
 
 - [API 文档](https://www.yunyoujun.cn/mirai-ts/)
 - [2.x 迁移指南](./migrate.md)
