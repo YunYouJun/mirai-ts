@@ -116,6 +116,10 @@ export interface Image extends BaseSingleMessage {
    * 图片的路径，发送本地图片，相对路径于 `data/net.mamoe.mirai-api-http/images`
    */
   path: string | null;
+  /**
+   * 图片的 Base64 编码
+   */
+  base64: string | null;
 }
 
 /**
