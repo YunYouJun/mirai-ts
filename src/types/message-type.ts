@@ -151,13 +151,21 @@ export interface Voice extends BaseSingleMessage {
    */
   voiceId: string | null;
   /**
-   * 语音的URL，发送时可作网络语音的链接；接收时为腾讯语音服务器的链接，可用于语音下载
+   * 语音的 URL，发送时可作网络语音的链接；接收时为腾讯语音服务器的链接，可用于语音下载
    */
   url: string | null;
   /**
-   * 语音的路径，发送本地语音，相对路径于 `data/net.mamoe.mirai-api-http/voices`
+   * 语音的路径，发送本地语音，路径相对于 JVM 工作路径（默认是当前路径，可通过 -Duser.dir=...指定），也可传入绝对路径。
    */
   path: string | null;
+  /**
+   * 语音的 Base64 编码
+   */
+  base64: string | null;
+  /**
+   * 返回的语音长度, 发送消息时可以不传
+   */
+  length?: number;
 }
 
 /**
@@ -213,26 +221,41 @@ export enum PokeName {
 export interface Poke extends BaseSingleMessage {
   type: "Poke";
   /**
-   * 	戳一戳的类型
+   * 戳一戳的类型
    */
   name: PokeName;
 }
 
-export interface ForwardNode {
+export interface Dice extends BaseSingleMessage {
+  type: "Dice";
   /**
-   * 发送者 id
+   * 点数
    */
-  senderId: number;
-  /**
-   * 时间戳, 单位 秒
-   */
-  time: number;
-  /**
-   * 发送者姓名
-   */
-  senderName: string;
-  messageChain: MessageChain;
+  value: number;
 }
+
+export type ForwardNode =
+  | {
+      /**
+       * 发送者 id
+       */
+      senderId: number;
+      /**
+       * 时间戳, 单位 秒
+       */
+      time: number;
+      /**
+       * 发送者姓名
+       */
+      senderName: string;
+      messageChain: MessageChain;
+    }
+  | {
+      /**
+       * 可以只使用消息messageId，从缓存中读取一条消息作为节点
+       */
+      messageId: number;
+    };
 
 /**
  * 转发
@@ -264,13 +287,9 @@ export interface Forward extends BaseSingleMessage {
 export interface File {
   type: "File";
   /**
-   * 文件唯一id
+   * 文件识别 id
    */
   id: string;
-  /**
-   * 服务器需要的ID
-   */
-  internalId: number;
   /**
    * 文件名字
    */
@@ -318,6 +337,15 @@ export interface MusicShare {
   brief?: string;
 }
 
+export interface MiraiCode {
+  type: "MiraiCode";
+  /**
+   * MiraiCode
+   * @example hello[mirai:at:1234567]
+   */
+  code: string;
+}
+
 export type SingleMessageMap = {
   Source: Source;
   Quote: Quote;
@@ -332,9 +360,11 @@ export type SingleMessageMap = {
   Json: Json;
   App: App;
   Poke: Poke;
+  Dice: Dice;
   Forward: Forward;
-  File: File;
   MusicShare: MusicShare;
+  File: File;
+  MiraiCode: MiraiCode;
 };
 
 export type SingleMessageType = keyof SingleMessageMap;

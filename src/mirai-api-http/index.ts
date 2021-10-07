@@ -1,9 +1,11 @@
 /**
  * mirai-api-http 类，实现了 [mirai-appi-http](https://github.com/project-mirai/mirai-api-http) 文档中的所有请求
+ * [Http Adapter](https://github.com/project-mirai/mirai-api-http/blob/master/docs/adapter/HttpAdapter.md)
+ * [API 文档参考](https://github.com/project-mirai/mirai-api-http/blob/master/docs/api/API.md)
  * @packageDocumentation
  */
 
-import { AxiosStatic, AxiosResponse } from "axios";
+import { AxiosStatic, AxiosResponse, Axios } from "axios";
 import { MessageType, Api, Config, EventType } from "..";
 
 // for upload image
@@ -12,6 +14,7 @@ import WebSocket from "ws";
 
 // nested api url
 import { Command } from "./command";
+import { File } from "./file";
 import { Resp } from "./resp";
 
 // 处理状态码
@@ -23,11 +26,20 @@ import chalk from "chalk";
 import { toMessageChain } from "./message";
 import { MiraiApiHttpSetting } from "../types";
 
+import { BaseResponse } from "../types/api/response";
+
 type WsCallbackMap = {
   message: (msg: MessageType.ChatMessage) => any;
   event: (event: EventType.Event) => any;
   all: (data: EventType.Event | MessageType.ChatMessage) => any;
 };
+
+/**
+ * 基础的验证参数
+ */
+interface BaseVerifyParams {
+  verifyKey: string;
+}
 
 export default class MiraiApiHttp {
   sessionKey = "";
@@ -49,6 +61,7 @@ export default class MiraiApiHttp {
   address: string;
 
   command: Command;
+  file: File;
   /**
    * [申请事件 | EventType](https://github.com/project-mirai/mirai-api-http/blob/master/docs/EventType.md#%E7%94%B3%E8%AF%B7%E4%BA%8B%E4%BB%B6)
    */
@@ -67,6 +80,7 @@ export default class MiraiApiHttp {
     this.axios.defaults.maxBodyLength = Infinity;
 
     this.command = new Command(this);
+    this.file = new File(this);
     this.resp = new Resp(this);
   }
 
@@ -75,7 +89,7 @@ export default class MiraiApiHttp {
    */
   async handleStatusCode() {
     this.axios.interceptors.response.use(
-      async (res: AxiosResponse) => {
+      async (res: AxiosResponse<BaseResponse>) => {
         if (res.status === 200 && res.data.code) {
           const message = getMessageFromStatusCode(res.data.code);
           if (message) {
@@ -115,13 +129,18 @@ export default class MiraiApiHttp {
   async verify(verifyKey = this.setting.verifyKey): Promise<Api.Response.Auth> {
     this.logger.info(`[http] Address: ${this.address}`);
 
-    const { data } = await this.axios.post("/verify", {
+    const { data } = await this.axios.post<
+      BaseVerifyParams,
+      AxiosResponse<Api.Response.Auth>
+    >("/verify", {
       verifyKey,
     });
 
     if (data.code === 0) {
       this.sessionKey = data.session;
-      this.axios.defaults.headers.common["sessionKey"] = this.sessionKey;
+      if (this.axios.defaults.headers)
+        (this.axios.defaults.headers.common as any)["sessionKey"] =
+          this.sessionKey;
     }
     return data;
   }
@@ -129,9 +148,12 @@ export default class MiraiApiHttp {
   /**
    * 使用此方法校验并激活你的Session，同时将Session与一个已登录的Bot绑定
    */
-  async bind(qq: number): Promise<Api.Response.BaseResponse> {
+  async bind(qq: number) {
     this.qq = qq;
-    const { data } = await this.axios.post("/bind", {
+    const { data } = await this.axios.post<
+      Api.Params.RequestParams<{ qq: number }>,
+      AxiosResponse<Api.Response.BaseResponse>
+    >("/bind", {
       sessionKey: this.sessionKey,
       qq,
     });
@@ -143,8 +165,11 @@ export default class MiraiApiHttp {
    * 使用此方式释放 session 及其相关资源（Bot不会被释放） 不使用的 Session 应当被释放，长时间（30分钟）未使用的 Session 将自动释放。
    * 否则 Session 持续保存Bot收到的消息，将会导致内存泄露(开启websocket后将不会自动释放)
    */
-  async release(qq = this.qq): Promise<Api.Response.BaseResponse> {
-    const { data } = await this.axios.post("/release", {
+  async release(qq = this.qq) {
+    const { data } = await this.axios.post<
+      Api.Params.RequestParams<{ qq: number }>,
+      AxiosResponse<Api.Response.BaseResponse>
+    >("/release", {
       sessionKey: this.sessionKey,
       qq,
     });
@@ -216,10 +241,11 @@ export default class MiraiApiHttp {
    * 通过 messageId 获取一条被缓存的消息
    * @param id 获取消息的messageId
    */
-  async messageFromId(
-    id: number
-  ): Promise<Api.Response.MessageFromId | MessageType.ChatMessage> {
-    const { data } = await this.axios.get("/messageFromId", {
+  async messageFromId(id: number) {
+    const { data } = await this.axios.get<
+      Api.Params.RequestParams<{ id: number }>,
+      AxiosResponse<Api.Response.MessageFromId>
+    >("/messageFromId", {
       params: {
         sessionKey: this.sessionKey,
         id,
@@ -237,15 +263,15 @@ export default class MiraiApiHttp {
    * @param messageChain 消息链，是一个消息对象构成的数组
    * @param target 发送消息目标好友的 QQ 号
    * @param quote 引用一条消息的messageId进行回复
-   * @returns { code: 0, msg: "success", messageId: 123456 } messageId 一个Int类型属性，标识本条消息，用于撤回和引用回复
+   * @returns '{ code: 0, msg: "success", messageId: 123456 }' messageId 一个Int类型属性，标识本条消息，用于撤回和引用回复
    */
   async sendFriendMessage(
     messageChain: string | MessageType.MessageChain,
     target: number,
     quote?: number
-  ): Promise<Api.Response.SendMessage> {
+  ) {
     messageChain = toMessageChain(messageChain);
-    const payload: Api.SendFriendMessage = {
+    const payload: Api.Params.SendFriendMessage = {
       sessionKey: this.sessionKey,
       target,
       messageChain,
@@ -253,7 +279,10 @@ export default class MiraiApiHttp {
     if (quote) {
       payload.quote = quote;
     }
-    const { data } = await this.axios.post("/sendFriendMessage", payload);
+    const { data } = await this.axios.post<
+      Api.Params.SendFriendMessage,
+      AxiosResponse<Api.Response.SendMessage>
+    >("/sendFriendMessage", payload);
     return data;
   }
 
@@ -268,9 +297,9 @@ export default class MiraiApiHttp {
     messageChain: string | MessageType.MessageChain,
     target: number,
     quote?: number
-  ): Promise<Api.Response.SendMessage> {
+  ) {
     messageChain = toMessageChain(messageChain);
-    const payload: Api.SendGroupMessage = {
+    const payload: Api.Params.SendGroupMessage = {
       sessionKey: this.sessionKey,
       target,
       messageChain,
@@ -278,7 +307,10 @@ export default class MiraiApiHttp {
     if (quote) {
       payload.quote = quote;
     }
-    const { data } = await this.axios.post("/sendGroupMessage", payload);
+    const { data } = await this.axios.post<
+      Api.Params.SendGroupMessage,
+      AxiosResponse<Api.Response.SendMessage>
+    >("/sendGroupMessage", payload);
     return data;
   }
 
@@ -294,9 +326,9 @@ export default class MiraiApiHttp {
     qq: number,
     group: number,
     quote?: number
-  ): Promise<Api.Response.SendMessage> {
+  ) {
     messageChain = toMessageChain(messageChain);
-    const payload: Api.SendTempMessage = {
+    const payload: Api.Params.SendTempMessage = {
       sessionKey: this.sessionKey,
       qq,
       group,
@@ -305,7 +337,10 @@ export default class MiraiApiHttp {
     if (quote) {
       payload.quote = quote;
     }
-    const { data } = await this.axios.post("/sendTempMessage", payload);
+    const { data } = await this.axios.post<
+      Api.Params.SendTempMessage,
+      AxiosResponse<Api.Response.SendMessage>
+    >("/sendTempMessage", payload);
     return data;
   }
 
@@ -321,8 +356,11 @@ export default class MiraiApiHttp {
     target?: number,
     qq?: number,
     group?: number
-  ): Promise<string[]> {
-    const { data } = await this.axios.post("/sendImageMessage", {
+  ) {
+    const { data } = await this.axios.post<
+      Api.Params.SendImageMessage,
+      AxiosResponse<string[]>
+    >("/sendImageMessage", {
       sessionKey: this.sessionKey,
       target,
       qq,
@@ -337,15 +375,15 @@ export default class MiraiApiHttp {
    * @param type
    * @param img 图片文件 fs.createReadStream(img)
    */
-  async uploadImage(
-    type: "friend" | "group" | "temp",
-    img: File
-  ): Promise<Api.Response.UploadImage> {
+  async uploadImage(type: "friend" | "group" | "temp", img: File) {
     const form = new FormData();
     form.append("sessionKey", this.sessionKey);
     form.append("type", type);
     form.append("img", img);
-    const { data } = await this.axios.post("/uploadImage", form, {
+    const { data } = await this.axios.post<
+      FormData,
+      AxiosResponse<Api.Response.UploadImage>
+    >("/uploadImage", form, {
       headers: form.getHeaders(), // same as post: { 'Content-Type': 'multipart/form-data' }
     });
     return data;
@@ -356,15 +394,15 @@ export default class MiraiApiHttp {
    * @param type 当前仅支持 "group"
    * @param voice 语音文件 fs.createReadStream(voice)
    */
-  async uploadVoice(
-    type: "friend" | "group" | "temp",
-    voice: File
-  ): Promise<Api.Response.UploadVoice> {
+  async uploadVoice(type: "friend" | "group" | "temp", voice: File) {
     const form = new FormData();
     form.append("sessionKey", this.sessionKey);
     form.append("type", type);
     form.append("voice", voice);
-    const { data } = await this.axios.post("/uploadVoice", form, {
+    const { data } = await this.axios.post<
+      FormData,
+      AxiosResponse<Api.Response.UploadVoice>
+    >("/uploadVoice", form, {
       headers: form.getHeaders(),
     });
     return data;
@@ -400,14 +438,15 @@ export default class MiraiApiHttp {
    * 使用此方法撤回指定消息。对于bot发送的消息，有2分钟时间限制。对于撤回群聊中群员的消息，需要有相应权限
    * @param target 需要撤回的消息的messageId
    */
-  async recall(
-    target: number | MessageType.ChatMessage
-  ): Promise<Api.Response.BaseResponse> {
+  async recall(target: Api.Params.Recall["target"]) {
     let messageId = target;
     if (typeof target !== "number" && target.messageChain[0].id) {
       messageId = target.messageChain[0].id;
     }
-    const { data } = await this.axios.post("/recall", {
+    const { data } = await this.axios.post<
+      Api.Params.Recall,
+      AxiosResponse<Api.Response.BaseResponse>
+    >("/recall", {
       sessionKey: this.sessionKey,
       target: messageId,
     });
@@ -456,8 +495,11 @@ export default class MiraiApiHttp {
    * 指定群进行全体禁言
    * @param target 指定群的群号
    */
-  async muteAll(target: number): Promise<Api.Response.BaseResponse> {
-    const { data } = await this.axios.post("/muteAll", {
+  async muteAll(target: Api.Params.MuteAll["target"]) {
+    const { data } = await this.axios.post<
+      Api.Params.MuteAll,
+      AxiosResponse<Api.Response.BaseResponse>
+    >("/muteAll", {
       sessionKey: this.sessionKey,
       target,
     });
@@ -468,8 +510,11 @@ export default class MiraiApiHttp {
    * 指定群解除全体禁言
    * @param target 指定群的群号
    */
-  async unmuteAll(target: number): Promise<Api.Response.BaseResponse> {
-    const { data } = await this.axios.post("/unmuteAll", {
+  async unmuteAll(target: Api.Params.UnmuteAll["target"]) {
+    const { data } = await this.axios.post<
+      Api.Params.UnmuteAll,
+      AxiosResponse<Api.Response.BaseResponse>
+    >("/unmuteAll", {
       sessionKey: this.sessionKey,
       target,
     });
@@ -482,17 +527,16 @@ export default class MiraiApiHttp {
    * @param memberId 指定群员QQ号
    * @param time 禁言时长，单位为秒，最多30天，默认为 60 秒
    */
-  async mute(
-    target: number,
-    memberId: number,
-    time = 60
-  ): Promise<Api.Response.BaseResponse> {
-    const body = {
+  async mute(target: number, memberId: number, time = 60) {
+    const { data } = await this.axios.post<
+      Api.Params.Mute,
+      AxiosResponse<Api.Response.BaseResponse>
+    >("/mute", {
+      sessionKey: this.sessionKey,
       target,
       memberId,
       time,
-    };
-    const { data } = await this.axios.post("/mute", body);
+    });
     return data;
   }
 
@@ -501,11 +545,11 @@ export default class MiraiApiHttp {
    * @param target	指定群的群号
    * @param memberId 指定群员QQ号
    */
-  async unmute(
-    target: number,
-    memberId: number
-  ): Promise<Api.Response.BaseResponse> {
-    const { data } = await this.axios.post("/unmute", {
+  async unmute(target: number, memberId: number) {
+    const { data } = await this.axios.post<
+      Api.Params.Unmute,
+      AxiosResponse<Api.Response.BaseResponse>
+    >("/unmute", {
       sessionKey: this.sessionKey,
       target,
       memberId,
@@ -519,12 +563,11 @@ export default class MiraiApiHttp {
    * @param memberId 指定群员QQ号
    * @param msg 信息
    */
-  async kick(
-    target: number,
-    memberId: number,
-    msg = "您已被移出群聊"
-  ): Promise<Api.Response.BaseResponse> {
-    const { data } = await this.axios.post("/kick", {
+  async kick(target: number, memberId: number, msg = "您已被移出群聊") {
+    const { data } = await this.axios.post<
+      Api.Params.Kick,
+      AxiosResponse<Api.Response.BaseResponse>
+    >("/kick", {
       sessionKey: this.sessionKey,
       target,
       memberId,
@@ -538,8 +581,11 @@ export default class MiraiApiHttp {
    * @param target 群号
    * bot为该群群主时退出失败并返回code 10(无操作权限)
    */
-  async quit(target: number): Promise<Api.Response.BaseResponse> {
-    const { data } = await this.axios.post("/quit", {
+  async quit(target: number) {
+    const { data } = await this.axios.post<
+      Api.Params.Quit,
+      AxiosResponse<Api.Response.BaseResponse>
+    >("/quit", {
       sessionKey: this.sessionKey,
       target,
     });
@@ -552,19 +598,22 @@ export default class MiraiApiHttp {
    * @param target 指定群的群号
    * @param config 群设置
    */
-  async groupConfig(
-    target: number,
-    config?: Config.GroupConfig
-  ): Promise<Api.Response.BaseResponse | Config.GroupConfig> {
+  async groupConfig(target: number, config?: Config.GroupConfig) {
     if (config) {
-      const { data } = await this.axios.post("/groupConfig", {
+      const { data } = await this.axios.post<
+        Api.Params.GroupConfig,
+        AxiosResponse<Api.Response.BaseResponse>
+      >("/groupConfig", {
         sessionKey: this.sessionKey,
         target,
         config,
       });
       return data;
     } else {
-      const { data } = await this.axios.get("/groupConfig", {
+      const { data } = await this.axios.get<
+        Api.Params.GroupConfig,
+        AxiosResponse<Config.GroupConfig>
+      >("/groupConfig", {
         params: {
           sessionKey: this.sessionKey,
           target,
@@ -584,15 +633,32 @@ export default class MiraiApiHttp {
   async memberInfo(
     target: number,
     memberId: number,
-    info: Config.MemberInfo = {}
-  ): Promise<Api.Response.BaseResponse | Config.MemberInfo> {
-    const { data } = await this.axios.post("/memberInfo", {
-      sessionKey: this.sessionKey,
-      target,
-      memberId,
-      info,
-    });
-    return data;
+    info?: Api.Params.MemberInfo["info"]
+  ) {
+    if (info) {
+      const { data } = await this.axios.post<
+        Api.Params.MemberInfo,
+        AxiosResponse<Api.Response.BaseResponse>
+      >("/memberInfo", {
+        sessionKey: this.sessionKey,
+        target,
+        memberId,
+        info,
+      });
+      return data;
+    } else {
+      const { data } = await this.axios.get<
+        Api.Params.MemberInfo,
+        AxiosResponse<Config.MemberInfo>
+      >("/memberInfo", {
+        params: {
+          sessionKey: this.sessionKey,
+          target,
+          memberId,
+        },
+      });
+      return data;
+    }
   }
 
   /**
@@ -683,8 +749,11 @@ export default class MiraiApiHttp {
    * 设置群精华消息
    * @param target 消息ID
    */
-  async setEssence(target: number): Promise<Api.Response.BaseResponse> {
-    const { data } = await this.axios.post("/setEssence", {
+  async setEssence(target: number) {
+    const { data } = await this.axios.post<
+      Api.Params.SetEssence,
+      AxiosResponse<Api.Response.BaseResponse>
+    >("/setEssence", {
       sessionKey: this.sessionKey,
       target,
     });
@@ -700,128 +769,16 @@ export default class MiraiApiHttp {
   async sendNudge(
     target: number,
     subject: number,
-    kind: "Friend" | "Group" = "Group"
-  ): Promise<Api.Response.BaseResponse> {
-    const { data } = await this.axios.post("/sendNudge", {
+    kind: Api.Params.SendNudge["kind"] = "Group"
+  ) {
+    const { data } = await this.axios.post<
+      Api.Params.SendNudge,
+      AxiosResponse<Api.Response.BaseResponse>
+    >("/sendNudge", {
       sessionKey: this.sessionKey,
       target,
       subject,
       kind,
-    });
-    return data;
-  }
-
-  // 群文件管理
-  /**
-   * 获取群文件列表
-   * @param target 指定群的群号
-   * @param dir 指定查询目录，不填为根目录
-   */
-  async groupFileList(
-    target: number,
-    dir?: string
-  ): Promise<Api.Response.GroupFile[]> {
-    const { data } = await this.axios.get("/groupFileList", {
-      params: {
-        sessionKey: this.sessionKey,
-        target,
-        dir,
-      },
-    });
-    return data;
-  }
-
-  /**
-   * 获取群文件详细信息
-   * @param target 指定群的群号
-   * @param id 文件唯一ID
-   */
-  async groupFileInfo(
-    target: number,
-    id: string
-  ): Promise<Api.Response.GroupFileInfo> {
-    const { data } = await this.axios.get("/groupFileInfo", {
-      params: {
-        sessionKey: this.sessionKey,
-        target,
-        id,
-      },
-    });
-    return data;
-  }
-
-  /**
-   * 重命名群文件/目录
-   * @param target
-   * @param id
-   * @param rename
-   */
-  async groupFileRename(
-    target: number,
-    id: string,
-    rename: string
-  ): Promise<Api.Response.BaseResponse> {
-    const { data } = await this.axios.post("/groupFileRename", {
-      sessionKey: this.sessionKey,
-      target,
-      id,
-      rename,
-    });
-    return data;
-  }
-
-  /**
-   * 创建群文件目录
-   * @param group
-   * @param dir
-   */
-  async groupMkdir(
-    group: number,
-    dir: string
-  ): Promise<Api.Response.BaseResponse> {
-    const { data } = await this.axios.post("/groupMkdir", {
-      sessionKey: this.sessionKey,
-      group,
-      dir,
-    });
-    return data;
-  }
-
-  /**
-   * 移动群文件
-   * @param target
-   * @param id
-   * @param movePath 移动到的目录，根目录为/，目录不存在时自动创建
-   * @returns
-   */
-  async groupFileMove(
-    target: number,
-    id: string,
-    movePath: string
-  ): Promise<Api.Response.BaseResponse> {
-    const { data } = await this.axios.post("/groupFileMove", {
-      sessionKey: this.sessionKey,
-      target,
-      id,
-      movePath,
-    });
-    return data;
-  }
-
-  /**
-   * 删除群文件/目录
-   * @param target
-   * @param id
-   * @returns
-   */
-  async groupFileDelete(
-    target: number,
-    id: string
-  ): Promise<Api.Response.BaseResponse> {
-    const { data } = await this.axios.post("/groupFileDelete", {
-      sessionKey: this.sessionKey,
-      target,
-      id,
     });
     return data;
   }

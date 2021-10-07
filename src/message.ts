@@ -112,13 +112,15 @@ function FlashImage(
 function Voice(
   voiceId: string | null = null,
   url: string | null = null,
-  path: string | null = null
+  path: string | null = null,
+  base64: string | null = null
 ): MessageType.Voice {
   return {
     type: "Voice",
     voiceId,
     url,
     path,
+    base64,
   };
 }
 
