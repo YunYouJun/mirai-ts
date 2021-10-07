@@ -63,6 +63,8 @@ export default class MiraiApiHttp {
     const httpSetting = this.setting.adapterSettings.http;
     this.address = `http://${httpSetting.host}:${httpSetting.port}`;
     this.axios.defaults.baseURL = this.address;
+    this.axios.defaults.maxContentLength = Infinity;
+    this.axios.defaults.maxBodyLength = Infinity;
 
     this.command = new Command(this);
     this.resp = new Resp(this);

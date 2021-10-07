@@ -66,17 +66,20 @@ function Plain(text: string): MessageType.Plain {
  * @param imageId 图片的imageId，群图片与好友图片格式不同。不为空时将忽略url属性
  * @param url 图片的URL，发送时可作网络图片的链接；接收时为腾讯图片服务器的链接，可用于图片下载
  * @param path 图片的路径，发送本地图片，相对路径于 `data/net.mamoe.mirai-api-http/images`
+ * @param base64 图片的 Base64 编码
  */
 function Image(
   imageId: string | null = null,
   url: string | null = null,
-  path: string | null = null
+  path: string | null = null,
+  base64: string | null = null
 ): MessageType.Image {
   return {
     type: "Image",
     imageId,
     url,
     path,
+    base64,
   };
 }
 
