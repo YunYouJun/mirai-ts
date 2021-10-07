@@ -5,7 +5,7 @@
  * @packageDocumentation
  */
 
-import { AxiosStatic, AxiosResponse, Axios } from "axios";
+import { AxiosStatic, AxiosResponse } from "axios";
 import { MessageType, Api, Config, EventType } from "..";
 
 // for upload image

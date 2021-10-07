@@ -7,7 +7,6 @@ import { AxiosResponse } from "axios";
 import MiraiApiHttp from "./index";
 
 import { Api, Contact } from "..";
-import { Response } from "../types/api";
 
 export type FileInfoResponse = AxiosResponse<
   Api.Response.ResponseType<FileInfo>
