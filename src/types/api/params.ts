@@ -1,7 +1,7 @@
 import * as Config from "../config";
 import * as MessageType from "../message-type";
 
-interface BaseRequestParams {
+export interface BaseRequestParams {
   sessionKey: string;
 }
 

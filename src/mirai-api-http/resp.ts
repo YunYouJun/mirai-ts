@@ -1,5 +1,6 @@
 import MiraiApiHttp from "./index";
 import { Api, EventType } from "..";
+import { AxiosResponse } from "axios";
 
 /**
  * - `0` 同意添加好友
@@ -74,17 +75,21 @@ export class Resp {
   constructor(private api: MiraiApiHttp) {}
 
   async _request(event: EventType.RequestEvent, operate: number, message = "") {
-    const { data } = await this.api.axios.post(
-      `/resp/${event.type[0].toLowerCase()}${event.type.substring(1)}`,
-      {
-        sessionKey: this.api.sessionKey,
-        eventId: event.eventId,
-        fromId: event.fromId,
-        groupId: event.groupId,
-        operate,
-        message,
-      }
-    );
+    const { data } = await this.api.axios.post<
+      null,
+      AxiosResponse<
+        | Api.Response.NewFriendRequestEvent
+        | Api.Response.MemberJoinRequestEvent
+        | Api.Response.BotInvitedJoinGroupRequestEvent
+      >
+    >(`/resp/${event.type[0].toLowerCase()}${event.type.substring(1)}`, {
+      sessionKey: this.api.sessionKey,
+      eventId: event.eventId,
+      fromId: event.fromId,
+      groupId: event.groupId,
+      operate,
+      message,
+    });
     return data;
   }
 
@@ -98,8 +103,12 @@ export class Resp {
     event: EventType.NewFriendRequestEvent,
     operate: NewFriendRequestOperationType,
     message?: string
-  ): Promise<Api.Response.NewFriendRequestEvent> {
-    return this._request(event, operate, message);
+  ) {
+    return this._request(
+      event,
+      operate,
+      message
+    ) as Promise<Api.Response.NewFriendRequestEvent>;
   }
 
   /**
@@ -112,8 +121,12 @@ export class Resp {
     event: EventType.MemberJoinRequestEvent,
     operate: MemberJoinRequestOperationType,
     message?: string
-  ): Promise<Api.Response.MemberJoinRequestEvent> {
-    return this._request(event, operate, message);
+  ) {
+    return this._request(
+      event,
+      operate,
+      message
+    ) as Promise<Api.Response.MemberJoinRequestEvent>;
   }
 
   /**
@@ -126,7 +139,11 @@ export class Resp {
     event: EventType.BotInvitedJoinGroupRequestEvent,
     operate: BotInvitedJoinGroupRequestOperationType,
     message?: string
-  ): Promise<Api.Response.BotInvitedJoinGroupRequestEvent> {
-    return this._request(event, operate, message);
+  ) {
+    return this._request(
+      event,
+      operate,
+      message
+    ) as Promise<Api.Response.BotInvitedJoinGroupRequestEvent>;
   }
 }

@@ -1,5 +1,5 @@
 /**
- * mirai-api-http 类，实现了 [mirai-appi-http](https://github.com/project-mirai/mirai-api-http) 文档中的所有请求
+ * mirai-api-http 类，实现了 [mirai-api-http](https://github.com/project-mirai/mirai-api-http) 文档中的所有请求
  * [Http Adapter](https://github.com/project-mirai/mirai-api-http/blob/master/docs/adapter/HttpAdapter.md)
  * [API 文档参考](https://github.com/project-mirai/mirai-api-http/blob/master/docs/api/API.md)
  * @packageDocumentation
@@ -25,8 +25,6 @@ import chalk from "chalk";
 // utils
 import { toMessageChain } from "./message";
 import { MiraiApiHttpSetting } from "../types";
-
-import { BaseResponse } from "../types/api/response";
 
 type WsCallbackMap = {
   message: (msg: MessageType.ChatMessage) => any;
@@ -89,13 +87,14 @@ export default class MiraiApiHttp {
    */
   async handleStatusCode() {
     this.axios.interceptors.response.use(
-      async (res: AxiosResponse<BaseResponse>) => {
-        if (res.status === 200 && res.data.code) {
-          const message = getMessageFromStatusCode(res.data.code);
+      async (res) => {
+        if (res.status === 200 && res.data) {
+          const statusCode = (res.data as any).code;
+          const message = getMessageFromStatusCode(statusCode);
           if (message) {
-            this.logger.error(`Code ${res.data.code}: ${message}`);
+            this.logger.error(`Code ${statusCode}: ${message}`);
 
-            if (res.data.code === 3 || res.data.code === 4) {
+            if (statusCode === 3 || statusCode === 4) {
               this.logger.warning("正在尝试重新建立连接...");
               await this.verify();
               await this.bind(this.qq);
@@ -118,8 +117,11 @@ export default class MiraiApiHttp {
    * 使用此方法获取插件的信息，如版本号
    * data.data: { "version": "v1.0.0" }
    */
-  async about(): Promise<Api.Response.About> {
-    const { data } = await this.axios.get("/about");
+  async about() {
+    const { data } = await this.axios.get<
+      null,
+      AxiosResponse<Api.Response.About>
+    >("/about");
     return data;
   }
 
@@ -185,8 +187,11 @@ export default class MiraiApiHttp {
    * { code: 0, data: [] }
    * @param count 获取消息和事件的数量
    */
-  async fetchMessage(count = 10): Promise<Api.Response.FetchMessage> {
-    const { data } = await this.axios.get("/fetchMessage", {
+  async fetchMessage(count = 10) {
+    const { data } = await this.axios.get<
+      Api.Params.RequestParams<{ count: number }>,
+      AxiosResponse<Api.Response.FetchMessage>
+    >("/fetchMessage", {
       params: {
         sessionKey: this.sessionKey,
         count,
@@ -199,8 +204,11 @@ export default class MiraiApiHttp {
    * 使用此方法获取 bot 接收到的最新消息和最新各类事件(会从 MiraiApiHttp 消息记录中删除)
    * @param count 获取消息和事件的数量
    */
-  async fetchLatestMessage(count = 10): Promise<Api.Response.FetchMessage> {
-    const { data } = await this.axios.get("/fetchLatestMessage", {
+  async fetchLatestMessage(count = 10) {
+    const { data } = await this.axios.get<
+      Api.Params.RequestParams<{ count: number }>,
+      AxiosResponse<Api.Response.FetchMessage>
+    >("/fetchLatestMessage", {
       params: {
         sessionKey: this.sessionKey,
         count,
@@ -213,8 +221,11 @@ export default class MiraiApiHttp {
    * 使用此方法获取 bot 接收到的最老消息和最老各类事件(不会从 MiraiApiHttp 消息记录中删除)
    * @param count 获取消息和事件的数量
    */
-  async peekMessage(count = 10): Promise<Api.Response.FetchMessage> {
-    const { data } = await this.axios.get("/peekMessage", {
+  async peekMessage(count = 10) {
+    const { data } = await this.axios.get<
+      Api.Params.RequestParams<{ count: number }>,
+      AxiosResponse<Api.Response.FetchMessage>
+    >("/peekMessage", {
       params: {
         sessionKey: this.sessionKey,
         count,
@@ -227,8 +238,11 @@ export default class MiraiApiHttp {
    * 使用此方法获取 bot 接收到的最老消息和最老各类事件(不会从 MiraiApiHttp 消息记录中删除)
    * @param count 获取消息和事件的数量
    */
-  async peekLatestMessage(count = 10): Promise<Api.Response.FetchMessage> {
-    const { data } = await this.axios.get("/peekLatestMessage", {
+  async peekLatestMessage(count = 10) {
+    const { data } = await this.axios.get<
+      Api.Params.RequestParams<{ count: number }>,
+      AxiosResponse<Api.Response.FetchMessage>
+    >("/peekLatestMessage", {
       params: {
         sessionKey: this.sessionKey,
         count,
@@ -456,8 +470,11 @@ export default class MiraiApiHttp {
   /**
    * 获取 bot 的好友列表
    */
-  async friendList(): Promise<Api.Response.FriendList> {
-    const { data } = await this.axios.get("/friendList", {
+  async friendList() {
+    const { data } = await this.axios.get<
+      Api.Params.BaseRequestParams,
+      AxiosResponse<Api.Response.FriendList>
+    >("/friendList", {
       params: {
         sessionKey: this.sessionKey,
       },
@@ -468,8 +485,11 @@ export default class MiraiApiHttp {
   /**
    * 获取 bot 的群列表
    */
-  async groupList(): Promise<Api.Response.GroupList> {
-    const { data } = await this.axios.get("/groupList", {
+  async groupList() {
+    const { data } = await this.axios.get<
+      Api.Params.BaseRequestParams,
+      AxiosResponse<Api.Response.GroupList>
+    >("/groupList", {
       params: {
         sessionKey: this.sessionKey,
       },
@@ -481,8 +501,11 @@ export default class MiraiApiHttp {
    * 获取 BOT 的群成员列表
    * @param target 指定群的群号
    */
-  async memberList(target: number): Promise<Api.Response.MemberList> {
-    const { data } = await this.axios.get("/memberList", {
+  async memberList(target: number) {
+    const { data } = await this.axios.get<
+      Api.Params.RequestParams<{ target: number }>,
+      AxiosResponse<Api.Response.MemberList>
+    >("/memberList", {
       params: {
         sessionKey: this.sessionKey,
         target,
@@ -626,7 +649,7 @@ export default class MiraiApiHttp {
   /**
    * 传入 info 时，修改群员资料
    * 未传入 info 时，获取群员资料
-   * @param targer 指定群的群号
+   * @param target 指定群的群号
    * @param memberId 群员QQ号
    * @param info 群员资料
    */
@@ -736,12 +759,15 @@ export default class MiraiApiHttp {
   /**
    * 获取 Mangers
    */
-  async managers(): Promise<number[]> {
-    const { data } = await this.axios.get("/managers", {
-      params: {
-        qq: this.qq,
-      },
-    });
+  async managers() {
+    const { data } = await this.axios.get<null, AxiosResponse<number[]>>(
+      "/managers",
+      {
+        params: {
+          qq: this.qq,
+        },
+      }
+    );
     return data;
   }
 
