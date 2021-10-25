@@ -91,7 +91,7 @@ export default class MiraiApiHttp {
         if (res.status === 200 && res.data) {
           const statusCode = (res.data as any).code;
           const message = getMessageFromStatusCode(statusCode);
-          if (message) {
+          if (statusCode && message) {
             this.logger.error(`Code ${statusCode}: ${message}`);
 
             if (statusCode === 3 || statusCode === 4) {
