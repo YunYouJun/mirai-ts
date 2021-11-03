@@ -1,7 +1,7 @@
 # [mirai-ts](https://github.com/YunYouJun/mirai-ts)
 
 [![docs](https://github.com/YunYouJun/mirai-ts/workflows/docs/badge.svg)](https://www.yunyoujun.cn/mirai-ts/)
-[![Compatible Version](https://img.shields.io/badge/mirai--api--http-v2.3.2-blue)](https://github.com/project-mirai/mirai-api-http)
+[![Compatible Version](https://img.shields.io/badge/mirai--api--http-v2.3.3-blue)](https://github.com/project-mirai/mirai-api-http)
 [![npm](https://img.shields.io/npm/v/mirai-ts)](https://www.npmjs.com/package/mirai-ts)
 [![GitHub](https://img.shields.io/github/license/YunYouJun/mirai-ts)](https://github.com/YunYouJun/mirai-ts)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/9b332231afb643df83b59cc8b4188278)](https://www.codacy.com/gh/YunYouJun/mirai-ts/dashboard?utm_source=github.com&utm_medium=referral&utm_content=YunYouJun/mirai-ts&utm_campaign=Badge_Grade)
@@ -17,6 +17,7 @@
 ## 如何使用
 
 > 自行配置好你的 [mirai](https://github.com/mamoe/mirai) 与 [mirai-api-http](https://github.com/project-mirai/mirai-api-http)，确保 `localhost:你配置的端口号/about` 是可访问的。
+> [settings.yml](https://github.com/project-mirai/mirai-api-http#settingyml%E6%A8%A1%E6%9D%BF) 中 `adapterSettings` 的 `http` 与 `ws` 是必须的。
 
 ```sh
 npm install mirai-ts

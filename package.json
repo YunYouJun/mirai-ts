@@ -1,6 +1,6 @@
 {
   "name": "mirai-ts",
-  "version": "2.0.0-beta.6",
+  "version": "2.0.0",
   "description": "Mirai TypeScript SDK",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -48,15 +48,15 @@
   "license": "AGPL-3.0",
   "devDependencies": {
     "@types/js-yaml": "^4.0.4",
-    "@types/node": "^16.11.4",
+    "@types/node": "^16.11.6",
     "@types/ws": "^8.2.0",
-    "@typescript-eslint/eslint-plugin": "^5.1.0",
-    "@typescript-eslint/parser": "^5.1.0",
+    "@typescript-eslint/eslint-plugin": "^5.3.0",
+    "@typescript-eslint/parser": "^5.3.0",
     "dotenv": "^10.0.0",
     "eslint": "^8.1.0",
     "husky": "7.0.4",
     "js-yaml": "^4.1.0",
-    "lint-staged": "^11.2.4",
+    "lint-staged": "^11.2.6",
     "prettier": "^2.4.1",
     "ts-node-dev": "^1.1.8",
     "typedoc": "^0.22.7",
@@ -64,7 +64,7 @@
   },
   "dependencies": {
     "@yunyoujun/logger": "^0.1.4",
-    "axios": "^0.23.0",
+    "axios": "^0.24.0",
     "chalk": "^4.1.2",
     "form-data": "^4.0.0",
     "ws": "^8.2.3"
