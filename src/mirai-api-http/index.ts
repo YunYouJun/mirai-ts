@@ -714,6 +714,7 @@ export default class MiraiApiHttp {
       const interval = setInterval(() => client.ping(), 60000);
       client.on("close", () => clearInterval(interval));
     });
+
     // 绑定 sessionKey
     client.once("message", (data: WebSocket.Data) => {
       const response = JSON.parse(data.toString());
@@ -724,6 +725,7 @@ export default class MiraiApiHttp {
         this.logger.error(response);
       }
     });
+
     client.on("message", (data: WebSocket.Data) => {
       const msg = JSON.parse(data.toString());
       callback(msg.data);
