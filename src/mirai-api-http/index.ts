@@ -86,10 +86,14 @@ export default class MiraiApiHttp {
     this.setting = this.mirai.mahSetting;
 
     const wsSetting = this.setting.adapterSettings.ws;
-    this.ws.address = `ws://${wsSetting.host}:${wsSetting.port}`;
+    this.ws.address =
+      this.mirai.options.ws?.address ||
+      `ws://${wsSetting.host}:${wsSetting.port}`;
 
     const httpSetting = this.setting.adapterSettings.http;
-    this.http.address = `http://${httpSetting.host}:${httpSetting.port}`;
+    this.http.address =
+      this.mirai.options.http?.address ||
+      `http://${httpSetting.host}:${httpSetting.port}`;
 
     this.axios.defaults.baseURL = this.http.address;
     this.axios.defaults.maxContentLength = Infinity;
