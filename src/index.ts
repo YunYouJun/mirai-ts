@@ -29,11 +29,6 @@ export * as template from "./utils/template";
 
 // 类型
 export * from "./types";
-export * as Api from "./types/api";
-export * as Config from "./types/config";
-export * as Contact from "./types/contact";
-export * as MessageType from "./types/message-type";
-export * as EventType from "./types/event-type";
 
 // export
 export { Mirai, Message, MiraiApiHttp, Logger };

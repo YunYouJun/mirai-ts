@@ -1,4 +1,5 @@
-import Mirai, { MessageType, MiraiApiHttpSetting } from "../src/index";
+import Mirai from "../src/index";
+import type { MessageType, MiraiApiHttpSetting } from "../src/index";
 import { getPokeMessage, getVoiceMessage } from "./message";
 import { miraiApiTest } from "./api";
 
@@ -19,6 +20,9 @@ const setting = yaml.load(
 ) as MiraiApiHttpSetting;
 
 const mirai = new Mirai(setting);
+
+// 你也可以使用默认配置，但最好配置一下你的 verifyKey
+// const mirai = new Mirai();
 
 async function app() {
   await mirai.link(botQQ);

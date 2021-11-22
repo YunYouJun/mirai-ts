@@ -7,7 +7,12 @@ import chalk from "chalk";
 import * as axios from "./axios";
 import { AxiosStatic } from "axios";
 import MiraiApiHttp from "./mirai-api-http";
-import { MessageType, EventType, MiraiApiHttpSetting } from ".";
+import type {
+  MessageType,
+  EventType,
+  MiraiApiHttpSetting,
+  MiraiOptions,
+} from ".";
 import Logger from "@yunyoujun/logger";
 
 import { splitText } from "./utils/internal";
@@ -15,6 +20,7 @@ import { isChatMessage } from "./utils/check";
 
 import events from "events";
 import { createHelperForMsg } from "./helper";
+import { defaultMahSetting, defaultMiraiOptions } from "./config";
 
 /**
  * 所有消息
@@ -45,6 +51,8 @@ type SendMessageType = "friend" | "group";
  * Mirai SDK 初始化类
  */
 export default class Mirai {
+  mahSetting: MiraiApiHttpSetting;
+  options: MiraiOptions;
   /**
    * 封装 mirai-api-http 的固有方法
    */
@@ -90,9 +98,22 @@ export default class Mirai {
    * 事件触发器
    */
   eventEmitter = new events.EventEmitter();
-  constructor(public mahSetting: MiraiApiHttpSetting) {
+  constructor(
+    userMahSetting?: Partial<MiraiApiHttpSetting>,
+    userOptions?: MiraiOptions
+  ) {
+    this.mahSetting = {
+      ...defaultMahSetting,
+      ...userMahSetting,
+    };
+
+    this.options = {
+      ...defaultMiraiOptions,
+      ...userOptions,
+    };
+
     this.axios = axios.init();
-    this.api = new MiraiApiHttp(this.mahSetting, this.axios);
+    this.api = new MiraiApiHttp(this, this.axios);
 
     // default
     this.qq = 0;

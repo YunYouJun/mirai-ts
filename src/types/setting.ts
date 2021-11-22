@@ -12,17 +12,19 @@ export interface HttpAdapter {
   /**
    * http server 监听的本地地址
    * 一般为 localhost 即可, 如果多网卡等情况，自定设置
+   * @default "localhost"
    */
   host: string;
   /**
    * http server 监听的端口
    * 与 websocket server 可以重复, 由于协议与路径不同, 不会产生冲突
+   * @default 4859
    */
   port: number;
   /**
    * 配置跨域, * 默认允许来自所有域名
    */
-  cors: string[];
+  cors?: string[];
 }
 
 /**
@@ -32,18 +34,20 @@ export interface WebsocketAdapter {
   /**
    * websocket server 监听的本地地址
    * 一般为 localhost 即可, 如果多网卡等情况，自定设置
+   * @default "localhost"
    */
   host: string;
   /**
    * websocket server 监听的端口
    * 与 http server 可以重复, 由于协议与路径不同, 不会产生冲突
+   * @default 4859
    */
   port: number;
   /**
    * websocket 用于消息同步的字段为 syncId, 一般值为请求时的原值，用于同步一次请求与响应
    * 对于由 websocket server 主动发出的通知, 固定使用一个 syncId, 默认为 ”-1“
    */
-  reservedSyncId: string;
+  reservedSyncId?: string;
 }
 
 /**
@@ -100,7 +104,7 @@ export interface ReverseWebsocketAdapter {
    * websocket 用于消息同步的字段为 syncId, 一般值为请求时的原值，用于同步一次请求与响应
    * 对于由 websocket client 主动发出的通知, 固定使用一个 syncId, 默认为 ”-1“
    */
-  reservedSyncId: string;
+  reservedSyncId?: string;
 }
 
 /**
@@ -131,24 +135,34 @@ export interface MiraiApiHttpSetting {
 
   /**
    * 是否开启认证流程, 若为 true 则建立连接时需要验证 verifyKey
+   * @default true
    */
   enableVerify: boolean;
   /**
-   * 默认由 mirai-api-http 随机生成，建议手动指定。未传入该值时，默认为 'el-psy-congroo'
+   * 默认由 mirai-api-http 随机生成，建议手动指定。
+   * @default "el-psy-congroo"
    */
   verifyKey: string;
+
+  /**
+   * 开启一些调试信息
+   * @default true
+   */
+  debug?: boolean;
 
   /**
    * 是否开启单 session 模式, 若为 true，则自动创建 session 绑定 console 中登录的 bot
    * 开启后，接口中任何 sessionKey 不需要传递参数
    * 若 console 中有多个 bot 登录，则行为未定义
    * 确保 console 中只有一个 bot 登陆时启用
+   * @default false
    */
   singleMode: boolean;
 
   /**
    * 历史消息的缓存大小
    * 同时，也是 http adapter 的消息队列容量
+   * @default 4096
    */
   cacheSize: number;
 

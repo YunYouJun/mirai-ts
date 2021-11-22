@@ -5,8 +5,14 @@
  * @packageDocumentation
  */
 
-import { AxiosStatic, AxiosResponse } from "axios";
-import { MessageType, Api, Config, EventType } from "..";
+import type { AxiosStatic, AxiosResponse } from "axios";
+import type {
+  MiraiApiHttpSetting,
+  MessageType,
+  Api,
+  Config,
+  EventType,
+} from "../types";
 
 // for upload image
 import FormData from "form-data";
@@ -24,7 +30,7 @@ import chalk from "chalk";
 
 // utils
 import { toMessageChain } from "./message";
-import { MiraiApiHttpSetting } from "../types";
+import type Mirai from "../mirai";
 
 type WsCallbackMap = {
   message: (msg: MessageType.ChatMessage) => any;
@@ -40,7 +46,18 @@ interface BaseVerifyParams {
 }
 
 export default class MiraiApiHttp {
+  setting: MiraiApiHttpSetting;
   sessionKey = "";
+
+  /**
+   * http adapter
+   */
+  http: {
+    address: string;
+  } = {
+    address: "",
+  };
+
   /**
    * WebSocket SessionKey
    */
@@ -56,8 +73,6 @@ export default class MiraiApiHttp {
   qq = 0;
   verified = false;
 
-  address: string;
-
   command: Command;
   file: File;
   /**
@@ -67,13 +82,16 @@ export default class MiraiApiHttp {
 
   public logger = new Logger({ prefix: chalk.cyan("[mirai-api-http]") });
 
-  constructor(public setting: MiraiApiHttpSetting, public axios: AxiosStatic) {
+  constructor(public mirai: Mirai, public axios: AxiosStatic) {
+    this.setting = this.mirai.mahSetting;
+
     const wsSetting = this.setting.adapterSettings.ws;
     this.ws.address = `ws://${wsSetting.host}:${wsSetting.port}`;
 
     const httpSetting = this.setting.adapterSettings.http;
-    this.address = `http://${httpSetting.host}:${httpSetting.port}`;
-    this.axios.defaults.baseURL = this.address;
+    this.http.address = `http://${httpSetting.host}:${httpSetting.port}`;
+
+    this.axios.defaults.baseURL = this.http.address;
     this.axios.defaults.maxContentLength = Infinity;
     this.axios.defaults.maxBodyLength = Infinity;
 
@@ -129,7 +147,7 @@ export default class MiraiApiHttp {
    * 使用此方法验证你的身份，并返回一个会话
    */
   async verify(verifyKey = this.setting.verifyKey): Promise<Api.Response.Auth> {
-    this.logger.info(`[http] Address: ${this.address}`);
+    this.logger.info(`[http] Address: ${this.http.address}`);
 
     const { data } = await this.axios.post<
       BaseVerifyParams,
@@ -711,7 +729,10 @@ export default class MiraiApiHttp {
     this.ws.client = client;
 
     client.on("open", () => {
-      const interval = setInterval(() => client.ping(), 60000);
+      const interval = setInterval(
+        () => client.ping(),
+        this.mirai.options.ws?.heartbeatInterval || 60000
+      );
       client.on("close", () => clearInterval(interval));
     });
 
