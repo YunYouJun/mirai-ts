@@ -12,6 +12,7 @@ import type {
   Api,
   Config,
   EventType,
+  UserProfile,
 } from "../types";
 
 // for upload image
@@ -537,6 +538,33 @@ export default class MiraiApiHttp {
   }
 
   /**
+   * 此接口获取 session 绑定 bot 的详细资料
+   * @returns
+   */
+  async botProfile(): Promise<UserProfile> {
+    const { data } = await this.axios.get("/botProfile");
+    return data;
+  }
+
+  /**
+   * 此接口获取好友的详细资料
+   * @returns
+   */
+  async friendProfile(): Promise<UserProfile> {
+    const { data } = await this.axios.get("/friendProfile");
+    return data;
+  }
+
+  /**
+   * 此接口获取群成员的消息资料
+   * @returns
+   */
+  async memberProfile(): Promise<UserProfile> {
+    const { data } = await this.axios.get("/memberProfile");
+    return data;
+  }
+
+  /**
    * 指定群进行全体禁言
    * @param target 指定群的群号
    */
@@ -710,7 +738,7 @@ export default class MiraiApiHttp {
    * 构建 WebSocket 通道
    * @param type
    */
-  _buildWsChannel<T extends "message" | "event" | "all">(
+  private _buildWsChannel<T extends "message" | "event" | "all">(
     type: T,
     callback: WsCallbackMap[T]
   ) {

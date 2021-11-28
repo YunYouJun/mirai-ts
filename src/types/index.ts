@@ -1,5 +1,7 @@
 export * from "./setting";
 
+export * from "./profile";
+
 export * as Api from "./api";
 export * as Config from "./config";
 export * as Contact from "./contact";
