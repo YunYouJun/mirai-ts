@@ -7,7 +7,7 @@ import json from "@rollup/plugin-json";
 import { dependencies } from "./package.json";
 
 const external = Object.keys({ ...dependencies }); // 默认不打包 dependencies,
-const outputName = "MiraiTs"; // 导出的模块名称 PascalCase
+const outputName = "Mirai"; // 导出的模块名称 PascalCase
 
 function getPlugins({
   isBrowser = false,
