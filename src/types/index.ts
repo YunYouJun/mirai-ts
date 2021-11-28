@@ -2,11 +2,12 @@ export * from "./setting";
 
 export * from "./profile";
 
-export * as Api from "./api";
-export * as Config from "./config";
-export * as Contact from "./contact";
-export * as MessageType from "./message-type";
-export * as EventType from "./event-type";
+import * as Api from "./api";
+import * as Config from "./config";
+import * as Contact from "./contact";
+import * as MessageType from "./message-type";
+import * as EventType from "./event-type";
+export { Api, Config, Contact, MessageType, EventType };
 
 /**
  * mirai-ts 自定义配置项，与 mirai-api-http setting 相区别

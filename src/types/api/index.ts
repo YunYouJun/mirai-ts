@@ -3,5 +3,6 @@
  * @packageDocumentation
  */
 
-export * as Params from "./params";
-export * as Response from "./response";
+import * as Params from "./params";
+import * as Response from "./response";
+export { Params, Response };
