@@ -162,9 +162,7 @@ export type FileMoveParams = Api.Params.RequestParams<FileMoveOptions>;
  * [文件操作 Http Adapter](https://github.com/project-mirai/mirai-api-http/blob/master/docs/adapter/HttpAdapter.md#%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C)
  */
 export class File {
-  constructor(public api: MiraiApiHttp) {
-    this.api = api;
-  }
+  constructor(public api: MiraiApiHttp) {}
 
   // 群文件管理
   /**
