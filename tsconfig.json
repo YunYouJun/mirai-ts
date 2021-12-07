@@ -12,7 +12,10 @@
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
-    "noUnusedLocals": true
+    "noUnusedLocals": true,
+    "paths": {
+      "mirai-ts": ["./src/index.ts"]
+    }
   },
-  "include": ["src/**/*.ts"]
+  "exclude": ["dist", "node_modules"]
 }

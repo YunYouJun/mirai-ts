@@ -3,7 +3,7 @@
  * @packageDocumentation
  */
 
-import Mirai from "./mirai";
+import { Mirai } from "./mirai";
 import type { MessageType, EventType } from ".";
 
 import { getPlain } from "./utils/internal";

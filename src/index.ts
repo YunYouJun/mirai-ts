@@ -3,13 +3,12 @@
  * @packageDocumentation
  */
 
-import Mirai from "./mirai";
+import { Mirai } from "./mirai";
 export * from "./mirai";
-export default Mirai;
 
 export type MiraiInstance = Mirai;
 
-import Message from "./message";
+export * as Message from "./message";
 export * from "./mirai-api-http";
 
 // 工具
@@ -23,4 +22,5 @@ export * as template from "./utils/template";
 export * from "./types";
 
 // export
-export { Mirai, Message, Logger };
+export { Logger };
+export default Mirai;

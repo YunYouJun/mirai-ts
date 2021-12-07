@@ -1,5 +1,5 @@
 import { MessageType } from "..";
-import Message from "../message";
+import * as Message from "../message";
 /**
  * 转化为标准的 MessageChain
  */

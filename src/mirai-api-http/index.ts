@@ -37,7 +37,7 @@ import chalk from "chalk";
 
 // utils
 import { toMessageChain } from "./message";
-import type Mirai from "../mirai";
+import type { Mirai } from "../mirai";
 
 type WsCallbackMap = {
   message: (msg: MessageType.ChatMessage) => any;

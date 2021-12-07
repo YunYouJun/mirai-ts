@@ -50,7 +50,7 @@ type SendMessageType = "friend" | "group";
 /**
  * Mirai SDK 初始化类
  */
-export default class Mirai {
+export class Mirai {
   mahSetting: MiraiApiHttpSetting;
   options: MiraiOptions;
   /**
