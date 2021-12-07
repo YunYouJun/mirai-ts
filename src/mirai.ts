@@ -6,7 +6,7 @@
 import chalk from "chalk";
 import * as axios from "./axios";
 import { AxiosStatic } from "axios";
-import MiraiApiHttp from "./mirai-api-http";
+import { MiraiApiHttp } from "./mirai-api-http";
 import type {
   MessageType,
   EventType,

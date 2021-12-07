@@ -5,6 +5,12 @@
  * @packageDocumentation
  */
 
+export * from "./command";
+export * from "./message";
+export * from "./file";
+export * from "./resp";
+export * from "./utils";
+
 import type { AxiosStatic, AxiosResponse } from "axios";
 import type {
   MiraiApiHttpSetting,
@@ -46,7 +52,7 @@ interface BaseVerifyParams {
   verifyKey: string;
 }
 
-export default class MiraiApiHttp {
+export class MiraiApiHttp {
   setting: MiraiApiHttpSetting;
   sessionKey = "";
 
