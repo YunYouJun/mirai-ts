@@ -7,11 +7,17 @@
   "files": [
     "dist"
   ],
+  "exports": {
+    ".": {
+      "require": "./dist/index.js",
+      "import": "./dist/index.mjs"
+    }
+  },
   "scripts": {
     "demo": "node demo/index.js",
     "demo:ts": "ts-node-dev demo/index.ts",
     "prepublishOnly": "npm run build",
-    "build": "rm -rf dist && tsc",
+    "build": "tsup src/index.ts",
     "docs:build": "typedoc",
     "docs:dev": "cd docs && live-server",
     "lint": "eslint --fix . --ext .ts && prettier --write .",
@@ -59,6 +65,7 @@
     "lint-staged": "^12.1.2",
     "prettier": "^2.5.0",
     "ts-node-dev": "^1.1.8",
+    "tsup": "^5.10.3",
     "typedoc": "^0.22.10",
     "typescript": "~4.5.2"
   },

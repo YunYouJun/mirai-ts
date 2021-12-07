@@ -9,7 +9,7 @@ import * as MessageType from "./types/message-type";
  * 生成引用的消息格式
  * @param messageId 消息 ID
  */
-function Quote(messageId: number): MessageType.Quote {
+export function Quote(messageId: number): MessageType.Quote {
   return {
     type: "Quote",
     id: messageId,
@@ -20,7 +20,7 @@ function Quote(messageId: number): MessageType.Quote {
  * 生成艾特默认的消息格式
  * @param target QQ 号
  */
-function At(target: number): MessageType.At {
+export function At(target: number): MessageType.At {
   return {
     type: "At",
     target,
@@ -31,7 +31,7 @@ function At(target: number): MessageType.At {
 /**
  * 生成艾特全体成员的消息格式
  */
-function AtAll(): MessageType.AtAll {
+export function AtAll(): MessageType.AtAll {
   return {
     type: "AtAll",
   };
@@ -42,7 +42,7 @@ function AtAll(): MessageType.AtAll {
  * @param faceId QQ表情编号
  * @param name QQ表情拼音，可选
  */
-function Face(faceId: number, name = ""): MessageType.Face {
+export function Face(faceId: number, name = ""): MessageType.Face {
   return {
     type: "Face",
     faceId,
@@ -54,7 +54,7 @@ function Face(faceId: number, name = ""): MessageType.Face {
  * 生成文本消息格式
  * @param text 文本
  */
-function Plain(text: string): MessageType.Plain {
+export function Plain(text: string): MessageType.Plain {
   return {
     type: "Plain",
     text,
@@ -68,7 +68,7 @@ function Plain(text: string): MessageType.Plain {
  * @param path 图片的路径，发送本地图片，相对路径于 `data/net.mamoe.mirai-api-http/images`
  * @param base64 图片的 Base64 编码
  */
-function Image(
+export function Image(
   imageId: string | null = null,
   url: string | null = null,
   path: string | null = null,
@@ -89,7 +89,7 @@ function Image(
  * @param url 图片的URL，发送时可作网络图片的链接；接收时为腾讯图片服务器的链接，可用于图片下载
  * @param path 图片的路径，发送本地图片，相对路径于 `data/net.mamoe.mirai-api-http/images`
  */
-function FlashImage(
+export function FlashImage(
   imageId: string | null = null,
   url: string | null = null,
   path: string | null = null
@@ -109,7 +109,7 @@ function FlashImage(
  * @param url 语音的URL，发送时可作网络语音的链接；接收时为腾讯语音服务器的链接，可用于语音下载
  * @param path 语音的路径，发送本地语音，相对路径于 `data/net.mamoe.mirai-api-http/voices`
  */
-function Voice(
+export function Voice(
   voiceId: string | null = null,
   url: string | null = null,
   path: string | null = null,
@@ -128,7 +128,7 @@ function Voice(
  * 富文本消息（譬如合并转发）
  * @param xml
  */
-function Xml(xml: string): MessageType.Xml {
+export function Xml(xml: string): MessageType.Xml {
   return {
     type: "Xml",
     xml,
@@ -139,7 +139,7 @@ function Xml(xml: string): MessageType.Xml {
  * Json 消息格式（我也还没看懂这哪里用，欢迎 PR）
  * @param json
  */
-function Json(json: string): MessageType.Json {
+export function Json(json: string): MessageType.Json {
   return {
     type: "Json",
     json,
@@ -150,7 +150,7 @@ function Json(json: string): MessageType.Json {
  * 小程序
  * @param content
  */
-function App(content: string): MessageType.App {
+export function App(content: string): MessageType.App {
   return {
     type: "App",
     content,
@@ -166,7 +166,7 @@ function App(content: string): MessageType.App {
  * - "FangDaZhao": 放大招
  * @param name 戳一戳的类型
  */
-function Poke(name: MessageType.PokeName): MessageType.Poke {
+export function Poke(name: MessageType.PokeName): MessageType.Poke {
   return {
     type: "Poke",
     name,
@@ -184,7 +184,7 @@ function Poke(name: MessageType.PokeName): MessageType.Poke {
  * @param brief 在消息列表显示，可选，默认为 `[分享]$title`
  * @returns
  */
-function MusicShare(
+export function MusicShare(
   kind: MessageType.MusicShareKind,
   title: string,
   summary: string,
@@ -204,19 +204,3 @@ function MusicShare(
     brief,
   };
 }
-
-export default {
-  Quote,
-  At,
-  AtAll,
-  Face,
-  Plain,
-  Image,
-  FlashImage,
-  Voice,
-  Xml,
-  Json,
-  App,
-  Poke,
-  MusicShare,
-};

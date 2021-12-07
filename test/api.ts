@@ -1,4 +1,4 @@
-import Mirai from "../src";
+import { Mirai } from "mirai-ts";
 import { groupId } from "./config";
 import { logger } from "./logger";
 

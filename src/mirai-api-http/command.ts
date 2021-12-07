@@ -3,8 +3,8 @@
  * @packageDocumentation
  */
 
+import type { MiraiApiHttp } from "./index";
 import { AxiosResponse } from "axios";
-import MiraiApiHttp from "./index";
 
 interface CommandInfo {
   name: string;

@@ -5,6 +5,12 @@
  * @packageDocumentation
  */
 
+export * from "./command";
+export * from "./message";
+export * from "./file";
+export * from "./resp";
+export * from "./utils";
+
 import type { AxiosStatic, AxiosResponse } from "axios";
 import type {
   MiraiApiHttpSetting,
@@ -31,7 +37,7 @@ import chalk from "chalk";
 
 // utils
 import { toMessageChain } from "./message";
-import type Mirai from "../mirai";
+import type { Mirai } from "../mirai";
 
 type WsCallbackMap = {
   message: (msg: MessageType.ChatMessage) => any;
@@ -46,7 +52,7 @@ interface BaseVerifyParams {
   verifyKey: string;
 }
 
-export default class MiraiApiHttp {
+export class MiraiApiHttp {
   setting: MiraiApiHttpSetting;
   sessionKey = "";
 

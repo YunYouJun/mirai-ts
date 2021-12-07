@@ -1,5 +1,5 @@
-import Mirai from "../src/index";
-import type { MessageType, MiraiApiHttpSetting } from "../src/index";
+import Mirai from "mirai-ts";
+import type { MessageType, MiraiApiHttpSetting } from "mirai-ts";
 import { getPokeMessage, getVoiceMessage } from "./message";
 import { miraiApiTest } from "./api";
 

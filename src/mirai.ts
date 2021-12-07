@@ -6,7 +6,7 @@
 import chalk from "chalk";
 import * as axios from "./axios";
 import { AxiosStatic } from "axios";
-import MiraiApiHttp from "./mirai-api-http";
+import { MiraiApiHttp } from "./mirai-api-http";
 import type {
   MessageType,
   EventType,
@@ -50,7 +50,7 @@ type SendMessageType = "friend" | "group";
 /**
  * Mirai SDK 初始化类
  */
-export default class Mirai {
+export class Mirai {
   mahSetting: MiraiApiHttpSetting;
   options: MiraiOptions;
   /**

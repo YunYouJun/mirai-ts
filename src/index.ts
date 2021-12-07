@@ -3,22 +3,13 @@
  * @packageDocumentation
  */
 
-import Mirai from "./mirai";
+import { Mirai } from "./mirai";
 export * from "./mirai";
-export default Mirai;
-
-// 必须放在最前面，适配 js require
-if (typeof window === "undefined" && typeof module !== "undefined") {
-  module.exports = Mirai;
-  module.exports.default = Mirai;
-  module.exports.Mirai = Mirai;
-  exports = module.exports;
-}
 
 export type MiraiInstance = Mirai;
 
-import Message from "./message";
-import MiraiApiHttp from "./mirai-api-http";
+export * as Message from "./message";
+export * from "./mirai-api-http";
 
 // 工具
 export * from "./utils/index";
@@ -31,4 +22,5 @@ export * as template from "./utils/template";
 export * from "./types";
 
 // export
-export { Mirai, Message, MiraiApiHttp, Logger };
+export { Logger };
+export default Mirai;
