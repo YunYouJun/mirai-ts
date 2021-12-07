@@ -3,7 +3,7 @@
     "experimentalDecorators": true,
     /* Visit https://aka.ms/tsconfig.json to read more about this file */
     /* Basic Options */
-    "target": "ES5",
+    "target": "ES2016",
     "declaration": true,
     "outDir": "./dist",
     "strict": true,
