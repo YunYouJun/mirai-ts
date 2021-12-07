@@ -3,6 +3,9 @@
  * @packageDocumentation
  */
 
+export * as check from "./check";
+export * as template from "./template";
+
 /**
  * 头像尺寸（允许传入的参数）
  */

@@ -4,7 +4,7 @@ type BaseCardType = "bilibili";
  * 获取卡片类型
  * @param type
  */
-function getInfoByType(type: BaseCardType) {
+export function getInfoByType(type: BaseCardType) {
   const info = {
     icon: "",
     name: "",
@@ -25,7 +25,7 @@ function getInfoByType(type: BaseCardType) {
 /**
  * 卡片信息格式
  */
-interface CardInfo {
+export interface CardInfo {
   type?: BaseCardType;
   /**
    * 简介

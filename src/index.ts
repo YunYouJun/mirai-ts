@@ -12,15 +12,11 @@ export * as Message from "./message";
 export * from "./mirai-api-http";
 
 // 工具
-export * from "./utils/index";
+export * from "./utils";
 // https://www.npmjs.com/package/@yunyoujun/logger
-import Logger from "@yunyoujun/logger";
-export * as check from "./utils/check";
-export * as template from "./utils/template";
+export { Logger } from "@yunyoujun/logger";
 
 // 类型
 export * from "./types";
 
-// export
-export { Logger };
 export default Mirai;
