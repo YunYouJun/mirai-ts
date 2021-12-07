@@ -22,9 +22,12 @@
 ```sh
 npm install mirai-ts
 # yarn add mirai-ts
+
+# 尝试新版本（比如 ES Module）
+npm i mirai-ts@next
 ```
 
-> 由于 mirai-api-http 2.x 已经稳定，mirai-ts@next 将会移除并修改为 latest 作为稳定版发布，如果您想使用 mirai-api-http 1.x，请安装 [mirai-ts@1.x](https://www.npmjs.com/package/mirai-ts/v/1.1.1) 版本。
+> 由于 mirai-api-http 2.x 已经稳定，mirai-ts@latest 为 2.x 版本，如果您想使用 mirai-api-http 1.x，请安装 [mirai-ts@1.x](https://www.npmjs.com/package/mirai-ts/v/1.1.1) 版本。
 
 - [API 文档](https://www.yunyoujun.cn/mirai-ts/)
 - [2.x 迁移指南](./migrate.md)
@@ -52,7 +55,8 @@ ts-node demo/index.ts
 基于 mirai-ts 开发面向浏览器端的应用程序时，您还需要安装 [events](https://github.com/browserify/events) 以在浏览器端替代 Node.js 原生 events 模块。
 
 ```sh
-yarn add events
+pnpm i events
+# yarn add events
 # npm install events mirai-ts
 ```
 
