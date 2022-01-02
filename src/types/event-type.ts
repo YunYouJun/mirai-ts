@@ -6,9 +6,9 @@
 import * as Contact from "./contact";
 import { MessageChain } from "./message-type";
 import {
-  NewFriendRequestOperationType,
-  MemberJoinRequestOperationType,
   BotInvitedJoinGroupRequestOperationType,
+  MemberJoinRequestOperationType,
+  NewFriendRequestOperationType,
 } from "../mirai-api-http/resp";
 import { Api } from "../index";
 

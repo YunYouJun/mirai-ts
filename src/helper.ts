@@ -4,15 +4,15 @@
  */
 
 import { Mirai } from "./mirai";
-import type { MessageType, EventType } from ".";
+import type { EventType, MessageType } from ".";
 
 import { getPlain } from "./utils/internal";
 import { isAt, isChatMessage } from "./utils/check";
 
 import {
-  NewFriendRequestOperationType,
-  MemberJoinRequestOperationType,
   BotInvitedJoinGroupRequestOperationType,
+  MemberJoinRequestOperationType,
+  NewFriendRequestOperationType,
 } from "./mirai-api-http/resp";
 import { SingleMessage } from "./types/message-type";
 

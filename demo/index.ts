@@ -1,4 +1,5 @@
-import Mirai, { MiraiApiHttpSetting } from "mirai-ts";
+import { Mirai } from "mirai-ts";
+import type { MiraiApiHttpSetting } from "mirai-ts";
 import fs from "fs";
 import path from "path";
 import yaml from "js-yaml";

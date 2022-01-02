@@ -11,13 +11,13 @@ export * from "./file";
 export * from "./resp";
 export * from "./utils";
 
-import type { AxiosStatic, AxiosResponse } from "axios";
+import type { AxiosResponse, AxiosStatic } from "axios";
 import type {
-  MiraiApiHttpSetting,
-  MessageType,
   Api,
   Config,
   EventType,
+  MessageType,
+  MiraiApiHttpSetting,
   UserProfile,
 } from "../types";
 

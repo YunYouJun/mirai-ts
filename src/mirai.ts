@@ -8,8 +8,8 @@ import * as axios from "./axios";
 import { AxiosStatic } from "axios";
 import { MiraiApiHttp } from "./mirai-api-http";
 import type {
-  MessageType,
   EventType,
+  MessageType,
   MiraiApiHttpSetting,
   MiraiOptions,
 } from ".";
