@@ -13,7 +13,7 @@ import type {
   MiraiApiHttpSetting,
   MiraiOptions,
 } from ".";
-import Logger from "@yunyoujun/logger";
+import { Logger } from "@yunyoujun/logger";
 
 import { splitText } from "./utils/internal";
 import { isChatMessage } from "./utils/check";

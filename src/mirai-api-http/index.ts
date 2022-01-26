@@ -32,7 +32,7 @@ import { Resp } from "./resp";
 
 // 处理状态码
 import { getMessageFromStatusCode } from "./utils";
-import Logger from "@yunyoujun/logger";
+import { Logger } from "@yunyoujun/logger";
 import chalk from "chalk";
 
 // utils
