@@ -21,6 +21,7 @@ import { isChatMessage } from "./utils/check";
 import events from "events";
 import { createHelperForMsg } from "./helper";
 import { defaultMahSetting, defaultMiraiOptions } from "./config";
+import pkg from "../package.json";
 
 /**
  * 所有消息
@@ -130,7 +131,6 @@ export class Mirai {
   }
 
   async about() {
-    const pkg = require("../package.json");
     this.logger.info(`Version ${pkg.version}`);
     this.logger.info(`Docs: ${pkg.homepage}`);
     this.logger.info(`GitHub: ${pkg.repository.url}`);
