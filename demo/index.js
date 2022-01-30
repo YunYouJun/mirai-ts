@@ -1,4 +1,4 @@
-const Mirai = require("mirai-ts");
+const { Mirai } = require("mirai-ts");
 const fs = require("fs");
 const path = require("path");
 const yaml = require("js-yaml");
