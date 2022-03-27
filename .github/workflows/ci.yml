@@ -1,4 +1,4 @@
-name: docs
+name: ci
 on:
   push:
     branches:
@@ -15,11 +15,5 @@ jobs:
           node-version: "16.x"
 
       - run: npm install
-      - run: npm run docs:build
-
-      - name: Deploy
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./docs
-          force_orphan: true
+      - run: npm run lint
+      - run: npm run build
