@@ -3,7 +3,7 @@
  * @packageDocumentation
  */
 
-import type * as MessageType from "./types/message-type";
+import type * as MessageType from './types/message-type'
 
 /**
  * 生成引用的消息格式
@@ -11,9 +11,9 @@ import type * as MessageType from "./types/message-type";
  */
 export function Quote(messageId: number): MessageType.Quote {
   return {
-    type: "Quote",
+    type: 'Quote',
     id: messageId,
-  };
+  }
 }
 
 /**
@@ -22,10 +22,10 @@ export function Quote(messageId: number): MessageType.Quote {
  */
 export function At(target: number): MessageType.At {
   return {
-    type: "At",
+    type: 'At',
     target,
-    display: "",
-  };
+    display: '',
+  }
 }
 
 /**
@@ -33,8 +33,8 @@ export function At(target: number): MessageType.At {
  */
 export function AtAll(): MessageType.AtAll {
   return {
-    type: "AtAll",
-  };
+    type: 'AtAll',
+  }
 }
 
 /**
@@ -42,12 +42,12 @@ export function AtAll(): MessageType.AtAll {
  * @param faceId QQ表情编号
  * @param name QQ表情拼音，可选
  */
-export function Face(faceId: number, name = ""): MessageType.Face {
+export function Face(faceId: number, name = ''): MessageType.Face {
   return {
-    type: "Face",
+    type: 'Face',
     faceId,
     name,
-  };
+  }
 }
 
 /**
@@ -56,9 +56,9 @@ export function Face(faceId: number, name = ""): MessageType.Face {
  */
 export function Plain(text: string): MessageType.Plain {
   return {
-    type: "Plain",
+    type: 'Plain',
     text,
-  };
+  }
 }
 
 /**
@@ -72,15 +72,15 @@ export function Image(
   imageId: string | null = null,
   url: string | null = null,
   path: string | null = null,
-  base64: string | null = null
+  base64: string | null = null,
 ): MessageType.Image {
   return {
-    type: "Image",
+    type: 'Image',
     imageId,
     url,
     path,
     base64,
-  };
+  }
 }
 
 /**
@@ -92,14 +92,14 @@ export function Image(
 export function FlashImage(
   imageId: string | null = null,
   url: string | null = null,
-  path: string | null = null
+  path: string | null = null,
 ): MessageType.FlashImage {
   return {
-    type: "FlashImage",
+    type: 'FlashImage',
     imageId,
     url,
     path,
-  };
+  }
 }
 
 /**
@@ -113,15 +113,15 @@ export function Voice(
   voiceId: string | null = null,
   url: string | null = null,
   path: string | null = null,
-  base64: string | null = null
+  base64: string | null = null,
 ): MessageType.Voice {
   return {
-    type: "Voice",
+    type: 'Voice',
     voiceId,
     url,
     path,
     base64,
-  };
+  }
 }
 
 /**
@@ -130,9 +130,9 @@ export function Voice(
  */
 export function Xml(xml: string): MessageType.Xml {
   return {
-    type: "Xml",
+    type: 'Xml',
     xml,
-  };
+  }
 }
 
 /**
@@ -141,9 +141,9 @@ export function Xml(xml: string): MessageType.Xml {
  */
 export function Json(json: string): MessageType.Json {
   return {
-    type: "Json",
+    type: 'Json',
     json,
-  };
+  }
 }
 
 /**
@@ -152,9 +152,9 @@ export function Json(json: string): MessageType.Json {
  */
 export function App(content: string): MessageType.App {
   return {
-    type: "App",
+    type: 'App',
     content,
-  };
+  }
 }
 
 /**
@@ -168,9 +168,9 @@ export function App(content: string): MessageType.App {
  */
 export function Poke(name: MessageType.PokeName): MessageType.Poke {
   return {
-    type: "Poke",
+    type: 'Poke',
     name,
-  };
+  }
 }
 
 /**
@@ -191,10 +191,10 @@ export function MusicShare(
   jumpUrl: string,
   pictureUrl: string,
   musicUrl: string,
-  brief?: string
+  brief?: string,
 ): MessageType.MusicShare {
   return {
-    type: "MusicShare",
+    type: 'MusicShare',
     kind,
     title,
     summary,
@@ -202,5 +202,5 @@ export function MusicShare(
     pictureUrl,
     musicUrl,
     brief,
-  };
+  }
 }

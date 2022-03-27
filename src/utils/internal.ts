@@ -3,7 +3,7 @@
  * @packageDocumentation
  */
 
-import type * as MessageType from "../types/message-type";
+import type * as MessageType from '../types/message-type'
 
 /**
  * 获取纯文本
@@ -12,11 +12,11 @@ import type * as MessageType from "../types/message-type";
  * @param messageChain 消息链
  */
 export function getPlain(messageChain: MessageType.MessageChain) {
-  let msg = "";
+  let msg = ''
   messageChain.forEach((chain) => {
-    if (chain.type === "Plain") msg += chain.text;
-  });
-  return msg;
+    if (chain.type === 'Plain') msg += chain.text
+  })
+  return msg
 }
 
 /**
@@ -24,15 +24,16 @@ export function getPlain(messageChain: MessageType.MessageChain) {
  * @param text
  */
 export function splitText(text: string): string[] {
-  const sections = [];
+  const sections = []
   if (text.length < 900) {
-    sections.push(text);
-  } else {
-    const number = Math.ceil(text.length / 800);
+    sections.push(text)
+  }
+  else {
+    const number = Math.ceil(text.length / 800)
     for (let i = 0; i < number; i++) {
-      const section = text.slice(i * 800, (i + 1) * 800);
-      sections.push(section);
+      const section = text.slice(i * 800, (i + 1) * 800)
+      sections.push(section)
     }
   }
-  return sections;
+  return sections
 }

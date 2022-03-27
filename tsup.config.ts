@@ -1,4 +1,4 @@
-import { defineConfig } from "tsup";
+import { defineConfig } from 'tsup'
 
 export default defineConfig((options) => {
   return {
@@ -6,7 +6,7 @@ export default defineConfig((options) => {
     clean: true,
     dts: true,
     minify: !options.watch,
-    entryPoints: ["src/index.ts"],
-    format: ["esm", "cjs"],
-  };
-});
+    entryPoints: ['src/index.ts'],
+    format: ['esm', 'cjs'],
+  }
+})

@@ -10,27 +10,27 @@ export interface GroupConfig {
   /**
    * 群名
    */
-  name?: string;
+  name?: string
   /**
    * 群公告
    */
-  announcement?: string;
+  announcement?: string
   /**
    * 是否开启坦白说
    */
-  confessTalk?: boolean;
+  confessTalk?: boolean
   /**
    * 是否允许群员邀请
    */
-  allowMemberInvite?: boolean;
+  allowMemberInvite?: boolean
   /**
    * 是否开启自动审批入群
    */
-  autoApprove?: boolean;
+  autoApprove?: boolean
   /**
    * 是否允许匿名聊天
    */
-  anonymousChat?: boolean;
+  anonymousChat?: boolean
 }
 
 /**
@@ -40,9 +40,9 @@ export interface MemberInfo {
   /**
    * 群名片
    */
-  name?: string;
+  name?: string
   /**
    * 群头衔
    */
-  specialTitle?: string;
+  specialTitle?: string
 }

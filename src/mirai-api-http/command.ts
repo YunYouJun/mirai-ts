@@ -3,14 +3,14 @@
  * @packageDocumentation
  */
 
-import type { AxiosResponse } from "axios";
-import type { MiraiApiHttp } from "./index";
+import type { AxiosResponse } from 'axios'
+import type { MiraiApiHttp } from './index'
 
 interface CommandInfo {
-  name: string;
-  sender: number;
-  group: number;
-  args: string[];
+  name: string
+  sender: number
+  group: number
+  args: string[]
 }
 
 /**
@@ -26,10 +26,10 @@ export class Command {
    * - 当指令通过其他方式发送时，如控制台、HTTP 接口等，sender 和 group 均为 0
    */
   async listen(): Promise<CommandInfo> {
-    const { data } = (await this.api.axios.post("/command", {
+    const { data } = (await this.api.axios.post('/command', {
       verifyKey: this.api.setting.verifyKey,
-    })) as AxiosResponse<CommandInfo>;
-    return data;
+    })) as AxiosResponse<CommandInfo>
+    return data
   }
 
   /**
@@ -43,16 +43,16 @@ export class Command {
     name: string,
     alias: string[],
     description: string,
-    usage?: string
+    usage?: string,
   ) {
-    const { data } = await this.api.axios.post("/command/register", {
+    const { data } = await this.api.axios.post('/command/register', {
       verifyKey: this.api.setting.verifyKey,
       name,
       alias,
       description,
       usage,
-    });
-    return data;
+    })
+    return data
   }
 
   /**
@@ -61,11 +61,11 @@ export class Command {
    * @param args 指令参数
    */
   async send(name: string, args: string[]) {
-    const { data } = await this.api.axios.post("/command/send", {
+    const { data } = await this.api.axios.post('/command/send', {
       verifyKey: this.api.setting.verifyKey,
       name,
       args,
-    });
-    return data;
+    })
+    return data
   }
 }

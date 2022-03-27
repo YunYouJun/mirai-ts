@@ -1,4 +1,4 @@
-type BaseCardType = "bilibili";
+type BaseCardType = 'bilibili'
 
 /**
  * 获取卡片类型
@@ -6,55 +6,55 @@ type BaseCardType = "bilibili";
  */
 export function getInfoByType(type: BaseCardType) {
   const info = {
-    icon: "",
-    name: "",
-  };
+    icon: '',
+    name: '',
+  }
   switch (type) {
-    case "bilibili":
-      info.name = "哔哩哔哩";
-      info.icon =
-        "http://miniapp.gtimg.cn/public/appicon/432b76be3a548fc128acaa6c1ec90131_200.jpg";
-      break;
+    case 'bilibili':
+      info.name = '哔哩哔哩'
+      info.icon
+        = 'http://miniapp.gtimg.cn/public/appicon/432b76be3a548fc128acaa6c1ec90131_200.jpg'
+      break
 
     default:
-      break;
+      break
   }
-  return info;
+  return info
 }
 
 /**
  * 卡片信息格式
  */
 export interface CardInfo {
-  type?: BaseCardType;
+  type?: BaseCardType
   /**
    * 简介
    */
-  brief?: string;
+  brief?: string
   /**
    * 卡片链接
    */
-  url: string;
+  url: string
   /**
    * 卡片标题
    */
-  title?: string;
+  title?: string
   /**
    * 卡片摘要
    */
-  summary?: string;
+  summary?: string
   /**
    * 卡片封面图
    */
-  cover: string;
+  cover: string
   /**
    * 卡片图标
    */
-  icon?: string;
+  icon?: string
   /**
    * 卡片名称
    */
-  name?: string;
+  name?: string
 }
 
 /**
@@ -76,7 +76,7 @@ export interface CardInfo {
  * @param info
  */
 export function card(info: CardInfo) {
-  if (info.type) info = Object.assign(getInfoByType(info.type), info);
+  if (info.type) info = Object.assign(getInfoByType(info.type), info)
 
-  return `<?xml version='1.0' encoding='UTF-8' standalone='yes'?><msg templateID="123" url="${info.url}" serviceID="1" action="web" actionData="" a_actionData="" i_actionData="" brief="${info.brief}" flag="0"><item layout="2"><picture cover="${info.cover}"/><title>${info.title}</title><summary>${info.summary}</summary></item><source url="${info.url}" icon="${info.icon}" name="${info.name}" appid="0" action="web" actionData="" a_actionData="tencent0://" i_actionData=""/></msg>`;
+  return `<?xml version='1.0' encoding='UTF-8' standalone='yes'?><msg templateID="123" url="${info.url}" serviceID="1" action="web" actionData="" a_actionData="" i_actionData="" brief="${info.brief}" flag="0"><item layout="2"><picture cover="${info.cover}"/><title>${info.title}</title><summary>${info.summary}</summary></item><source url="${info.url}" icon="${info.icon}" name="${info.name}" appid="0" action="web" actionData="" a_actionData="tencent0://" i_actionData=""/></msg>`
 }

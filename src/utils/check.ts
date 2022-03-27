@@ -3,8 +3,8 @@
  * @packageDocumentation
  */
 
-import type * as MessageType from "../types/message-type";
-import type * as EventType from "../types/event-type";
+import type * as MessageType from '../types/message-type'
+import type * as EventType from '../types/event-type'
 
 /**
  * 配置类型
@@ -15,17 +15,17 @@ import type * as EventType from "../types/event-type";
  * 正则表达式
  */
 export interface Re {
-  pattern: string;
-  flags?: string;
+  pattern: string
+  flags?: string
 }
 
 /**
  * 匹配配置
  */
 export interface Match {
-  re?: Re | string;
-  is?: string | string[];
-  includes?: string | string[];
+  re?: Re | string
+  is?: string | string[]
+  includes?: string | string[]
 }
 
 // 匹配
@@ -35,8 +35,8 @@ export interface Match {
  * @param keywords 关键字
  */
 export function is(str: string, keywords: string | string[]): boolean {
-  if (Array.isArray(keywords)) return keywords.includes(str);
-  else return str === keywords;
+  if (Array.isArray(keywords)) return keywords.includes(str)
+  else return str === keywords
 }
 
 /**
@@ -50,10 +50,11 @@ export function includes(str: string, keywords: string | string[]): boolean {
       /**
        * 有 false 时跳出循环
        */
-      return str.includes(keyword);
-    });
-  } else {
-    return str.includes(keywords);
+      return str.includes(keyword)
+    })
+  }
+  else {
+    return str.includes(keywords)
   }
 }
 
@@ -64,15 +65,15 @@ export function includes(str: string, keywords: string | string[]): boolean {
  */
 export function re(
   str: string,
-  config: Re | string
+  config: Re | string,
 ): RegExpMatchArray | boolean {
-  let regExp = null;
-  if (typeof config === "string") regExp = new RegExp(config);
-  else regExp = new RegExp(config.pattern, config.flags || "i");
+  let regExp = null
+  if (typeof config === 'string') regExp = new RegExp(config)
+  else regExp = new RegExp(config.pattern, config.flags || 'i')
 
-  const result = regExp.exec(str);
-  if (result && result[0]) return result;
-  else return false;
+  const result = regExp.exec(str)
+  if (result && result[0]) return result
+  else return false
 }
 
 /**
@@ -82,12 +83,12 @@ export function re(
  */
 export function match(
   str: string,
-  ans: Match
+  ans: Match,
 ): boolean | RegExpMatchArray | null {
-  if (ans.re) return re(str, ans.re);
-  if (ans.is) return is(str, ans.is);
-  if (ans.includes) return includes(str, ans.includes);
-  return false;
+  if (ans.re) return re(str, ans.re)
+  if (ans.is) return is(str, ans.is)
+  if (ans.includes) return includes(str, ans.includes)
+  return false
 }
 
 // ------------
@@ -99,10 +100,10 @@ export function match(
  * @param msg 消息链
  */
 export function isChatMessage(
-  msg: MessageType.ChatMessage | EventType.Event
+  msg: MessageType.ChatMessage | EventType.Event,
 ): msg is MessageType.ChatMessage {
-  const msgType = ["FriendMessage", "GroupMessage", "TempMessage"];
-  return msgType.includes(msg.type);
+  const msgType = ['FriendMessage', 'GroupMessage', 'TempMessage']
+  return msgType.includes(msg.type)
 }
 
 /**
@@ -113,21 +114,22 @@ export function isChatMessage(
  */
 export function isAt(
   msg: MessageType.ChatMessage,
-  qq?: number
+  qq?: number,
 ): boolean | MessageType.At {
   if (qq) {
     return msg.messageChain.some((singleMessage) => {
-      return singleMessage.type === "At" && singleMessage.target === qq;
-    });
-  } else {
-    let atMsg: MessageType.At | undefined;
+      return singleMessage.type === 'At' && singleMessage.target === qq
+    })
+  }
+  else {
+    let atMsg: MessageType.At | undefined
     msg.messageChain.some((singleMessage) => {
-      if (singleMessage.type === "At") {
-        atMsg = singleMessage;
-        return true;
+      if (singleMessage.type === 'At') {
+        atMsg = singleMessage
+        return true
       }
-      return false;
-    });
-    return atMsg || false;
+      return false
+    })
+    return atMsg || false
   }
 }

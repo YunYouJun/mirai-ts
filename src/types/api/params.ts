@@ -1,108 +1,108 @@
-import type * as Config from "../config";
-import type * as MessageType from "../message-type";
+import type * as Config from '../config'
+import type * as MessageType from '../message-type'
 
 export interface BaseRequestParams {
-  sessionKey: string;
+  sessionKey: string
 }
 
-export type RequestParams<T> = T & BaseRequestParams;
+export type RequestParams<T> = T & BaseRequestParams
 
 /**
  * 基础的发送消息格式
  */
 export type SendMessage = RequestParams<{
-  target: number;
-  messageChain: MessageType.MessageChain;
-}>;
+  target: number
+  messageChain: MessageType.MessageChain
+}>
 
 /**
  * 发送好友消息的请求格式
  */
 export interface SendFriendMessage extends SendMessage {
-  quote?: number;
+  quote?: number
 }
 
 export interface SendGroupMessage extends SendMessage {
-  quote?: number;
+  quote?: number
 }
 
 export type SendTempMessage = RequestParams<{
-  messageChain: MessageType.MessageChain;
-  qq: number;
-  group: number;
-  quote?: number;
-}>;
+  messageChain: MessageType.MessageChain
+  qq: number
+  group: number
+  quote?: number
+}>
 
 export type SendImageMessage = RequestParams<{
-  urls: string[];
-  target?: number;
-  qq?: number;
-  group?: number;
-}>;
+  urls: string[]
+  target?: number
+  qq?: number
+  group?: number
+}>
 
 export type Recall = RequestParams<{
-  target: number | MessageType.ChatMessage;
-}>;
+  target: number | MessageType.ChatMessage
+}>
 
 export type Unmute = RequestParams<{
-  target: number;
-  memberId: number;
-}>;
+  target: number
+  memberId: number
+}>
 
 export interface Mute extends Unmute {
-  time: number;
+  time: number
 }
 
 export type MuteAll = RequestParams<{
-  target: number;
-}>;
+  target: number
+}>
 
-export type UnmuteAll = MuteAll;
+export type UnmuteAll = MuteAll
 
 export type Kick = RequestParams<{
-  target: number;
-  memberId: number;
-  msg: string;
-}>;
+  target: number
+  memberId: number
+  msg: string
+}>
 
-export type Quit = MuteAll;
+export type Quit = MuteAll
 
 export type GroupConfig = RequestParams<{
-  target: number;
-  config?: Config.GroupConfig;
-}>;
+  target: number
+  config?: Config.GroupConfig
+}>
 
 export type MemberInfo = RequestParams<{
-  target: number;
-  memberId: number;
-  info?: Config.MemberInfo;
-}>;
+  target: number
+  memberId: number
+  info?: Config.MemberInfo
+}>
 
 export type SetEssence = RequestParams<{
-  target: number;
-}>;
+  target: number
+}>
 
 export type SendNudge = RequestParams<{
-  target: number;
-  subject: number;
-  kind: "Friend" | "Group" | "Stranger";
-}>;
+  target: number
+  subject: number
+  kind: 'Friend' | 'Group' | 'Stranger'
+}>
 
 // file
 
 export type GroupFileRename = RequestParams<{
-  target: number;
-  id: string;
-  rename: string;
-}>;
+  target: number
+  id: string
+  rename: string
+}>
 
 export type GroupMkdir = RequestParams<{
-  group: number;
-  dir: string;
-}>;
+  group: number
+  dir: string
+}>
 
 export type GroupFileMove = RequestParams<{
-  target: number;
-  id: string;
-  movePath: string;
-}>;
+  target: number
+  id: string
+  movePath: string
+}>

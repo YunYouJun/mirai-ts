@@ -1,11 +1,11 @@
-import { Message, MessageType } from "../src/index";
+import { Message, MessageType } from '../src/index'
 
 /**
  * 戳一戳消息
  * @param mirai
  */
 export function getPokeMessage() {
-  return [Message.Poke(MessageType.PokeName.Poke)];
+  return [Message.Poke(MessageType.PokeName.Poke)]
 }
 
 /**
@@ -13,5 +13,5 @@ export function getPokeMessage() {
  * @param mirai
  */
 export function getVoiceMessage() {
-  return [Message.Voice(null, null, "adnd.amr")];
+  return [Message.Voice(null, null, 'adnd.amr')]
 }

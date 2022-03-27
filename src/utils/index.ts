@@ -3,13 +3,13 @@
  * @packageDocumentation
  */
 
-export * as check from "./check";
-export * as template from "./template";
+export * as check from './check'
+export * as template from './template'
 
 /**
  * 头像尺寸（允许传入的参数）
  */
-export type AvatarSize = 1 | 2 | 3 | 4 | 5 | 40 | 100 | 140 | 640;
+export type AvatarSize = 1 | 2 | 3 | 4 | 5 | 40 | 100 | 140 | 640
 
 /**
  * 获取 QQ 头像链接
@@ -27,12 +27,12 @@ export type AvatarSize = 1 | 2 | 3 | 4 | 5 | 40 | 100 | 140 | 640;
  */
 export function getAvatarById(
   id: number,
-  type: "friend" | "group" = "friend",
-  size: AvatarSize = 640
+  type: 'friend' | 'group' = 'friend',
+  size: AvatarSize = 640,
 ): string | null {
-  let url = null;
-  if (type === "friend") url = `https://q1.qlogo.cn/g?b=qq&nk=${id}&s=${size}`;
-  else if (type === "group") url = `https://p.qlogo.cn/gh/${id}/${id}/${size}`;
+  let url = null
+  if (type === 'friend') url = `https://q1.qlogo.cn/g?b=qq&nk=${id}&s=${size}`
+  else if (type === 'group') url = `https://p.qlogo.cn/gh/${id}/${id}/${size}`
 
-  return url;
+  return url
 }

@@ -1,6 +1,6 @@
-import type { AxiosResponse } from "axios";
-import type { Api, EventType } from "..";
-import type { MiraiApiHttp } from "./index";
+import type { AxiosResponse } from 'axios'
+import type { Api, EventType } from '..'
+import type { MiraiApiHttp } from './index'
 
 /**
  * - `0` 同意添加好友
@@ -74,14 +74,14 @@ export enum BotInvitedJoinGroupRequestOperationType {
 export class Resp {
   constructor(private api: MiraiApiHttp) {}
 
-  async _request(event: EventType.RequestEvent, operate: number, message = "") {
+  async _request(event: EventType.RequestEvent, operate: number, message = '') {
     const { data } = await this.api.axios.post<
-      null,
-      AxiosResponse<
-        | Api.Response.NewFriendRequestEvent
-        | Api.Response.MemberJoinRequestEvent
-        | Api.Response.BotInvitedJoinGroupRequestEvent
-      >
+    null,
+    AxiosResponse<
+    | Api.Response.NewFriendRequestEvent
+    | Api.Response.MemberJoinRequestEvent
+    | Api.Response.BotInvitedJoinGroupRequestEvent
+    >
     >(`/resp/${event.type[0].toLowerCase()}${event.type.substring(1)}`, {
       sessionKey: this.api.sessionKey,
       eventId: event.eventId,
@@ -89,8 +89,8 @@ export class Resp {
       groupId: event.groupId,
       operate,
       message,
-    });
-    return data;
+    })
+    return data
   }
 
   /**
@@ -102,13 +102,13 @@ export class Resp {
   newFriendRequest(
     event: EventType.NewFriendRequestEvent,
     operate: NewFriendRequestOperationType,
-    message?: string
+    message?: string,
   ) {
     return this._request(
       event,
       operate,
-      message
-    ) as Promise<Api.Response.NewFriendRequestEvent>;
+      message,
+    ) as Promise<Api.Response.NewFriendRequestEvent>
   }
 
   /**
@@ -120,13 +120,13 @@ export class Resp {
   memberJoinRequest(
     event: EventType.MemberJoinRequestEvent,
     operate: MemberJoinRequestOperationType,
-    message?: string
+    message?: string,
   ) {
     return this._request(
       event,
       operate,
-      message
-    ) as Promise<Api.Response.MemberJoinRequestEvent>;
+      message,
+    ) as Promise<Api.Response.MemberJoinRequestEvent>
   }
 
   /**
@@ -138,12 +138,12 @@ export class Resp {
   botInvitedJoinGroupRequest(
     event: EventType.BotInvitedJoinGroupRequestEvent,
     operate: BotInvitedJoinGroupRequestOperationType,
-    message?: string
+    message?: string,
   ) {
     return this._request(
       event,
       operate,
-      message
-    ) as Promise<Api.Response.BotInvitedJoinGroupRequestEvent>;
+      message,
+    ) as Promise<Api.Response.BotInvitedJoinGroupRequestEvent>
   }
 }

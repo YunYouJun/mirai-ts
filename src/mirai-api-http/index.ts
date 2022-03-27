@@ -5,11 +5,11 @@
  * @packageDocumentation
  */
 
-import type { AxiosResponse, AxiosStatic } from "axios";
-import FormData from "form-data";
-import WebSocket from "ws";
-import { Logger } from "@yunyoujun/logger";
-import chalk from "chalk";
+import type { AxiosResponse, AxiosStatic } from 'axios'
+import FormData from 'form-data'
+import WebSocket from 'ws'
+import { Logger } from '@yunyoujun/logger'
+import chalk from 'chalk'
 import type {
   Api,
   Config,
@@ -17,98 +17,98 @@ import type {
   MessageType,
   MiraiApiHttpSetting,
   UserProfile,
-} from "../types";
+} from '../types'
 
 // for upload image
 
 // nested api url
-import type { Mirai } from "../mirai";
-import { Command } from "./command";
-import { File } from "./file";
-import { Resp } from "./resp";
+import type { Mirai } from '../mirai'
+import { Command } from './command'
+import { File } from './file'
+import { Resp } from './resp'
 
 // 处理状态码
-import { getMessageFromStatusCode } from "./utils";
+import { getMessageFromStatusCode } from './utils'
 
 // utils
-import { toMessageChain } from "./message";
+import { toMessageChain } from './message'
 
-export * from "./command";
-export * from "./message";
-export * from "./file";
-export * from "./resp";
-export * from "./utils";
+export * from './command'
+export * from './message'
+export * from './file'
+export * from './resp'
+export * from './utils'
 
 interface WsCallbackMap {
-  message: (msg: MessageType.ChatMessage) => any;
-  event: (event: EventType.Event) => any;
-  all: (data: EventType.Event | MessageType.ChatMessage) => any;
+  message: (msg: MessageType.ChatMessage) => any
+  event: (event: EventType.Event) => any
+  all: (data: EventType.Event | MessageType.ChatMessage) => any
 }
 
 /**
  * 基础的验证参数
  */
 interface BaseVerifyParams {
-  verifyKey: string;
+  verifyKey: string
 }
 
 export class MiraiApiHttp {
-  setting: MiraiApiHttpSetting;
-  sessionKey = "";
+  setting: MiraiApiHttpSetting
+  sessionKey = ''
 
   /**
    * http adapter
    */
   http: {
-    address: string;
+    address: string
   } = {
-    address: "",
-  };
+      address: '',
+    }
 
   /**
    * WebSocket SessionKey
    */
   ws: {
-    sessionKey: string;
-    address: string;
-    client?: WebSocket;
+    sessionKey: string
+    address: string
+    client?: WebSocket
   } = {
-    sessionKey: "",
-    address: "",
-  };
+      sessionKey: '',
+      address: '',
+    }
 
-  qq = 0;
-  verified = false;
+  qq = 0
+  verified = false
 
-  command: Command;
-  file: File;
+  command: Command
+  file: File
   /**
    * [申请事件 | EventType](https://github.com/project-mirai/mirai-api-http/blob/master/docs/EventType.md#%E7%94%B3%E8%AF%B7%E4%BA%8B%E4%BB%B6)
    */
-  resp: Resp;
+  resp: Resp
 
-  public logger = new Logger({ prefix: chalk.cyan("[mirai-api-http]") });
+  public logger = new Logger({ prefix: chalk.cyan('[mirai-api-http]') })
 
   constructor(public mirai: Mirai, public axios: AxiosStatic) {
-    this.setting = this.mirai.mahSetting;
+    this.setting = this.mirai.mahSetting
 
-    const wsSetting = this.setting.adapterSettings.ws;
-    this.ws.address =
-      this.mirai.options.ws?.address ||
-      `ws://${wsSetting.host}:${wsSetting.port}`;
+    const wsSetting = this.setting.adapterSettings.ws
+    this.ws.address
+      = this.mirai.options.ws?.address
+      || `ws://${wsSetting.host}:${wsSetting.port}`
 
-    const httpSetting = this.setting.adapterSettings.http;
-    this.http.address =
-      this.mirai.options.http?.address ||
-      `http://${httpSetting.host}:${httpSetting.port}`;
+    const httpSetting = this.setting.adapterSettings.http
+    this.http.address
+      = this.mirai.options.http?.address
+      || `http://${httpSetting.host}:${httpSetting.port}`
 
-    this.axios.defaults.baseURL = this.http.address;
-    this.axios.defaults.maxContentLength = Infinity;
-    this.axios.defaults.maxBodyLength = Infinity;
+    this.axios.defaults.baseURL = this.http.address
+    this.axios.defaults.maxContentLength = Infinity
+    this.axios.defaults.maxBodyLength = Infinity
 
-    this.command = new Command(this);
-    this.file = new File(this);
-    this.resp = new Resp(this);
+    this.command = new Command(this)
+    this.file = new File(this)
+    this.resp = new Resp(this)
   }
 
   /**
@@ -116,29 +116,29 @@ export class MiraiApiHttp {
    */
   async handleStatusCode() {
     this.axios.interceptors.response.use(
-      async (res) => {
+      async(res) => {
         if (res.status === 200 && res.data) {
-          const statusCode = (res.data as any).code;
-          const message = getMessageFromStatusCode(statusCode);
+          const statusCode = (res.data as any).code
+          const message = getMessageFromStatusCode(statusCode)
           if (statusCode && message) {
-            this.logger.error(`Code ${statusCode}: ${message}`);
+            this.logger.error(`Code ${statusCode}: ${message}`)
 
             if (statusCode === 3 || statusCode === 4) {
-              this.logger.warning("正在尝试重新建立连接...");
-              await this.verify();
-              await this.bind(this.qq);
+              this.logger.warning('正在尝试重新建立连接...')
+              await this.verify()
+              await this.bind(this.qq)
             }
           }
         }
-        return res;
+        return res
       },
       (err) => {
-        this.logger.error(`响应失败：${err.message}`);
-        if (process.env.NODE_ENV !== "production") console.error(err);
+        this.logger.error(`响应失败：${err.message}`)
+        if (process.env.NODE_ENV !== 'production') console.error(err)
 
-        return Promise.reject(err);
-      }
-    );
+        return Promise.reject(err)
+      },
+    )
   }
 
   /**
@@ -147,49 +147,49 @@ export class MiraiApiHttp {
    */
   async about() {
     const { data } = await this.axios.get<
-      null,
-      AxiosResponse<Api.Response.About>
-    >("/about");
-    return data;
+    null,
+    AxiosResponse<Api.Response.About>
+    >('/about')
+    return data
   }
 
   /**
    * 使用此方法验证你的身份，并返回一个会话
    */
   async verify(verifyKey = this.setting.verifyKey): Promise<Api.Response.Auth> {
-    this.logger.info(`[http] Address: ${this.http.address}`);
+    this.logger.info(`[http] Address: ${this.http.address}`)
 
     const { data } = await this.axios.post<
-      BaseVerifyParams,
-      AxiosResponse<Api.Response.Auth>
-    >("/verify", {
+    BaseVerifyParams,
+    AxiosResponse<Api.Response.Auth>
+    >('/verify', {
       verifyKey,
-    });
+    })
 
     if (data.code === 0) {
-      this.sessionKey = data.session;
+      this.sessionKey = data.session
       if (this.axios.defaults.headers) {
-        (this.axios.defaults.headers.common as any).sessionKey =
-          this.sessionKey;
+        (this.axios.defaults.headers.common as any).sessionKey
+          = this.sessionKey
       }
     }
-    return data;
+    return data
   }
 
   /**
    * 使用此方法校验并激活你的Session，同时将Session与一个已登录的Bot绑定
    */
   async bind(qq: number) {
-    this.qq = qq;
+    this.qq = qq
     const { data } = await this.axios.post<
-      Api.Params.RequestParams<{ qq: number }>,
-      AxiosResponse<Api.Response.BaseResponse>
-    >("/bind", {
+    Api.Params.RequestParams<{ qq: number }>,
+    AxiosResponse<Api.Response.BaseResponse>
+    >('/bind', {
       sessionKey: this.sessionKey,
       qq,
-    });
-    this.verified = data.code === 0;
-    return data;
+    })
+    this.verified = data.code === 0
+    return data
   }
 
   /**
@@ -198,15 +198,15 @@ export class MiraiApiHttp {
    */
   async release(qq = this.qq) {
     const { data } = await this.axios.post<
-      Api.Params.RequestParams<{ qq: number }>,
-      AxiosResponse<Api.Response.BaseResponse>
-    >("/release", {
+    Api.Params.RequestParams<{ qq: number }>,
+    AxiosResponse<Api.Response.BaseResponse>
+    >('/release', {
       sessionKey: this.sessionKey,
       qq,
-    });
-    if (data.code === 0) this.verified = false;
+    })
+    if (data.code === 0) this.verified = false
 
-    return data;
+    return data
   }
 
   // 获取 Bot 收到的消息和事件
@@ -217,15 +217,15 @@ export class MiraiApiHttp {
    */
   async fetchMessage(count = 10) {
     const { data } = await this.axios.get<
-      Api.Params.RequestParams<{ count: number }>,
-      AxiosResponse<Api.Response.FetchMessage>
-    >("/fetchMessage", {
+    Api.Params.RequestParams<{ count: number }>,
+    AxiosResponse<Api.Response.FetchMessage>
+    >('/fetchMessage', {
       params: {
         sessionKey: this.sessionKey,
         count,
       },
-    });
-    return data;
+    })
+    return data
   }
 
   /**
@@ -234,15 +234,15 @@ export class MiraiApiHttp {
    */
   async fetchLatestMessage(count = 10) {
     const { data } = await this.axios.get<
-      Api.Params.RequestParams<{ count: number }>,
-      AxiosResponse<Api.Response.FetchMessage>
-    >("/fetchLatestMessage", {
+    Api.Params.RequestParams<{ count: number }>,
+    AxiosResponse<Api.Response.FetchMessage>
+    >('/fetchLatestMessage', {
       params: {
         sessionKey: this.sessionKey,
         count,
       },
-    });
-    return data;
+    })
+    return data
   }
 
   /**
@@ -251,15 +251,15 @@ export class MiraiApiHttp {
    */
   async peekMessage(count = 10) {
     const { data } = await this.axios.get<
-      Api.Params.RequestParams<{ count: number }>,
-      AxiosResponse<Api.Response.FetchMessage>
-    >("/peekMessage", {
+    Api.Params.RequestParams<{ count: number }>,
+    AxiosResponse<Api.Response.FetchMessage>
+    >('/peekMessage', {
       params: {
         sessionKey: this.sessionKey,
         count,
       },
-    });
-    return data;
+    })
+    return data
   }
 
   /**
@@ -268,15 +268,15 @@ export class MiraiApiHttp {
    */
   async peekLatestMessage(count = 10) {
     const { data } = await this.axios.get<
-      Api.Params.RequestParams<{ count: number }>,
-      AxiosResponse<Api.Response.FetchMessage>
-    >("/peekLatestMessage", {
+    Api.Params.RequestParams<{ count: number }>,
+    AxiosResponse<Api.Response.FetchMessage>
+    >('/peekLatestMessage', {
       params: {
         sessionKey: this.sessionKey,
         count,
       },
-    });
-    return data;
+    })
+    return data
   }
 
   /**
@@ -285,16 +285,16 @@ export class MiraiApiHttp {
    */
   async messageFromId(id: number) {
     const { data } = await this.axios.get<
-      Api.Params.RequestParams<{ id: number }>,
-      AxiosResponse<Api.Response.MessageFromId>
-    >("/messageFromId", {
+    Api.Params.RequestParams<{ id: number }>,
+    AxiosResponse<Api.Response.MessageFromId>
+    >('/messageFromId', {
       params: {
         sessionKey: this.sessionKey,
         id,
       },
-    });
-    if (data.code === 0) return data.data;
-    else return data;
+    })
+    if (data.code === 0) return data.data
+    else return data
   }
 
   /**
@@ -307,21 +307,21 @@ export class MiraiApiHttp {
   async sendFriendMessage(
     messageChain: string | MessageType.MessageChain,
     target: number,
-    quote?: number
+    quote?: number,
   ) {
-    messageChain = toMessageChain(messageChain);
+    messageChain = toMessageChain(messageChain)
     const payload: Api.Params.SendFriendMessage = {
       sessionKey: this.sessionKey,
       target,
       messageChain,
-    };
-    if (quote) payload.quote = quote;
+    }
+    if (quote) payload.quote = quote
 
     const { data } = await this.axios.post<
-      Api.Params.SendFriendMessage,
-      AxiosResponse<Api.Response.SendMessage>
-    >("/sendFriendMessage", payload);
-    return data;
+    Api.Params.SendFriendMessage,
+    AxiosResponse<Api.Response.SendMessage>
+    >('/sendFriendMessage', payload)
+    return data
   }
 
   /**
@@ -334,21 +334,21 @@ export class MiraiApiHttp {
   async sendGroupMessage(
     messageChain: string | MessageType.MessageChain,
     target: number,
-    quote?: number
+    quote?: number,
   ) {
-    messageChain = toMessageChain(messageChain);
+    messageChain = toMessageChain(messageChain)
     const payload: Api.Params.SendGroupMessage = {
       sessionKey: this.sessionKey,
       target,
       messageChain,
-    };
-    if (quote) payload.quote = quote;
+    }
+    if (quote) payload.quote = quote
 
     const { data } = await this.axios.post<
-      Api.Params.SendGroupMessage,
-      AxiosResponse<Api.Response.SendMessage>
-    >("/sendGroupMessage", payload);
-    return data;
+    Api.Params.SendGroupMessage,
+    AxiosResponse<Api.Response.SendMessage>
+    >('/sendGroupMessage', payload)
+    return data
   }
 
   /**
@@ -362,22 +362,22 @@ export class MiraiApiHttp {
     messageChain: string | MessageType.MessageChain,
     qq: number,
     group: number,
-    quote?: number
+    quote?: number,
   ) {
-    messageChain = toMessageChain(messageChain);
+    messageChain = toMessageChain(messageChain)
     const payload: Api.Params.SendTempMessage = {
       sessionKey: this.sessionKey,
       qq,
       group,
       messageChain,
-    };
-    if (quote) payload.quote = quote;
+    }
+    if (quote) payload.quote = quote
 
     const { data } = await this.axios.post<
-      Api.Params.SendTempMessage,
-      AxiosResponse<Api.Response.SendMessage>
-    >("/sendTempMessage", payload);
-    return data;
+    Api.Params.SendTempMessage,
+    AxiosResponse<Api.Response.SendMessage>
+    >('/sendTempMessage', payload)
+    return data
   }
 
   /**
@@ -391,19 +391,19 @@ export class MiraiApiHttp {
     urls: string[],
     target?: number,
     qq?: number,
-    group?: number
+    group?: number,
   ) {
     const { data } = await this.axios.post<
-      Api.Params.SendImageMessage,
-      AxiosResponse<string[]>
-    >("/sendImageMessage", {
+    Api.Params.SendImageMessage,
+    AxiosResponse<string[]>
+    >('/sendImageMessage', {
       sessionKey: this.sessionKey,
       target,
       qq,
       group,
       urls,
-    });
-    return data;
+    })
+    return data
   }
 
   /**
@@ -411,18 +411,18 @@ export class MiraiApiHttp {
    * @param type
    * @param img 图片文件 fs.createReadStream(img)
    */
-  async uploadImage(type: "friend" | "group" | "temp", img: File) {
-    const form = new FormData();
-    form.append("sessionKey", this.sessionKey);
-    form.append("type", type);
-    form.append("img", img);
+  async uploadImage(type: 'friend' | 'group' | 'temp', img: File) {
+    const form = new FormData()
+    form.append('sessionKey', this.sessionKey)
+    form.append('type', type)
+    form.append('img', img)
     const { data } = await this.axios.post<
-      FormData,
-      AxiosResponse<Api.Response.UploadImage>
-    >("/uploadImage", form, {
+    FormData,
+    AxiosResponse<Api.Response.UploadImage>
+    >('/uploadImage', form, {
       headers: form.getHeaders(), // same as post: { 'Content-Type': 'multipart/form-data' }
-    });
-    return data;
+    })
+    return data
   }
 
   /**
@@ -430,18 +430,18 @@ export class MiraiApiHttp {
    * @param type 当前仅支持 "group"
    * @param voice 语音文件 fs.createReadStream(voice)
    */
-  async uploadVoice(type: "friend" | "group" | "temp", voice: File) {
-    const form = new FormData();
-    form.append("sessionKey", this.sessionKey);
-    form.append("type", type);
-    form.append("voice", voice);
+  async uploadVoice(type: 'friend' | 'group' | 'temp', voice: File) {
+    const form = new FormData()
+    form.append('sessionKey', this.sessionKey)
+    form.append('type', type)
+    form.append('voice', voice)
     const { data } = await this.axios.post<
-      FormData,
-      AxiosResponse<Api.Response.UploadVoice>
-    >("/uploadVoice", form, {
+    FormData,
+    AxiosResponse<Api.Response.UploadVoice>
+    >('/uploadVoice', form, {
       headers: form.getHeaders(),
-    });
-    return data;
+    })
+    return data
   }
 
   /**
@@ -452,21 +452,21 @@ export class MiraiApiHttp {
    * @param file 文件内容
    */
   async uploadFileAndSend(
-    type: "Group",
+    type: 'Group',
     target: number,
     path: string,
-    file: File
+    file: File,
   ) {
-    const form = new FormData();
-    form.append("sessionKey", this.sessionKey);
-    form.append("type", type);
-    form.append("target", target);
-    form.append("path", path);
-    form.append("file", file);
-    const { data } = await this.axios.post("/uploadFileAndSend", form, {
+    const form = new FormData()
+    form.append('sessionKey', this.sessionKey)
+    form.append('type', type)
+    form.append('target', target)
+    form.append('path', path)
+    form.append('file', file)
+    const { data } = await this.axios.post('/uploadFileAndSend', form, {
       headers: form.getHeaders(),
-    });
-    return data;
+    })
+    return data
   }
 
   /**
@@ -474,19 +474,19 @@ export class MiraiApiHttp {
    * 使用此方法撤回指定消息。对于bot发送的消息，有2分钟时间限制。对于撤回群聊中群员的消息，需要有相应权限
    * @param target 需要撤回的消息的messageId
    */
-  async recall(target: Api.Params.Recall["target"]) {
-    let messageId = target;
-    if (typeof target !== "number" && target.messageChain[0].id)
-      messageId = target.messageChain[0].id;
+  async recall(target: Api.Params.Recall['target']) {
+    let messageId = target
+    if (typeof target !== 'number' && target.messageChain[0].id)
+      messageId = target.messageChain[0].id
 
     const { data } = await this.axios.post<
-      Api.Params.Recall,
-      AxiosResponse<Api.Response.BaseResponse>
-    >("/recall", {
+    Api.Params.Recall,
+    AxiosResponse<Api.Response.BaseResponse>
+    >('/recall', {
       sessionKey: this.sessionKey,
       target: messageId,
-    });
-    return data;
+    })
+    return data
   }
 
   /**
@@ -494,14 +494,14 @@ export class MiraiApiHttp {
    */
   async friendList() {
     const { data } = await this.axios.get<
-      Api.Params.BaseRequestParams,
-      AxiosResponse<Api.Response.FriendList>
-    >("/friendList", {
+    Api.Params.BaseRequestParams,
+    AxiosResponse<Api.Response.FriendList>
+    >('/friendList', {
       params: {
         sessionKey: this.sessionKey,
       },
-    });
-    return data;
+    })
+    return data
   }
 
   /**
@@ -509,14 +509,14 @@ export class MiraiApiHttp {
    */
   async groupList() {
     const { data } = await this.axios.get<
-      Api.Params.BaseRequestParams,
-      AxiosResponse<Api.Response.GroupList>
-    >("/groupList", {
+    Api.Params.BaseRequestParams,
+    AxiosResponse<Api.Response.GroupList>
+    >('/groupList', {
       params: {
         sessionKey: this.sessionKey,
       },
-    });
-    return data;
+    })
+    return data
   }
 
   /**
@@ -525,15 +525,15 @@ export class MiraiApiHttp {
    */
   async memberList(target: number) {
     const { data } = await this.axios.get<
-      Api.Params.RequestParams<{ target: number }>,
-      AxiosResponse<Api.Response.MemberList>
-    >("/memberList", {
+    Api.Params.RequestParams<{ target: number }>,
+    AxiosResponse<Api.Response.MemberList>
+    >('/memberList', {
       params: {
         sessionKey: this.sessionKey,
         target,
       },
-    });
-    return data;
+    })
+    return data
   }
 
   /**
@@ -541,8 +541,8 @@ export class MiraiApiHttp {
    * @returns
    */
   async botProfile(): Promise<UserProfile> {
-    const { data } = await this.axios.get("/botProfile");
-    return data;
+    const { data } = await this.axios.get('/botProfile')
+    return data
   }
 
   /**
@@ -550,8 +550,8 @@ export class MiraiApiHttp {
    * @returns
    */
   async friendProfile(): Promise<UserProfile> {
-    const { data } = await this.axios.get("/friendProfile");
-    return data;
+    const { data } = await this.axios.get('/friendProfile')
+    return data
   }
 
   /**
@@ -559,38 +559,38 @@ export class MiraiApiHttp {
    * @returns
    */
   async memberProfile(): Promise<UserProfile> {
-    const { data } = await this.axios.get("/memberProfile");
-    return data;
+    const { data } = await this.axios.get('/memberProfile')
+    return data
   }
 
   /**
    * 指定群进行全体禁言
    * @param target 指定群的群号
    */
-  async muteAll(target: Api.Params.MuteAll["target"]) {
+  async muteAll(target: Api.Params.MuteAll['target']) {
     const { data } = await this.axios.post<
-      Api.Params.MuteAll,
-      AxiosResponse<Api.Response.BaseResponse>
-    >("/muteAll", {
+    Api.Params.MuteAll,
+    AxiosResponse<Api.Response.BaseResponse>
+    >('/muteAll', {
       sessionKey: this.sessionKey,
       target,
-    });
-    return data;
+    })
+    return data
   }
 
   /**
    * 指定群解除全体禁言
    * @param target 指定群的群号
    */
-  async unmuteAll(target: Api.Params.UnmuteAll["target"]) {
+  async unmuteAll(target: Api.Params.UnmuteAll['target']) {
     const { data } = await this.axios.post<
-      Api.Params.UnmuteAll,
-      AxiosResponse<Api.Response.BaseResponse>
-    >("/unmuteAll", {
+    Api.Params.UnmuteAll,
+    AxiosResponse<Api.Response.BaseResponse>
+    >('/unmuteAll', {
       sessionKey: this.sessionKey,
       target,
-    });
-    return data;
+    })
+    return data
   }
 
   /**
@@ -601,15 +601,15 @@ export class MiraiApiHttp {
    */
   async mute(target: number, memberId: number, time = 60) {
     const { data } = await this.axios.post<
-      Api.Params.Mute,
-      AxiosResponse<Api.Response.BaseResponse>
-    >("/mute", {
+    Api.Params.Mute,
+    AxiosResponse<Api.Response.BaseResponse>
+    >('/mute', {
       sessionKey: this.sessionKey,
       target,
       memberId,
       time,
-    });
-    return data;
+    })
+    return data
   }
 
   /**
@@ -619,14 +619,14 @@ export class MiraiApiHttp {
    */
   async unmute(target: number, memberId: number) {
     const { data } = await this.axios.post<
-      Api.Params.Unmute,
-      AxiosResponse<Api.Response.BaseResponse>
-    >("/unmute", {
+    Api.Params.Unmute,
+    AxiosResponse<Api.Response.BaseResponse>
+    >('/unmute', {
       sessionKey: this.sessionKey,
       target,
       memberId,
-    });
-    return data;
+    })
+    return data
   }
 
   /**
@@ -635,17 +635,17 @@ export class MiraiApiHttp {
    * @param memberId 指定群员QQ号
    * @param msg 信息
    */
-  async kick(target: number, memberId: number, msg = "您已被移出群聊") {
+  async kick(target: number, memberId: number, msg = '您已被移出群聊') {
     const { data } = await this.axios.post<
-      Api.Params.Kick,
-      AxiosResponse<Api.Response.BaseResponse>
-    >("/kick", {
+    Api.Params.Kick,
+    AxiosResponse<Api.Response.BaseResponse>
+    >('/kick', {
       sessionKey: this.sessionKey,
       target,
       memberId,
       msg,
-    });
-    return data;
+    })
+    return data
   }
 
   /**
@@ -655,13 +655,13 @@ export class MiraiApiHttp {
    */
   async quit(target: number) {
     const { data } = await this.axios.post<
-      Api.Params.Quit,
-      AxiosResponse<Api.Response.BaseResponse>
-    >("/quit", {
+    Api.Params.Quit,
+    AxiosResponse<Api.Response.BaseResponse>
+    >('/quit', {
       sessionKey: this.sessionKey,
       target,
-    });
-    return data;
+    })
+    return data
   }
 
   /**
@@ -673,25 +673,26 @@ export class MiraiApiHttp {
   async groupConfig(target: number, config?: Config.GroupConfig) {
     if (config) {
       const { data } = await this.axios.post<
-        Api.Params.GroupConfig,
-        AxiosResponse<Api.Response.BaseResponse>
-      >("/groupConfig", {
+      Api.Params.GroupConfig,
+      AxiosResponse<Api.Response.BaseResponse>
+      >('/groupConfig', {
         sessionKey: this.sessionKey,
         target,
         config,
-      });
-      return data;
-    } else {
+      })
+      return data
+    }
+    else {
       const { data } = await this.axios.get<
-        Api.Params.GroupConfig,
-        AxiosResponse<Config.GroupConfig>
-      >("/groupConfig", {
+      Api.Params.GroupConfig,
+      AxiosResponse<Config.GroupConfig>
+      >('/groupConfig', {
         params: {
           sessionKey: this.sessionKey,
           target,
         },
-      });
-      return data;
+      })
+      return data
     }
   }
 
@@ -705,31 +706,32 @@ export class MiraiApiHttp {
   async memberInfo(
     target: number,
     memberId: number,
-    info?: Api.Params.MemberInfo["info"]
+    info?: Api.Params.MemberInfo['info'],
   ) {
     if (info) {
       const { data } = await this.axios.post<
-        Api.Params.MemberInfo,
-        AxiosResponse<Api.Response.BaseResponse>
-      >("/memberInfo", {
+      Api.Params.MemberInfo,
+      AxiosResponse<Api.Response.BaseResponse>
+      >('/memberInfo', {
         sessionKey: this.sessionKey,
         target,
         memberId,
         info,
-      });
-      return data;
-    } else {
+      })
+      return data
+    }
+    else {
       const { data } = await this.axios.get<
-        Api.Params.MemberInfo,
-        AxiosResponse<Config.MemberInfo>
-      >("/memberInfo", {
+      Api.Params.MemberInfo,
+      AxiosResponse<Config.MemberInfo>
+      >('/memberInfo', {
         params: {
           sessionKey: this.sessionKey,
           target,
           memberId,
         },
-      });
-      return data;
+      })
+      return data
     }
   }
 
@@ -737,51 +739,52 @@ export class MiraiApiHttp {
    * 构建 WebSocket 通道
    * @param type
    */
-  private _buildWsChannel<T extends "message" | "event" | "all">(
+  private _buildWsChannel<T extends 'message' | 'event' | 'all'>(
     type: T,
-    callback: WsCallbackMap[T]
+    callback: WsCallbackMap[T],
   ) {
     const typeName = {
-      message: "消息",
-      event: "事件",
-      all: "消息与事件",
-    };
+      message: '消息',
+      event: '事件',
+      all: '消息与事件',
+    }
     this.logger.info(
-      `[websocket] [${type}](${typeName[type]}) ${this.ws.address}`
-    );
+      `[websocket] [${type}](${typeName[type]}) ${this.ws.address}`,
+    )
 
-    const wsParams = new URLSearchParams();
-    wsParams.append("verifyKey", this.setting.verifyKey);
-    wsParams.append("qq", this.qq.toString());
+    const wsParams = new URLSearchParams()
+    wsParams.append('verifyKey', this.setting.verifyKey)
+    wsParams.append('qq', this.qq.toString())
 
     const client = new WebSocket(
-      `${this.ws.address}/${type}?${wsParams.toString()}`
-    );
-    this.ws.client = client;
+      `${this.ws.address}/${type}?${wsParams.toString()}`,
+    )
+    this.ws.client = client
 
-    client.on("open", () => {
+    client.on('open', () => {
       const interval = setInterval(
         () => client.ping(),
-        this.mirai.options.ws?.heartbeatInterval || 60000
-      );
-      client.on("close", () => clearInterval(interval));
-    });
+        this.mirai.options.ws?.heartbeatInterval || 60000,
+      )
+      client.on('close', () => clearInterval(interval))
+    })
 
     // 绑定 sessionKey
-    client.once("message", (data: WebSocket.Data) => {
-      const response = JSON.parse(data.toString());
+    client.once('message', (data: WebSocket.Data) => {
+      const response = JSON.parse(data.toString())
       if (response.data.session) {
-        this.ws.sessionKey = response.data.session;
-        this.logger.info(`[ws] Session: ${this.ws.sessionKey}`);
-      } else {
-        this.logger.error(response);
+        this.ws.sessionKey = response.data.session
+        this.logger.info(`[ws] Session: ${this.ws.sessionKey}`)
       }
-    });
+      else {
+        this.logger.error(response)
+      }
+    })
 
-    client.on("message", (data: WebSocket.Data) => {
-      const msg = JSON.parse(data.toString());
-      callback(msg.data);
-    });
+    client.on('message', (data: WebSocket.Data) => {
+      const msg = JSON.parse(data.toString())
+      callback(msg.data)
+    })
   }
 
   // Websocket
@@ -789,24 +792,24 @@ export class MiraiApiHttp {
    * 监听该接口，插件将推送 Bot 收到的消息
    * @param callback 回调函数
    */
-  message(callback: WsCallbackMap["message"]): void {
-    this._buildWsChannel("message", callback);
+  message(callback: WsCallbackMap['message']): void {
+    this._buildWsChannel('message', callback)
   }
 
   /**
    * 监听该接口，插件将推送 Bot 收到的事件
    * @param callback 回调函数
    */
-  event(callback: WsCallbackMap["event"]) {
-    this._buildWsChannel("event", callback);
+  event(callback: WsCallbackMap['event']) {
+    this._buildWsChannel('event', callback)
   }
 
   /**
    * 监听该接口，插件将推送 Bot 收到的消息和事件
    * @param callback 回调函数
    */
-  all(callback: WsCallbackMap["all"]) {
-    this._buildWsChannel("all", callback);
+  all(callback: WsCallbackMap['all']) {
+    this._buildWsChannel('all', callback)
   }
 
   // 配置相关
@@ -815,14 +818,14 @@ export class MiraiApiHttp {
    */
   async managers() {
     const { data } = await this.axios.get<null, AxiosResponse<number[]>>(
-      "/managers",
+      '/managers',
       {
         params: {
           qq: this.qq,
         },
-      }
-    );
-    return data;
+      },
+    )
+    return data
   }
 
   /**
@@ -831,13 +834,13 @@ export class MiraiApiHttp {
    */
   async setEssence(target: number) {
     const { data } = await this.axios.post<
-      Api.Params.SetEssence,
-      AxiosResponse<Api.Response.BaseResponse>
-    >("/setEssence", {
+    Api.Params.SetEssence,
+    AxiosResponse<Api.Response.BaseResponse>
+    >('/setEssence', {
       sessionKey: this.sessionKey,
       target,
-    });
-    return data;
+    })
+    return data
   }
 
   /**
@@ -849,17 +852,17 @@ export class MiraiApiHttp {
   async sendNudge(
     target: number,
     subject: number,
-    kind: Api.Params.SendNudge["kind"] = "Group"
+    kind: Api.Params.SendNudge['kind'] = 'Group',
   ) {
     const { data } = await this.axios.post<
-      Api.Params.SendNudge,
-      AxiosResponse<Api.Response.BaseResponse>
-    >("/sendNudge", {
+    Api.Params.SendNudge,
+    AxiosResponse<Api.Response.BaseResponse>
+    >('/sendNudge', {
       sessionKey: this.sessionKey,
       target,
       subject,
       kind,
-    });
-    return data;
+    })
+    return data
   }
 }

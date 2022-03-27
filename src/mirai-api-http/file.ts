@@ -3,36 +3,36 @@
  * @packageDocumentation
  */
 
-import type { AxiosResponse } from "axios";
+import type { AxiosResponse } from 'axios'
 
-import type { Api, Contact } from "..";
-import type { MiraiApiHttp } from "./index";
+import type { Api, Contact } from '..'
+import type { MiraiApiHttp } from './index'
 
 export type FileInfoResponse = AxiosResponse<
-  Api.Response.ResponseType<FileInfo>
->;
+Api.Response.ResponseType<FileInfo>
+>
 
 interface BaseFileOptions {
   /**
    * 文件 ID
    */
-  id: string;
+  id: string
   /**
    * 文件夹路径, 文件夹允许重名, 不保证准确, 准确定位使用 id
    */
-  path?: string;
+  path?: string
   /**
    * 群号或好友QQ号
    */
-  target?: number;
+  target?: number
   /**
    * 群号
    */
-  group?: number;
+  group?: number
   /**
    * 好友QQ号
    */
-  qq?: number;
+  qq?: number
 }
 
 /**
@@ -42,27 +42,27 @@ export interface FileInfo {
   /**
    * 文件名字
    */
-  name: string;
+  name: string
   /**
    * 文件 ID
    */
-  id: string;
+  id: string
   /**
    * 文件对象, 递归类型. null 为存在根目录
    */
-  parent: FileInfo;
+  parent: FileInfo
   /**
    * 群信息或好友信息
    */
-  contact: Contact.User;
+  contact: Contact.User
   /**
    * 是否文件
    */
-  isFile: boolean;
+  isFile: boolean
   /**
    * 是否文件夹
    */
-  isDirectory: boolean;
+  isDirectory: boolean
   /**
    * 文件下载信息
    */
@@ -70,92 +70,92 @@ export interface FileInfo {
     /**
      * 下载次数
      */
-    downloadTimes: number;
+    downloadTimes: number
     /**
      * 上传者QQ
      */
-    uploaderId: number;
+    uploaderId: number
     /**
      * 上传时间
      */
-    uploadTime: number;
+    uploadTime: number
     /**
      * 最后修改时间
      */
-    lastModifyTime: number;
+    lastModifyTime: number
     /**
      * 文件 sha1 值
      */
-    sha1: string;
+    sha1: string
     /**
      * 文件 md5 值
      */
-    md5: string;
+    md5: string
     /**
      * 文件下载 url
      */
-    url: string;
-  };
+    url: string
+  }
 }
 
 export interface FileListOptions extends BaseFileOptions {
   /**
    * 是否携带下载信息，额外请求，无必要不要携带
    */
-  withDownloadInfo?: number;
+  withDownloadInfo?: number
   /**
    * 分页偏移
    */
-  offset?: number;
+  offset?: number
   /**
    * 分页大小
    */
-  size?: number;
+  size?: number
 }
 export type FileListResponse = AxiosResponse<
-  Api.Response.ResponseType<FileInfo[]>
->;
+Api.Response.ResponseType<FileInfo[]>
+>
 
 export interface FileInfoOptions extends BaseFileOptions {
   /**
    * 是否携带下载信息，额外请求，无必要不要携带
    */
-  withDownloadInfo?: number;
+  withDownloadInfo?: number
 }
 
-export type FileInfoParams = Api.Params.RequestParams<FileInfoOptions>;
+export type FileInfoParams = Api.Params.RequestParams<FileInfoOptions>
 
 export interface FileMkdirOptions extends BaseFileOptions {
   /**
    * 新建文件夹名
    */
-  directoryName: string;
+  directoryName: string
 }
 
-export type FileMkdirParams = Api.Params.RequestParams<FileMkdirOptions>;
+export type FileMkdirParams = Api.Params.RequestParams<FileMkdirOptions>
 
-export type FileDeleteOptions = BaseFileOptions;
-export type FileDeleteParams = Api.Params.RequestParams<BaseFileOptions>;
+export type FileDeleteOptions = BaseFileOptions
+export type FileDeleteParams = Api.Params.RequestParams<BaseFileOptions>
 
 export interface FileRenameOptions extends BaseFileOptions {
   /**
    * 新文件名
    */
-  renameTo?: string;
+  renameTo?: string
 }
-export type FileRenameParams = Api.Params.RequestParams<FileRenameOptions>;
+export type FileRenameParams = Api.Params.RequestParams<FileRenameOptions>
 
 export interface FileMoveOptions extends BaseFileOptions {
   /**
    * 移动目标文件夹 id
    */
-  moveTo?: string;
+  moveTo?: string
   /**
    * 移动目标文件路径, 文件夹允许重名, 不保证准确, 准确定位使用 moveTo
    */
-  moveToPath?: string;
+  moveToPath?: string
 }
-export type FileMoveParams = Api.Params.RequestParams<FileMoveOptions>;
+export type FileMoveParams = Api.Params.RequestParams<FileMoveOptions>
 
 /**
  * [文件操作 | mirai-api-http](https://github.com/project-mirai/mirai-api-http/blob/master/docs/api/API.md#%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C)
@@ -178,15 +178,15 @@ export class File {
    */
   async list(options: FileListOptions) {
     const { data } = await this.api.axios.get<FileInfoParams, FileListResponse>(
-      "/file/list",
+      '/file/list',
       {
         params: {
           sessionKey: this.api.sessionKey,
           ...options,
         },
-      }
-    );
-    return data;
+      },
+    )
+    return data
   }
 
   /**
@@ -196,15 +196,15 @@ export class File {
    */
   async info(options: FileInfoOptions) {
     const { data } = await this.api.axios.get<FileInfoParams, FileInfoResponse>(
-      "/file/info",
+      '/file/info',
       {
         params: {
           sessionKey: this.api.sessionKey,
           ...options,
         },
-      }
-    );
-    return data;
+      },
+    )
+    return data
   }
 
   /**
@@ -213,13 +213,13 @@ export class File {
    */
   async mkdir(options: FileMkdirOptions) {
     const { data } = await this.api.axios.post<
-      FileMkdirParams,
-      FileInfoResponse
-    >("/file/mkdir", {
+    FileMkdirParams,
+    FileInfoResponse
+    >('/file/mkdir', {
       sessionKey: this.api.sessionKey,
       ...options,
-    });
-    return data;
+    })
+    return data
   }
 
   /**
@@ -227,13 +227,13 @@ export class File {
    */
   async delete(options: FileDeleteOptions) {
     const { data } = await this.api.axios.post<
-      FileDeleteParams,
-      AxiosResponse<Api.Response.BaseResponse>
-    >("/file/delete", {
+    FileDeleteParams,
+    AxiosResponse<Api.Response.BaseResponse>
+    >('/file/delete', {
       sessionKey: this.api.sessionKey,
       ...options,
-    });
-    return data;
+    })
+    return data
   }
 
   /**
@@ -242,13 +242,13 @@ export class File {
    */
   async move(options: FileMoveOptions) {
     const { data } = await this.api.axios.post<
-      FileMoveParams,
-      AxiosResponse<Api.Response.BaseResponse>
-    >("/groupFileMove", {
+    FileMoveParams,
+    AxiosResponse<Api.Response.BaseResponse>
+    >('/groupFileMove', {
       sessionKey: this.api.sessionKey,
       ...options,
-    });
-    return data;
+    })
+    return data
   }
 
   /**
@@ -256,12 +256,12 @@ export class File {
    */
   async rename(options: FileRenameOptions) {
     const { data } = await this.api.axios.post<
-      FileRenameParams,
-      AxiosResponse<Api.Response.BaseResponse>
-    >("/groupFileRename", {
+    FileRenameParams,
+    AxiosResponse<Api.Response.BaseResponse>
+    >('/groupFileRename', {
       sessionKey: this.api.sessionKey,
       ...options,
-    });
-    return data;
+    })
+    return data
   }
 }

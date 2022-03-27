@@ -1,6 +1,6 @@
-import dotenv from "dotenv";
+import dotenv from 'dotenv'
 
-dotenv.config();
+dotenv.config()
 
-export const groupId = 120117362;
-export const botQQ = parseInt(process.env.BOT_QQ || "");
+export const groupId = 120117362
+export const botQQ = parseInt(process.env.BOT_QQ || '')

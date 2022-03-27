@@ -1,26 +1,26 @@
-export * from "./setting";
+export * from './setting'
 
-export * from "./profile";
+export * from './profile'
 
-export * as Api from "./api";
-export * as Config from "./config";
-export * as Contact from "./contact";
-export * as MessageType from "./message-type";
-export * as EventType from "./event-type";
+export * as Api from './api'
+export * as Config from './config'
+export * as Contact from './contact'
+export * as MessageType from './message-type'
+export * as EventType from './event-type'
 
 /**
  * mirai-ts 自定义配置项，与 mirai-api-http setting 相区别
  */
 export interface MiraiOptions {
   http?: {
-    address?: string;
-  };
+    address?: string
+  }
   ws?: {
-    address?: string;
+    address?: string
     /**
      * 心跳间隔
      * @default 60000
      */
-    heartbeatInterval?: number;
-  };
+    heartbeatInterval?: number
+  }
 }

@@ -3,5 +3,5 @@
  * @packageDocumentation
  */
 
-export * as Params from "./params";
-export * as Response from "./response";
+export * as Params from './params'
+export * as Response from './response'

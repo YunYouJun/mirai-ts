@@ -3,7 +3,7 @@
  * @packageDocumentation
  */
 
-export type Permission = "OWNER" | "ADMINISTRATOR" | "MEMBER";
+export type Permission = 'OWNER' | 'ADMINISTRATOR' | 'MEMBER'
 
 /**
  * 群的信息
@@ -12,15 +12,15 @@ export interface Group {
   /**
    * 群号
    */
-  id: number;
+  id: number
   /**
    * 群的群名称
    */
-  name: string;
+  name: string
   /**
    * 群中，Bot的群限权
    */
-  permission: Permission;
+  permission: Permission
 }
 
 /**
@@ -30,7 +30,7 @@ interface BaseUser {
   /**
    * QQ 号
    */
-  id: number;
+  id: number
 }
 
 /**
@@ -40,11 +40,11 @@ export interface Friend extends BaseUser {
   /**
    * 用户昵称
    */
-  nickname: string;
+  nickname: string
   /**
    * 用户备注
    */
-  remark: string;
+  remark: string
 }
 
 /**
@@ -54,31 +54,31 @@ export interface Member extends BaseUser {
   /**
    * 群名片
    */
-  memberName: string;
+  memberName: string
   /**
    * 群权限 OWNER、ADMINISTRATOR 或 MEMBER
    */
-  permission: Permission;
+  permission: Permission
   /**
    * 群头衔
    */
-  specialTitle: string;
+  specialTitle: string
   /**
    * 入群时间戳
    */
-  joinTimestamp: number;
+  joinTimestamp: number
   /**
    * 上一次发言时间戳
    */
-  lastSpeakTimestamp: number;
+  lastSpeakTimestamp: number
   /**
    * 剩余禁言时间
    */
-  muteTimeRemaining: number;
+  muteTimeRemaining: number
   /**
    * 所在的群
    */
-  group: Group;
+  group: Group
 }
 
-export type User = Friend | Member;
+export type User = Friend | Member
