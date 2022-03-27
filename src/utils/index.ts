@@ -31,10 +31,8 @@ export function getAvatarById(
   size: AvatarSize = 640
 ): string | null {
   let url = null;
-  if (type === "friend") {
-    url = `https://q1.qlogo.cn/g?b=qq&nk=${id}&s=${size}`;
-  } else if (type === "group") {
-    url = `https://p.qlogo.cn/gh/${id}/${id}/${size}`;
-  }
+  if (type === "friend") url = `https://q1.qlogo.cn/g?b=qq&nk=${id}&s=${size}`;
+  else if (type === "group") url = `https://p.qlogo.cn/gh/${id}/${id}/${size}`;
+
   return url;
 }

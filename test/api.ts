@@ -1,4 +1,5 @@
-import { Mirai } from "mirai-ts";
+/* eslint-disable no-console */
+import type { Mirai } from "mirai-ts";
 import { groupId } from "./config";
 import { logger } from "./logger";
 

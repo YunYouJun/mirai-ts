@@ -1,11 +1,12 @@
+/* eslint-disable no-console */
+import fs from "fs";
+import path from "path";
 import Mirai from "mirai-ts";
 import type { MessageType, MiraiApiHttpSetting } from "mirai-ts";
+import yaml from "js-yaml";
 import { getPokeMessage, getVoiceMessage } from "./message";
 import { miraiApiTest } from "./api";
 
-import fs from "fs";
-import path from "path";
-import yaml from "js-yaml";
 import { botQQ } from "./config";
 
 // setting 可直接读取 setting.yml 或参考 `src/types/setting.ts`

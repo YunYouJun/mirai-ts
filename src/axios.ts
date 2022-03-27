@@ -3,7 +3,8 @@
  * @packageDocumentation
  */
 
-import axios, { AxiosStatic } from "axios";
+import type { AxiosStatic } from "axios";
+import axios from "axios";
 
 /**
  * 初始化 axios
@@ -11,19 +12,17 @@ import axios, { AxiosStatic } from "axios";
  * @param timeout  请求超时时间
  */
 export function init(baseURL?: string, timeout = 0): AxiosStatic {
-  if (baseURL) {
-    axios.defaults.baseURL = baseURL;
-  }
+  if (baseURL) axios.defaults.baseURL = baseURL;
+
   axios.defaults.timeout = timeout;
 
   axios.interceptors.request.use(
-    function (config) {
+    (config) => {
       return config;
     },
-    function (err) {
-      if (process.env.NODE_ENV !== "production") {
-        console.error(err);
-      }
+    (err) => {
+      if (process.env.NODE_ENV !== "production") console.error(err);
+
       return Promise.reject(err);
     }
   );

@@ -3,7 +3,7 @@
  * @packageDocumentation
  */
 
-import * as Contact from "./contact";
+import type * as Contact from "./contact";
 
 interface BaseSingleMessage {
   type: string;
@@ -15,7 +15,7 @@ interface BaseSingleMessage {
 export interface Source extends BaseSingleMessage {
   type: "Source";
   /**
-   * 	消息的识别号，用于引用回复（Source 类型永远为 chain 的第一个元素）
+   * 消息的识别号，用于引用回复（Source 类型永远为 chain 的第一个元素）
    */
   id: number;
   /**
@@ -30,7 +30,7 @@ export interface Source extends BaseSingleMessage {
 export interface Quote extends BaseSingleMessage {
   type: "Quote";
   /**
-   * 	被引用回复的原消息的messageId
+   * 被引用回复的原消息的messageId
    */
   id: number;
   /**
@@ -61,7 +61,7 @@ export interface At extends BaseSingleMessage {
    */
   target: number;
   /**
-   * 	At时显示的文字，发送消息时无效，自动使用群名片
+   * At 时显示的文字，发送消息时无效，自动使用群名片
    */
   display: string;
 }
@@ -346,7 +346,7 @@ export interface MiraiCode {
   code: string;
 }
 
-export type SingleMessageMap = {
+export interface SingleMessageMap {
   Source: Source;
   Quote: Quote;
   At: At;
@@ -365,7 +365,7 @@ export type SingleMessageMap = {
   MusicShare: MusicShare;
   File: File;
   MiraiCode: MiraiCode;
-};
+}
 
 export type SingleMessageType = keyof SingleMessageMap;
 /**
@@ -437,9 +437,9 @@ export type ChatMessage = GroupMessage | TempMessage | FriendMessage;
  */
 export type ChatMessageType = ChatMessage["type"];
 
-export type ChatMessageMap = {
+export interface ChatMessageMap {
   message: ChatMessage;
   GroupMessage: GroupMessage;
   FriendMessage: FriendMessage;
   TempMessage: TempMessage;
-};
+}

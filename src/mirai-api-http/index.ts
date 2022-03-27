@@ -5,13 +5,11 @@
  * @packageDocumentation
  */
 
-export * from "./command";
-export * from "./message";
-export * from "./file";
-export * from "./resp";
-export * from "./utils";
-
 import type { AxiosResponse, AxiosStatic } from "axios";
+import FormData from "form-data";
+import WebSocket from "ws";
+import { Logger } from "@yunyoujun/logger";
+import chalk from "chalk";
 import type {
   Api,
   Config,
@@ -22,28 +20,30 @@ import type {
 } from "../types";
 
 // for upload image
-import FormData from "form-data";
-import WebSocket from "ws";
 
 // nested api url
+import type { Mirai } from "../mirai";
 import { Command } from "./command";
 import { File } from "./file";
 import { Resp } from "./resp";
 
 // 处理状态码
 import { getMessageFromStatusCode } from "./utils";
-import { Logger } from "@yunyoujun/logger";
-import chalk from "chalk";
 
 // utils
 import { toMessageChain } from "./message";
-import type { Mirai } from "../mirai";
 
-type WsCallbackMap = {
+export * from "./command";
+export * from "./message";
+export * from "./file";
+export * from "./resp";
+export * from "./utils";
+
+interface WsCallbackMap {
   message: (msg: MessageType.ChatMessage) => any;
   event: (event: EventType.Event) => any;
   all: (data: EventType.Event | MessageType.ChatMessage) => any;
-};
+}
 
 /**
  * 基础的验证参数
@@ -134,9 +134,8 @@ export class MiraiApiHttp {
       },
       (err) => {
         this.logger.error(`响应失败：${err.message}`);
-        if (process.env.NODE_ENV !== "production") {
-          console.error(err);
-        }
+        if (process.env.NODE_ENV !== "production") console.error(err);
+
         return Promise.reject(err);
       }
     );
@@ -169,9 +168,10 @@ export class MiraiApiHttp {
 
     if (data.code === 0) {
       this.sessionKey = data.session;
-      if (this.axios.defaults.headers)
-        (this.axios.defaults.headers.common as any)["sessionKey"] =
+      if (this.axios.defaults.headers) {
+        (this.axios.defaults.headers.common as any).sessionKey =
           this.sessionKey;
+      }
     }
     return data;
   }
@@ -204,9 +204,8 @@ export class MiraiApiHttp {
       sessionKey: this.sessionKey,
       qq,
     });
-    if (data.code === 0) {
-      this.verified = false;
-    }
+    if (data.code === 0) this.verified = false;
+
     return data;
   }
 
@@ -294,11 +293,8 @@ export class MiraiApiHttp {
         id,
       },
     });
-    if (data.code === 0) {
-      return data.data;
-    } else {
-      return data;
-    }
+    if (data.code === 0) return data.data;
+    else return data;
   }
 
   /**
@@ -319,9 +315,8 @@ export class MiraiApiHttp {
       target,
       messageChain,
     };
-    if (quote) {
-      payload.quote = quote;
-    }
+    if (quote) payload.quote = quote;
+
     const { data } = await this.axios.post<
       Api.Params.SendFriendMessage,
       AxiosResponse<Api.Response.SendMessage>
@@ -347,9 +342,8 @@ export class MiraiApiHttp {
       target,
       messageChain,
     };
-    if (quote) {
-      payload.quote = quote;
-    }
+    if (quote) payload.quote = quote;
+
     const { data } = await this.axios.post<
       Api.Params.SendGroupMessage,
       AxiosResponse<Api.Response.SendMessage>
@@ -377,9 +371,8 @@ export class MiraiApiHttp {
       group,
       messageChain,
     };
-    if (quote) {
-      payload.quote = quote;
-    }
+    if (quote) payload.quote = quote;
+
     const { data } = await this.axios.post<
       Api.Params.SendTempMessage,
       AxiosResponse<Api.Response.SendMessage>
@@ -483,9 +476,9 @@ export class MiraiApiHttp {
    */
   async recall(target: Api.Params.Recall["target"]) {
     let messageId = target;
-    if (typeof target !== "number" && target.messageChain[0].id) {
+    if (typeof target !== "number" && target.messageChain[0].id)
       messageId = target.messageChain[0].id;
-    }
+
     const { data } = await this.axios.post<
       Api.Params.Recall,
       AxiosResponse<Api.Response.BaseResponse>
@@ -602,7 +595,7 @@ export class MiraiApiHttp {
 
   /**
    * 指定群禁言指定群员
-   * @param target	指定群的群号
+   * @param target 指定群的群号
    * @param memberId 指定群员QQ号
    * @param time 禁言时长，单位为秒，最多30天，默认为 60 秒
    */
@@ -621,7 +614,7 @@ export class MiraiApiHttp {
 
   /**
    * 指定群解除群成员禁言
-   * @param target	指定群的群号
+   * @param target 指定群的群号
    * @param memberId 指定群员QQ号
    */
   async unmute(target: number, memberId: number) {

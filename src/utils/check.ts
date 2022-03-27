@@ -3,8 +3,8 @@
  * @packageDocumentation
  */
 
-import * as MessageType from "../types/message-type";
-import * as EventType from "../types/event-type";
+import type * as MessageType from "../types/message-type";
+import type * as EventType from "../types/event-type";
 
 /**
  * 配置类型
@@ -35,13 +35,8 @@ export interface Match {
  * @param keywords 关键字
  */
 export function is(str: string, keywords: string | string[]): boolean {
-  if (Array.isArray(keywords)) {
-    return keywords.some((keyword) => {
-      return str === keyword;
-    });
-  } else {
-    return str === keywords;
-  }
+  if (Array.isArray(keywords)) return keywords.includes(str);
+  else return str === keywords;
 }
 
 /**
@@ -72,18 +67,12 @@ export function re(
   config: Re | string
 ): RegExpMatchArray | boolean {
   let regExp = null;
-  if (typeof config === "string") {
-    regExp = new RegExp(config);
-  } else {
-    regExp = new RegExp(config.pattern, config.flags || "i");
-  }
+  if (typeof config === "string") regExp = new RegExp(config);
+  else regExp = new RegExp(config.pattern, config.flags || "i");
 
   const result = regExp.exec(str);
-  if (result && result[0]) {
-    return result;
-  } else {
-    return false;
-  }
+  if (result && result[0]) return result;
+  else return false;
 }
 
 /**
@@ -131,13 +120,14 @@ export function isAt(
       return singleMessage.type === "At" && singleMessage.target === qq;
     });
   } else {
-    let atMsg: MessageType.At | undefined = undefined;
+    let atMsg: MessageType.At | undefined;
     msg.messageChain.some((singleMessage) => {
       if (singleMessage.type === "At") {
         atMsg = singleMessage;
         return true;
       }
+      return false;
     });
-    return atMsg ? atMsg : false;
+    return atMsg || false;
   }
 }

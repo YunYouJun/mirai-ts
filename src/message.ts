@@ -3,7 +3,7 @@
  * @packageDocumentation
  */
 
-import * as MessageType from "./types/message-type";
+import type * as MessageType from "./types/message-type";
 
 /**
  * 生成引用的消息格式

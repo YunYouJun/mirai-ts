@@ -3,10 +3,10 @@
  * @packageDocumentation
  */
 
-import type { MiraiApiHttp } from "./index";
-import { AxiosResponse } from "axios";
+import type { AxiosResponse } from "axios";
 
-import { Api, Contact } from "..";
+import type { Api, Contact } from "..";
+import type { MiraiApiHttp } from "./index";
 
 export type FileInfoResponse = AxiosResponse<
   Api.Response.ResponseType<FileInfo>

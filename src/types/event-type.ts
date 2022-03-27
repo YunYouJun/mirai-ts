@@ -3,14 +3,14 @@
  * @packageDocumentation
  */
 
-import * as Contact from "./contact";
-import { MessageChain } from "./message-type";
-import {
+import type {
   BotInvitedJoinGroupRequestOperationType,
   MemberJoinRequestOperationType,
   NewFriendRequestOperationType,
 } from "../mirai-api-http/resp";
-import { Api } from "../index";
+import type { Api } from "../index";
+import type * as Contact from "./contact";
+import type { MessageChain } from "./message-type";
 
 /**
  * 内部基类
@@ -302,7 +302,7 @@ export interface NewFriendRequestEvent extends BaseRequestEvent {
    */
   groupId: number;
   /**
-   * 	申请人的昵称或群名片
+   * 申请人的昵称或群名片
    */
   nick: string;
   /**
@@ -417,7 +417,7 @@ export interface NudgeEvent extends BaseEvent {
   };
 }
 
-export type EventMap = {
+export interface EventMap {
   BotOnlineEvent: BotOnlineEvent;
   BotOfflineEventActive: BotOfflineEventActive;
   BotOfflineEventForce: BotOfflineEventForce;
@@ -451,7 +451,7 @@ export type EventMap = {
   BotInvitedJoinGroupRequestEvent: BotInvitedJoinGroupRequestEvent;
 
   NudgeEvent: NudgeEvent;
-};
+}
 
 // string union of event type
 export type EventType = keyof EventMap;

@@ -1,5 +1,5 @@
-import * as Config from "../config";
-import * as MessageType from "../message-type";
+import type * as Config from "../config";
+import type * as MessageType from "../message-type";
 
 export interface BaseRequestParams {
   sessionKey: string;

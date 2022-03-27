@@ -3,18 +3,18 @@
  * @packageDocumentation
  */
 
-import { Mirai } from "./mirai";
-import type { EventType, MessageType } from ".";
+import type { Mirai } from "./mirai";
 
 import { getPlain } from "./utils/internal";
 import { isAt, isChatMessage } from "./utils/check";
 
-import {
+import type {
   BotInvitedJoinGroupRequestOperationType,
   MemberJoinRequestOperationType,
   NewFriendRequestOperationType,
 } from "./mirai-api-http/resp";
-import { SingleMessage } from "./types/message-type";
+import type { SingleMessage } from "./types/message-type";
+import type { EventType, MessageType } from ".";
 
 /**
  * 为消息和事件类型挂载辅助函数
@@ -33,7 +33,7 @@ export function createHelperForMsg(
     if (msg.type === "GroupMessage") {
       // 添加判断是否被艾特的辅助函数
       msg.isAt = (qq?: number) => {
-        return isAt(msg, qq ? qq : mirai.qq) as boolean;
+        return isAt(msg, qq || mirai.qq) as boolean;
       };
     }
 
@@ -54,6 +54,7 @@ export function createHelperForMsg(
           curSingleMessage = singleMessage;
           return true;
         }
+        return false;
       });
       return curSingleMessage;
     };

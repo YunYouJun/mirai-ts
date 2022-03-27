@@ -3,7 +3,7 @@
  * @packageDocumentation
  */
 
-import * as MessageType from "../types/message-type";
+import type * as MessageType from "../types/message-type";
 
 /**
  * 获取纯文本

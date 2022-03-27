@@ -3,25 +3,25 @@
  * @packageDocumentation
  */
 
+import events from "events";
 import chalk from "chalk";
+import type { AxiosStatic } from "axios";
+import { Logger } from "@yunyoujun/logger";
+import pkg from "../package.json";
 import * as axios from "./axios";
-import { AxiosStatic } from "axios";
 import { MiraiApiHttp } from "./mirai-api-http";
+import { splitText } from "./utils/internal";
+
+import { isChatMessage } from "./utils/check";
+
+import { createHelperForMsg } from "./helper";
+import { defaultMahSetting, defaultMiraiOptions } from "./config";
 import type {
   EventType,
   MessageType,
   MiraiApiHttpSetting,
   MiraiOptions,
 } from ".";
-import { Logger } from "@yunyoujun/logger";
-
-import { splitText } from "./utils/internal";
-import { isChatMessage } from "./utils/check";
-
-import events from "events";
-import { createHelperForMsg } from "./helper";
-import { defaultMahSetting, defaultMiraiOptions } from "./config";
-import pkg from "../package.json";
 
 /**
  * 所有消息
@@ -153,9 +153,8 @@ export class Mirai {
    */
   async verify() {
     const data = await this.api.verify();
-    if (data.code === 0) {
-      this.logger.info(`[http] Session: ${data.session}`);
-    }
+    if (data.code === 0) this.logger.info(`[http] Session: ${data.session}`);
+
     return data;
   }
 
@@ -179,9 +178,9 @@ export class Mirai {
    */
   async release() {
     const data = await this.api.release();
-    if (data.code === 0) {
+    if (data.code === 0)
       this.logger.success(`释放 ${this.qq} Session: ${this.api.sessionKey}`);
-    }
+
     return data;
   }
 
@@ -283,15 +282,13 @@ export class Mirai {
     let type: SendMessageType = "friend";
 
     if (isChatMessage(srcMsg)) {
-      if (quote && srcMsg.messageChain[0].type === "Source") {
+      if (quote && srcMsg.messageChain[0].type === "Source")
         messageId = srcMsg.messageChain[0].id;
-      }
     }
 
     // 自动转化为数组
-    if (typeof msgChain !== "string" && !Array.isArray(msgChain)) {
+    if (typeof msgChain !== "string" && !Array.isArray(msgChain))
       msgChain = [msgChain];
-    }
 
     // reply 不同的目标
     switch (srcMsg.type) {
@@ -386,11 +383,10 @@ export class Mirai {
     target: number,
     messageId: number
   ) {
-    if (type === "friend") {
+    if (type === "friend")
       return this.api.sendFriendMessage(msgChain, target, messageId);
-    } else if (type === "group") {
+    else if (type === "group")
       return this.api.sendGroupMessage(msgChain, target, messageId);
-    }
   }
 
   /**

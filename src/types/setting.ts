@@ -75,30 +75,22 @@ export interface ReverseWebsocketAdapter {
     /**
      * 额外参数，该连接有效
      */
-    extraParameters?: {
-      [key: string]: string;
-    };
+    extraParameters?: Record<string, string>;
     /**
      * 额外请求头，该连接有效
      */
-    extraHeaders?: {
-      [key: string]: string;
-    };
+    extraHeaders?: Record<string, string>;
   };
 
   /**
    * 额外请求参数，全 client 有效; 会被具体 destination 中的覆盖
    */
-  extraParameters?: {
-    [key: string]: string;
-  };
+  extraParameters?: Record<string, string>;
 
   /**
    * 额外请求头，全 client 有效; 会被具体 destination 中的覆盖
    */
-  extraHeaders?: {
-    [key: string]: string;
-  };
+  extraHeaders?: Record<string, string>;
 
   /**
    * websocket 用于消息同步的字段为 syncId, 一般值为请求时的原值，用于同步一次请求与响应

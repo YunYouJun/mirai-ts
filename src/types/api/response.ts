@@ -3,10 +3,10 @@
  * @packageDocumentation
  */
 
-import * as MessageType from "../message-type";
-import * as EventType from "../event-type";
-import { Friend, Group, Member } from "../contact";
-import {
+import type * as MessageType from "../message-type";
+import type * as EventType from "../event-type";
+import type { Friend, Group, Member } from "../contact";
+import type {
   BotInvitedJoinGroupRequestOperationType,
   MemberJoinRequestOperationType,
   NewFriendRequestOperationType,

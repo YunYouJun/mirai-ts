@@ -1,4 +1,4 @@
-import { MiraiApiHttpSetting, MiraiOptions } from ".";
+import type { MiraiApiHttpSetting, MiraiOptions } from ".";
 
 export const defaultMahSetting: MiraiApiHttpSetting = {
   adapters: ["http", "ws"],

@@ -1,6 +1,6 @@
-import type { MiraiApiHttp } from "./index";
-import type { Api, EventType } from "..";
 import type { AxiosResponse } from "axios";
+import type { Api, EventType } from "..";
+import type { MiraiApiHttp } from "./index";
 
 /**
  * - `0` 同意添加好友
