@@ -26,7 +26,7 @@ export class Command {
    * - 当指令通过其他方式发送时，如控制台、HTTP 接口等，sender 和 group 均为 0
    */
   async listen(): Promise<CommandInfo> {
-    const { data } = (await this.api.axios.post('/command', {
+    const { data } = (await this.api.axios.post('/cmd', {
       verifyKey: this.api.setting.verifyKey,
     })) as AxiosResponse<CommandInfo>
     return data
@@ -45,7 +45,7 @@ export class Command {
     description: string,
     usage?: string,
   ) {
-    const { data } = await this.api.axios.post('/command/register', {
+    const { data } = await this.api.axios.post('/cmd/register', {
       verifyKey: this.api.setting.verifyKey,
       name,
       alias,
@@ -60,8 +60,8 @@ export class Command {
    * @param name 指令名
    * @param args 指令参数
    */
-  async send(name: string, args: string[]) {
-    const { data } = await this.api.axios.post('/command/send', {
+  async execute(name: string, args: string[]) {
+    const { data } = await this.api.axios.post('/cmd/execute', {
       verifyKey: this.api.setting.verifyKey,
       name,
       args,

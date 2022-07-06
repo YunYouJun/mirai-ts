@@ -417,6 +417,27 @@ export interface NudgeEvent extends BaseEvent {
   }
 }
 
+export interface CommandExecutedEvent extends BaseEvent {
+  type: 'CommandExecutedEvent'
+  /**
+  * 命令名称
+  */
+  name: string
+  /**
+  * 发送命令的好友, 从控制台发送为 null
+  */
+  friend: Contact.Friend | null
+  /**
+  * 发送命令的群成员, 从控制台发送为 null
+  */
+  member: Contact.Member | null
+  /**
+  * 指令的参数, 以消息类型传递
+  */
+  args: MessageChain
+  reply?: undefined
+}
+
 export interface EventMap {
   BotOnlineEvent: BotOnlineEvent
   BotOfflineEventActive: BotOfflineEventActive
@@ -451,6 +472,9 @@ export interface EventMap {
   BotInvitedJoinGroupRequestEvent: BotInvitedJoinGroupRequestEvent
 
   NudgeEvent: NudgeEvent
+
+  // 命令事件
+  CommandExecutedEvent: CommandExecutedEvent
 }
 
 // string union of event type
