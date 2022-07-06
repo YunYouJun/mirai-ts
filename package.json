@@ -15,17 +15,18 @@
     }
   },
   "scripts": {
+    "build": "tsup src/index.ts",
     "demo": "node demo/index.js",
     "demo:ts": "tsx watch demo/index.ts",
+    "prepare": "husky install",
     "prepublishOnly": "npm run build",
-    "build": "tsup src/index.ts",
     "docs:build": "typedoc",
     "docs:dev": "cd docs && live-server",
     "lint": "eslint --fix . --ext .ts",
     "mcl": "cd mcl && ./mcl",
     "watch": "tsup src/index.ts --watch",
-    "test": "tsx watch test/index.ts",
-    "prepare": "husky install"
+    "release": "bumpp --commit --push --tag",
+    "test": "tsx watch test/index.ts"
   },
   "lint-staged": {
     "*.ts": [
