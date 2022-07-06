@@ -12,7 +12,8 @@ import axios from 'axios'
  * @param timeout  请求超时时间
  */
 export function init(baseURL?: string, timeout = 0): AxiosStatic {
-  if (baseURL) axios.defaults.baseURL = baseURL
+  if (baseURL)
+    axios.defaults.baseURL = baseURL
 
   axios.defaults.timeout = timeout
 
@@ -21,7 +22,8 @@ export function init(baseURL?: string, timeout = 0): AxiosStatic {
       return config
     },
     (err) => {
-      if (process.env.NODE_ENV !== 'production') console.error(err)
+      if (process.env.NODE_ENV !== 'production')
+        console.error(err)
 
       return Promise.reject(err)
     },

@@ -116,7 +116,7 @@ export class MiraiApiHttp {
    */
   async handleStatusCode() {
     this.axios.interceptors.response.use(
-      async(res) => {
+      async (res) => {
         if (res.status === 200 && res.data) {
           const statusCode = (res.data as any).code
           const message = getMessageFromStatusCode(statusCode)
@@ -134,7 +134,8 @@ export class MiraiApiHttp {
       },
       (err) => {
         this.logger.error(`响应失败：${err.message}`)
-        if (process.env.NODE_ENV !== 'production') console.error(err)
+        if (process.env.NODE_ENV !== 'production')
+          console.error(err)
 
         return Promise.reject(err)
       },
@@ -204,7 +205,8 @@ export class MiraiApiHttp {
       sessionKey: this.sessionKey,
       qq,
     })
-    if (data.code === 0) this.verified = false
+    if (data.code === 0)
+      this.verified = false
 
     return data
   }
@@ -293,7 +295,8 @@ export class MiraiApiHttp {
         id,
       },
     })
-    if (data.code === 0) return data.data
+    if (data.code === 0)
+      return data.data
     else return data
   }
 
@@ -315,7 +318,8 @@ export class MiraiApiHttp {
       target,
       messageChain,
     }
-    if (quote) payload.quote = quote
+    if (quote)
+      payload.quote = quote
 
     const { data } = await this.axios.post<
     Api.Params.SendFriendMessage,
@@ -342,7 +346,8 @@ export class MiraiApiHttp {
       target,
       messageChain,
     }
-    if (quote) payload.quote = quote
+    if (quote)
+      payload.quote = quote
 
     const { data } = await this.axios.post<
     Api.Params.SendGroupMessage,
@@ -371,7 +376,8 @@ export class MiraiApiHttp {
       group,
       messageChain,
     }
-    if (quote) payload.quote = quote
+    if (quote)
+      payload.quote = quote
 
     const { data } = await this.axios.post<
     Api.Params.SendTempMessage,

@@ -3,7 +3,7 @@
  * @packageDocumentation
  */
 
-import type * as MessageType from '../types/message-type'
+import type { MessageType } from '../types/message-type'
 
 /**
  * 获取纯文本
@@ -14,7 +14,8 @@ import type * as MessageType from '../types/message-type'
 export function getPlain(messageChain: MessageType.MessageChain) {
   let msg = ''
   messageChain.forEach((chain) => {
-    if (chain.type === 'Plain') msg += chain.text
+    if (chain.type === 'Plain')
+      msg += chain.text
   })
   return msg
 }

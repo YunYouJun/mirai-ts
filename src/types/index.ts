@@ -5,7 +5,7 @@ export * from './profile'
 export * as Api from './api'
 export * as Config from './config'
 export * as Contact from './contact'
-export * as MessageType from './message-type'
+export { MessageType } from './message-type'
 export * as EventType from './event-type'
 
 /**

@@ -3,7 +3,7 @@
  * @packageDocumentation
  */
 
-import type * as MessageType from '../message-type'
+import type { MessageType } from '../message-type'
 import type * as EventType from '../event-type'
 import type { Friend, Group, Member } from '../contact'
 import type {

@@ -13,8 +13,8 @@ import type {
   MemberJoinRequestOperationType,
   NewFriendRequestOperationType,
 } from './mirai-api-http/resp'
-import type { SingleMessage } from './types/message-type'
-import type { EventType, MessageType } from '.'
+import type { MessageType } from './types/message-type'
+import type { EventType } from '.'
 
 /**
  * 为消息和事件类型挂载辅助函数
@@ -48,7 +48,7 @@ export function createHelperForMsg(
     }
 
     msg.get = (type) => {
-      let curSingleMessage: SingleMessage | null = null
+      let curSingleMessage: MessageType.SingleMessage | null = null
       msg.messageChain.some((singleMessage) => {
         if (singleMessage.type === type) {
           curSingleMessage = singleMessage
@@ -61,7 +61,7 @@ export function createHelperForMsg(
   }
 
   // 为各类型添加 reply 辅助函数
-  (msg as any).reply = async(
+  (msg as any).reply = async (
     msgChain: string | MessageType.MessageChain,
     quote = false,
   ) => {
@@ -70,7 +70,7 @@ export function createHelperForMsg(
 
   // 为请求类事件添加 respond 辅助函数
   if (msg.type === 'NewFriendRequestEvent') {
-    msg.respond = async(
+    msg.respond = async (
       operate: NewFriendRequestOperationType,
       message?: string,
     ) => {
@@ -78,7 +78,7 @@ export function createHelperForMsg(
     }
   }
   else if (msg.type === 'MemberJoinRequestEvent') {
-    msg.respond = async(
+    msg.respond = async (
       operate: MemberJoinRequestOperationType,
       message?: string,
     ) => {
@@ -86,7 +86,7 @@ export function createHelperForMsg(
     }
   }
   else if (msg.type === 'BotInvitedJoinGroupRequestEvent') {
-    msg.respond = async(
+    msg.respond = async (
       operate: BotInvitedJoinGroupRequestOperationType,
       message?: string,
     ) => {

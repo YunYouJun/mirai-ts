@@ -76,7 +76,8 @@ export interface CardInfo {
  * @param info
  */
 export function card(info: CardInfo) {
-  if (info.type) info = Object.assign(getInfoByType(info.type), info)
+  if (info.type)
+    info = Object.assign(getInfoByType(info.type), info)
 
   return `<?xml version='1.0' encoding='UTF-8' standalone='yes'?><msg templateID="123" url="${info.url}" serviceID="1" action="web" actionData="" a_actionData="" i_actionData="" brief="${info.brief}" flag="0"><item layout="2"><picture cover="${info.cover}"/><title>${info.title}</title><summary>${info.summary}</summary></item><source url="${info.url}" icon="${info.icon}" name="${info.name}" appid="0" action="web" actionData="" a_actionData="tencent0://" i_actionData=""/></msg>`
 }

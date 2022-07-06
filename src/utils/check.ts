@@ -3,7 +3,7 @@
  * @packageDocumentation
  */
 
-import type * as MessageType from '../types/message-type'
+import type { MessageType } from '../types/message-type'
 import type * as EventType from '../types/event-type'
 
 /**
@@ -35,7 +35,8 @@ export interface Match {
  * @param keywords 关键字
  */
 export function is(str: string, keywords: string | string[]): boolean {
-  if (Array.isArray(keywords)) return keywords.includes(str)
+  if (Array.isArray(keywords))
+    return keywords.includes(str)
   else return str === keywords
 }
 
@@ -68,11 +69,13 @@ export function re(
   config: Re | string,
 ): RegExpMatchArray | boolean {
   let regExp = null
-  if (typeof config === 'string') regExp = new RegExp(config)
+  if (typeof config === 'string')
+    regExp = new RegExp(config)
   else regExp = new RegExp(config.pattern, config.flags || 'i')
 
   const result = regExp.exec(str)
-  if (result && result[0]) return result
+  if (result && result[0])
+    return result
   else return false
 }
 
@@ -85,9 +88,12 @@ export function match(
   str: string,
   ans: Match,
 ): boolean | RegExpMatchArray | null {
-  if (ans.re) return re(str, ans.re)
-  if (ans.is) return is(str, ans.is)
-  if (ans.includes) return includes(str, ans.includes)
+  if (ans.re)
+    return re(str, ans.re)
+  if (ans.is)
+    return is(str, ans.is)
+  if (ans.includes)
+    return includes(str, ans.includes)
   return false
 }
 

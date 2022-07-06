@@ -153,7 +153,8 @@ export class Mirai {
    */
   async verify() {
     const data = await this.api.verify()
-    if (data.code === 0) this.logger.info(`[http] Session: ${data.session}`)
+    if (data.code === 0)
+      this.logger.info(`[http] Session: ${data.session}`)
 
     return data
   }
