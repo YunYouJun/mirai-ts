@@ -6,7 +6,7 @@
 import type { AxiosResponse } from 'axios'
 import type { MiraiApiHttp } from './index'
 
-interface CommandInfo {
+export interface CommandInfo {
   name: string
   sender: number
   group: number

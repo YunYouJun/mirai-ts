@@ -59,7 +59,7 @@ export interface CardInfo {
 
 /**
  * 生成卡片 XML 消息模版
- * Example:
+ * @example
  * msg.reply([
  *   Message.Xml(
  *     template.card({

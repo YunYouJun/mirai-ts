@@ -38,7 +38,7 @@ export type MessageAndEventType =
 /**
  * 数据类型
  */
-type Data<
+export type Data<
   T extends 'message' | EventType.EventType | MessageType.ChatMessageType,
 > = T extends EventType.EventType
   ? EventType.EventMap[T]
@@ -46,7 +46,7 @@ type Data<
     ? MessageType.ChatMessageMap[T]
     : MessageType.ChatMessage
 
-type SendMessageType = 'friend' | 'group'
+export type SendMessageType = 'friend' | 'group'
 
 /**
  * Mirai SDK 初始化类
@@ -205,7 +205,7 @@ export class Mirai {
    * 绑定事件列表
    * message: FriendMessage | GroupMessage | TempMessage
    * [mirai-api-http事件类型一览](https://github.com/project-mirai/mirai-api-http/blob/master/docs/EventType.md)
-   * mirai.on('MemberMuteEvent', ()=>{})
+   * @example mirai.on('MemberMuteEvent', ()=>{})
    * @param type
    * @param callback
    */

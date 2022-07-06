@@ -2,6 +2,7 @@
   "name": "mirai-ts",
   "version": "2.3.5",
   "description": "Mirai TypeScript SDK",
+  "packageManager": "pnpm@7.5.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "module": "dist/index.mjs",

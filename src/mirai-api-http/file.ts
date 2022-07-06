@@ -12,7 +12,7 @@ export type FileInfoResponse = AxiosResponse<
 Api.Response.ResponseType<FileInfo>
 >
 
-interface BaseFileOptions {
+export interface BaseFileOptions {
   /**
    * 文件 ID
    */

@@ -39,7 +39,7 @@ export * from './file'
 export * from './resp'
 export * from './utils'
 
-interface WsCallbackMap {
+export interface WsCallbackMap {
   message: (msg: MessageType.ChatMessage) => any
   event: (event: EventType.Event) => any
   all: (data: EventType.Event | MessageType.ChatMessage) => any
@@ -144,7 +144,7 @@ export class MiraiApiHttp {
 
   /**
    * 使用此方法获取插件的信息，如版本号
-   * data.data: { "version": "v1.0.0" }
+   * @example data.data: { "version": "v1.0.0" }
    */
   async about() {
     const { data } = await this.axios.get<
@@ -214,7 +214,7 @@ export class MiraiApiHttp {
   // 获取 Bot 收到的消息和事件
   /**
    * 使用此方法获取 bot 接收到的最老消息和最老各类事件(会从 MiraiApiHttp 消息记录中删除)
-   * { code: 0, data: [] }
+   * @example { code: 0, data: [] }
    * @param count 获取消息和事件的数量
    */
   async fetchMessage(count = 10) {
@@ -305,7 +305,7 @@ export class MiraiApiHttp {
    * @param messageChain 消息链，是一个消息对象构成的数组
    * @param target 发送消息目标好友的 QQ 号
    * @param quote 引用一条消息的messageId进行回复
-   * @returns '{ code: 0, msg: "success", messageId: 123456 }' messageId 一个Int类型属性，标识本条消息，用于撤回和引用回复
+   * @returns { code: 0, msg: "success", messageId: 123456 } messageId 一个Int类型属性，标识本条消息，用于撤回和引用回复
    */
   async sendFriendMessage(
     messageChain: string | MessageType.MessageChain,
