@@ -1,6 +1,6 @@
 {
   "name": "mirai-ts",
-  "version": "2.3.5",
+  "version": "2.4.0",
   "description": "Mirai TypeScript SDK",
   "packageManager": "pnpm@7.5.0",
   "main": "dist/index.js",
@@ -61,6 +61,7 @@
     "@types/ws": "^8.5.3",
     "@typescript-eslint/eslint-plugin": "^5.30.5",
     "@typescript-eslint/parser": "^5.30.5",
+    "bumpp": "^8.2.1",
     "dotenv": "^16.0.1",
     "eslint": "^8.19.0",
     "husky": "8.0.1",
