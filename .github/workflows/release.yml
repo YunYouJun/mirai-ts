@@ -13,10 +13,16 @@ jobs:
         with:
           fetch-depth: 0
 
+      - uses: pnpm/action-setup@v2
+
       - uses: actions/setup-node@v3
         with:
+          cache: pnpm
           node-version: 16.x
           registry-url: "https://registry.npmjs.org"
+
+      - name: Install
+        run: pnpm install
 
       - run: npm publish --access public
         env:
