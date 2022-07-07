@@ -10,7 +10,7 @@ import type {
 } from '../mirai-api-http/resp'
 import type { Api } from '../index'
 import type * as Contact from './contact'
-import type { MessageChain } from './message-type'
+import type { MessageType } from './message-type'
 
 /**
  * 内部基类
@@ -20,7 +20,7 @@ export interface BaseEvent {
   /**
    * reply 辅助函数
    */
-  reply?: (msgChain: string | MessageChain, quote?: boolean) => Promise<void>
+  reply?: (msgChain: string | MessageType.MessageChain, quote?: boolean) => Promise<void>
 }
 
 /**
@@ -434,7 +434,7 @@ export interface CommandExecutedEvent extends BaseEvent {
   /**
    * 指令的参数, 以消息类型传递
    */
-  args: MessageChain
+  args: MessageType.MessageChain
   reply?: undefined
 }
 
