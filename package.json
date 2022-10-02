@@ -1,44 +1,19 @@
 {
   "name": "mirai-ts",
   "version": "2.4.0",
+  "packageManager": "pnpm@7.12.2",
   "description": "Mirai TypeScript SDK",
-  "packageManager": "pnpm@7.5.0",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "module": "dist/index.mjs",
-  "files": [
-    "dist"
-  ],
-  "exports": {
-    ".": {
-      "require": "./dist/index.js",
-      "import": "./dist/index.mjs"
-    }
+  "author": {
+    "name": "YunYouJun",
+    "email": "me@yunyoujun.cn",
+    "url": "https://www.yunyoujun.cn"
   },
-  "scripts": {
-    "build": "tsup src/index.ts",
-    "demo": "node demo/index.js",
-    "demo:ts": "tsx watch demo/index.ts",
-    "prepare": "husky install",
-    "prepublishOnly": "npm run build",
-    "docs:build": "typedoc",
-    "docs:dev": "cd docs && live-server",
-    "lint": "eslint --fix . --ext .ts",
-    "mcl": "cd mcl && ./mcl",
-    "watch": "tsup src/index.ts --watch",
-    "release": "bumpp --commit --push --tag",
-    "test": "tsx watch test/index.ts"
-  },
-  "lint-staged": {
-    "*.ts": [
-      "eslint --fix"
-    ]
-  },
+  "license": "AGPL-3.0",
+  "homepage": "https://www.yunyoujun.cn/mirai-ts/",
   "repository": {
     "type": "git",
     "url": "https://github.com/YunYouJun/mirai-ts"
   },
-  "homepage": "https://www.yunyoujun.cn/mirai-ts/",
   "keywords": [
     "mirai",
     "http",
@@ -48,36 +23,61 @@
     "node",
     "js"
   ],
-  "author": {
-    "name": "YunYouJun",
-    "email": "me@yunyoujun.cn",
-    "url": "https://www.yunyoujun.cn"
+  "exports": {
+    ".": {
+      "require": "./dist/index.js",
+      "import": "./dist/index.mjs"
+    }
   },
-  "license": "AGPL-3.0",
-  "devDependencies": {
-    "@antfu/eslint-config-ts": "^0.25.2",
-    "@types/js-yaml": "^4.0.5",
-    "@types/node": "^18.0.3",
-    "@types/ws": "^8.5.3",
-    "@typescript-eslint/eslint-plugin": "^5.30.5",
-    "@typescript-eslint/parser": "^5.30.5",
-    "bumpp": "^8.2.1",
-    "dotenv": "^16.0.1",
-    "eslint": "^8.19.0",
-    "husky": "8.0.1",
-    "js-yaml": "^4.1.0",
-    "lint-staged": "^13.0.3",
-    "prettier": "^2.7.1",
-    "tsup": "6.1.3",
-    "tsx": "^3.7.1",
-    "typedoc": "^0.23.5",
-    "typescript": "^4.7.4"
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup src/index.ts",
+    "demo": "node demo/index.js",
+    "demo:ts": "tsx watch demo/index.ts",
+    "prepare": "husky install",
+    "prepublishOnly": "npm run build",
+    "docs:build": "typedoc",
+    "docs:dev": "cd docs && live-server",
+    "lint": "eslint .",
+    "mcl": "cd mcl && ./mcl",
+    "watch": "tsup src/index.ts --watch",
+    "release": "bumpp --commit --push --tag",
+    "test": "tsx watch test/index.ts"
   },
   "dependencies": {
     "@yunyoujun/logger": "^0.2.3",
     "axios": "^0.27.2",
     "chalk": "4",
     "form-data": "^4.0.0",
-    "ws": "^8.8.0"
+    "ws": "^8.9.0"
+  },
+  "devDependencies": {
+    "@antfu/eslint-config-ts": "^0.27.0",
+    "@types/js-yaml": "^4.0.5",
+    "@types/node": "^18.7.23",
+    "@types/ws": "^8.5.3",
+    "@typescript-eslint/eslint-plugin": "^5.38.1",
+    "@typescript-eslint/parser": "^5.38.1",
+    "bumpp": "^8.2.1",
+    "dotenv": "^16.0.3",
+    "eslint": "^8.24.0",
+    "husky": "8.0.1",
+    "js-yaml": "^4.1.0",
+    "lint-staged": "^13.0.3",
+    "prettier": "^2.7.1",
+    "tsup": "6.2.3",
+    "tsx": "^3.9.0",
+    "typedoc": "^0.23.15",
+    "typescript": "^4.8.4"
+  },
+  "lint-staged": {
+    "*.ts": [
+      "eslint --fix"
+    ]
   }
 }

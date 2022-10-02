@@ -85,11 +85,11 @@ pnpm i events
 ### 工具类
 
 ```js
-const { Message, Logger, check, MessageType, EventType } = require("mirai-ts");
+const { Message, Logger, check, MessageType, EventType } = require('mirai-ts')
 ```
 
 ```ts
-import { Message, Logger, check, MessageType, EventType } from "mirai-ts";
+import { EventType, Logger, Message, MessageType, check } from 'mirai-ts'
 ```
 
 > 详情请参见 [API 文档](https://www.yunyoujun.cn/mirai-ts/)。
@@ -105,10 +105,10 @@ import { Message, Logger, check, MessageType, EventType } from "mirai-ts";
 简单的日志工具，当然你可以自由使用其他工具替代它。
 
 ```ts
-import { Logger } from "mirai-ts";
+import { Logger } from 'mirai-ts'
 // 你可以自定义你的前缀
-const logger = new Logger({ prefix: "[mirai-ts]" });
-logger.success("We are free!");
+const logger = new Logger({ prefix: '[mirai-ts]' })
+logger.success('We are free!')
 ```
 
 #### [check](https://www.yunyoujun.cn/mirai-ts/modules/check.html)
@@ -118,13 +118,13 @@ logger.success("We are free!");
 如判断消息链是否有艾特某人：
 
 ```js
-const { check } = require("mirai-ts");
+const { check } = require('mirai-ts')
 // msg 为消息链 MessageChain
 // qq 为 QQ 号
-check.isAt(msg, qq);
+check.isAt(msg, qq)
 
 // or just
-msg.isAt(qq);
+msg.isAt(qq)
 // 留空则判断是否艾特机器人自身
 ```
 
