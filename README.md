@@ -168,6 +168,9 @@ pnpm mcl
 
 # 参考 https://github.com/project-mirai/mirai-login-solver-selenium 获取 ticket
 
-# 启动 demo
+# 开发（监听文件变动并构建）（打开新终端窗口）
+pnpm dev
+
+# 启动 demo（打开新终端窗口）
 pnpm demo
 ```
