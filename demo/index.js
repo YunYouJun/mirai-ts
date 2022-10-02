@@ -37,8 +37,9 @@ async function app() {
 
   // 调用 mirai-ts 封装的 mirai-api-http 发送指令
   console.log('send command help')
-  const data = await mirai.api.command.send('/help', [])
-  console.log(`帮助信息:${data}`)
+  const data = await mirai.api.command.execute(['/help'])
+  if (data.code === 0)
+    console.log('执行成功')
 
   // 处理各种事件类型
   // 事件订阅说明（名称均与 mirai-api-http 中事件名一致）

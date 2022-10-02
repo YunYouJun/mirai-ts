@@ -1,9 +1,11 @@
 /**
  * 指令系统
  * @packageDocumentation
+ * https://github.com/project-mirai/mirai-api-http/blob/master/mirai-api-http/src/main/kotlin/net/mamoe/mirai/api/http/adapter/internal/consts/paths.kt
  */
 
 import type { AxiosResponse } from 'axios'
+import type { Api, MessageType } from '../types'
 import type { MiraiApiHttp } from './index'
 
 export interface CommandInfo {
@@ -27,7 +29,7 @@ export class Command {
    */
   async listen(): Promise<CommandInfo> {
     const { data } = (await this.api.axios.post('/cmd', {
-      verifyKey: this.api.setting.verifyKey,
+      sessionKey: this.api.sessionKey,
     })) as AxiosResponse<CommandInfo>
     return data
   }
@@ -37,7 +39,7 @@ export class Command {
    * @param name 指令名
    * @param alias 指令别名
    * @param description 指令描述
-   * @param usage 指令描述，会在指令执行错误时显示
+   * @param usage 使用说明，会在指令执行错误时显示
    */
   async register(
     name: string,
@@ -45,8 +47,13 @@ export class Command {
     description: string,
     usage?: string,
   ) {
-    const { data } = await this.api.axios.post('/cmd/register', {
-      verifyKey: this.api.setting.verifyKey,
+    const { data } = await this.api.axios.post<Api.Params.RequestParams<{
+      name: string
+      alias: string[]
+      description: string
+      usage?: string
+    }>>('/cmd/register', {
+      sessionKey: this.api.sessionKey,
       name,
       alias,
       description,
@@ -57,14 +64,18 @@ export class Command {
 
   /**
    * 发送指令
-   * @param name 指令名
-   * @param args 指令参数
+   * @param command 命令与参数
    */
-  async execute(name: string, args: string[]) {
-    const { data } = await this.api.axios.post('/cmd/execute', {
-      verifyKey: this.api.setting.verifyKey,
-      name,
-      args,
+  async execute(command: string[]) {
+    const { data } = await this.api.axios.post<
+      Api.Params.RequestParams<{ command: MessageType.MessageChain }>,
+      AxiosResponse<Api.Response.BaseResponse>
+    >('/cmd/execute', {
+      sessionKey: this.api.sessionKey,
+      command: [{
+        type: 'Plain',
+        text: command.join(' '),
+      }],
     })
     return data
   }

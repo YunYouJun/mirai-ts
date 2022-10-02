@@ -139,3 +139,35 @@ el-bot 展示了整个 mirai-ts 的使用流程，并内置了一些如自动应
 但这并不是束缚，在插件系统中你仍然可以调用机器人所有的上下文，并通过编写插件的形式快速实现你想要的功能。
 
 > 更多请参见文档 [el-bot | El Bot Docs](https://docs.bot.elpsy.cn/)
+
+## 开发
+
+```bash
+# clone 本项目
+git clone https://github.com/YunYouJun/mirai-ts
+cd mirai-ts
+
+# 安装 mirai-console-loader，放置于 `mirai-ts/mcl` 文件夹下
+# https://github.com/iTXTech/mirai-console-loader
+mkdir mcl
+cd mcl
+# 修改链接下载 mcl 对应版本
+wget https://github.com/iTXTech/mirai-console-loader/releases/download/v2.1.1/mcl-2.1.1.zip
+unzip mcl-2.1.1.zip
+chmod +x mcl
+./mcl
+
+# 使用 mcl 安装 mirai-api-http
+# https://github.com/project-mirai/mirai-api-http#%E5%AE%89%E8%A3%85mirai-api-http
+./mcl --update-package net.mamoe:mirai-api-http --channel stable-v2 --type plugin
+# mcl 自动更新
+./mcl -u
+
+cd ..
+pnpm mcl
+
+# 参考 https://github.com/project-mirai/mirai-login-solver-selenium 获取 ticket
+
+# 启动 demo
+pnpm demo
+```
