@@ -107,19 +107,19 @@ export namespace MessageType {
     /**
      * 图片的 imageId，群图片与好友图片格式不同。不为空时将忽略 url 属性
      */
-    imageId: string | null
+    imageId?: string
     /**
      * 图片的 URL，发送时可作网络图片的链接；接收时为腾讯图片服务器的链接，可用于图片下载
      */
-    url: string | null
+    url?: string
     /**
      * 图片的路径，发送本地图片，相对路径于 `data/net.mamoe.mirai-api-http/images`
      */
-    path: string | null
+    path?: string
     /**
      * 图片的 Base64 编码
      */
-    base64: string | null
+    base64?: string
   }
 
   /**
