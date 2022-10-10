@@ -3,7 +3,7 @@
  * @packageDocumentation
  */
 
-import type { MessageType } from './types/message-type'
+import type { MessageType } from './types/message-type';
 
 /**
  * 生成引用的消息格式
@@ -13,7 +13,7 @@ export function Quote(messageId: number): MessageType.Quote {
   return {
     type: 'Quote',
     id: messageId,
-  }
+  };
 }
 
 /**
@@ -25,7 +25,7 @@ export function At(target: number): MessageType.At {
     type: 'At',
     target,
     display: '',
-  }
+  };
 }
 
 /**
@@ -34,7 +34,7 @@ export function At(target: number): MessageType.At {
 export function AtAll(): MessageType.AtAll {
   return {
     type: 'AtAll',
-  }
+  };
 }
 
 /**
@@ -47,7 +47,7 @@ export function Face(faceId: number, name = ''): MessageType.Face {
     type: 'Face',
     faceId,
     name,
-  }
+  };
 }
 
 /**
@@ -58,7 +58,7 @@ export function Plain(text: string): MessageType.Plain {
   return {
     type: 'Plain',
     text,
-  }
+  };
 }
 
 /**
@@ -80,7 +80,7 @@ export function Image(
     url,
     path,
     base64,
-  }
+  };
 }
 
 /**
@@ -99,7 +99,7 @@ export function FlashImage(
     imageId,
     url,
     path,
-  }
+  };
 }
 
 /**
@@ -121,7 +121,7 @@ export function Voice(
     url,
     path,
     base64,
-  }
+  };
 }
 
 /**
@@ -132,7 +132,7 @@ export function Xml(xml: string): MessageType.Xml {
   return {
     type: 'Xml',
     xml,
-  }
+  };
 }
 
 /**
@@ -143,7 +143,7 @@ export function Json(json: string): MessageType.Json {
   return {
     type: 'Json',
     json,
-  }
+  };
 }
 
 /**
@@ -154,7 +154,7 @@ export function App(content: string): MessageType.App {
   return {
     type: 'App',
     content,
-  }
+  };
 }
 
 /**
@@ -170,7 +170,7 @@ export function Poke(name: MessageType.PokeName): MessageType.Poke {
   return {
     type: 'Poke',
     name,
-  }
+  };
 }
 
 /**
@@ -202,5 +202,5 @@ export function MusicShare(
     pictureUrl,
     musicUrl,
     brief,
-  }
+  };
 }

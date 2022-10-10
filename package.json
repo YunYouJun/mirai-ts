@@ -33,6 +33,7 @@
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
   "files": [
+    "src",
     "dist"
   ],
   "scripts": {
@@ -48,7 +49,8 @@
     "mcl": "cd mcl && ./mcl",
     "watch": "tsup src/index.ts --watch",
     "release": "bumpp --commit --push --tag",
-    "test": "tsx watch test/index.ts"
+    "test": "tsx watch test/index.ts",
+    "postinstall": "npm run build"
   },
   "dependencies": {
     "@yunyoujun/logger": "^0.2.3",
