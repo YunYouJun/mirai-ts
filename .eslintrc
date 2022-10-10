@@ -1,3 +1,10 @@
 {
-  "extends": ["@antfu/eslint-config-ts"]
+  "extends": ["@antfu/eslint-config-ts"],
+  "rules": {
+    "indent": "off",
+    "@typescript-eslint/indent": "off",
+    "semi": "off",
+    "@typescript-eslint/semi": "off",
+    "@typescript-eslint/member-delimiter-style": "off"
+  }
 }
