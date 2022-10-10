@@ -1,5 +1,5 @@
 {
-  "name": "mirai-ts",
+  "name": "@hengkx/mirai-ts",
   "version": "2.4.1",
   "packageManager": "pnpm@7.12.2",
   "description": "Mirai TypeScript SDK",
@@ -33,7 +33,6 @@
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
   "files": [
-    "src",
     "dist"
   ],
   "scripts": {
@@ -49,8 +48,7 @@
     "mcl": "cd mcl && ./mcl",
     "watch": "tsup src/index.ts --watch",
     "release": "bumpp --commit --push --tag",
-    "test": "tsx watch test/index.ts",
-    "postinstall": "npm run build"
+    "test": "tsx watch test/index.ts"
   },
   "dependencies": {
     "@yunyoujun/logger": "^0.2.3",
