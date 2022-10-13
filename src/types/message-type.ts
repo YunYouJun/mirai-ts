@@ -3,6 +3,7 @@
  * @packageDocumentation
  */
 
+import type { SendMessage } from './api/params'
 import type * as Contact from './contact'
 
 export namespace MessageType {
@@ -388,7 +389,7 @@ export namespace MessageType {
     /**
      * 快捷回复函数
      */
-    reply: (msgChain: string | MessageChain, quote?: boolean) => Promise<void>
+    reply: (msgChain: string | MessageChain, quote?: boolean) => Promise<SendMessage>
     /**
      * 消息文本
      */
