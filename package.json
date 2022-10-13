@@ -1,6 +1,6 @@
 {
   "name": "mirai-ts",
-  "version": "2.4.2",
+  "version": "2.4.3",
   "packageManager": "pnpm@7.12.2",
   "description": "Mirai TypeScript SDK",
   "author": {
@@ -48,7 +48,8 @@
     "mcl": "cd mcl && ./mcl",
     "watch": "tsup src/index.ts --watch",
     "release": "bumpp --commit --push --tag",
-    "test": "tsx watch test/index.ts"
+    "test": "tsx watch test/index.ts",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@yunyoujun/logger": "^0.2.3",
