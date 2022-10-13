@@ -10,6 +10,7 @@ import FormData from 'form-data'
 import WebSocket from 'ws'
 import { Logger } from '@yunyoujun/logger'
 import chalk from 'chalk'
+import { isChatMessage } from '../utils/check'
 import type {
   Api,
   Config,
@@ -51,6 +52,8 @@ export interface WsCallbackMap {
 interface BaseVerifyParams {
   verifyKey: string
 }
+
+type RecallParams = Pick<Api.Params.Recall, 'target' | 'messageId'>
 
 export class MiraiApiHttp {
   setting: MiraiApiHttpSetting
@@ -148,8 +151,8 @@ export class MiraiApiHttp {
    */
   async about() {
     const { data } = await this.axios.get<
-    null,
-    AxiosResponse<Api.Response.About>
+      null,
+      AxiosResponse<Api.Response.About>
     >('/about')
     return data
   }
@@ -161,8 +164,8 @@ export class MiraiApiHttp {
     this.logger.info(`[http] Address: ${this.http.address}`)
 
     const { data } = await this.axios.post<
-    BaseVerifyParams,
-    AxiosResponse<Api.Response.Auth>
+      BaseVerifyParams,
+      AxiosResponse<Api.Response.Auth>
     >('/verify', {
       verifyKey,
     })
@@ -183,8 +186,8 @@ export class MiraiApiHttp {
   async bind(qq: number) {
     this.qq = qq
     const { data } = await this.axios.post<
-    Api.Params.RequestParams<{ qq: number }>,
-    AxiosResponse<Api.Response.BaseResponse>
+      Api.Params.RequestParams<{ qq: number }>,
+      AxiosResponse<Api.Response.BaseResponse>
     >('/bind', {
       sessionKey: this.sessionKey,
       qq,
@@ -199,8 +202,8 @@ export class MiraiApiHttp {
    */
   async release(qq = this.qq) {
     const { data } = await this.axios.post<
-    Api.Params.RequestParams<{ qq: number }>,
-    AxiosResponse<Api.Response.BaseResponse>
+      Api.Params.RequestParams<{ qq: number }>,
+      AxiosResponse<Api.Response.BaseResponse>
     >('/release', {
       sessionKey: this.sessionKey,
       qq,
@@ -219,8 +222,8 @@ export class MiraiApiHttp {
    */
   async fetchMessage(count = 10) {
     const { data } = await this.axios.get<
-    Api.Params.RequestParams<{ count: number }>,
-    AxiosResponse<Api.Response.FetchMessage>
+      Api.Params.RequestParams<{ count: number }>,
+      AxiosResponse<Api.Response.FetchMessage>
     >('/fetchMessage', {
       params: {
         sessionKey: this.sessionKey,
@@ -236,8 +239,8 @@ export class MiraiApiHttp {
    */
   async fetchLatestMessage(count = 10) {
     const { data } = await this.axios.get<
-    Api.Params.RequestParams<{ count: number }>,
-    AxiosResponse<Api.Response.FetchMessage>
+      Api.Params.RequestParams<{ count: number }>,
+      AxiosResponse<Api.Response.FetchMessage>
     >('/fetchLatestMessage', {
       params: {
         sessionKey: this.sessionKey,
@@ -253,8 +256,8 @@ export class MiraiApiHttp {
    */
   async peekMessage(count = 10) {
     const { data } = await this.axios.get<
-    Api.Params.RequestParams<{ count: number }>,
-    AxiosResponse<Api.Response.FetchMessage>
+      Api.Params.RequestParams<{ count: number }>,
+      AxiosResponse<Api.Response.FetchMessage>
     >('/peekMessage', {
       params: {
         sessionKey: this.sessionKey,
@@ -270,8 +273,8 @@ export class MiraiApiHttp {
    */
   async peekLatestMessage(count = 10) {
     const { data } = await this.axios.get<
-    Api.Params.RequestParams<{ count: number }>,
-    AxiosResponse<Api.Response.FetchMessage>
+      Api.Params.RequestParams<{ count: number }>,
+      AxiosResponse<Api.Response.FetchMessage>
     >('/peekLatestMessage', {
       params: {
         sessionKey: this.sessionKey,
@@ -288,8 +291,8 @@ export class MiraiApiHttp {
    */
   async messageFromId(id: number, target: number) {
     const { data } = await this.axios.get<
-    Api.Params.RequestParams<{ id: number; target: number }>,
-    AxiosResponse<Api.Response.MessageFromId>
+      Api.Params.RequestParams<{ id: number; target: number }>,
+      AxiosResponse<Api.Response.MessageFromId>
     >('/messageFromId', {
       params: {
         sessionKey: this.sessionKey,
@@ -324,8 +327,8 @@ export class MiraiApiHttp {
       payload.quote = quote
 
     const { data } = await this.axios.post<
-    Api.Params.SendFriendMessage,
-    AxiosResponse<Api.Response.SendMessage>
+      Api.Params.SendFriendMessage,
+      AxiosResponse<Api.Response.SendMessage>
     >('/sendFriendMessage', payload)
     return data
   }
@@ -352,8 +355,8 @@ export class MiraiApiHttp {
       payload.quote = quote
 
     const { data } = await this.axios.post<
-    Api.Params.SendGroupMessage,
-    AxiosResponse<Api.Response.SendMessage>
+      Api.Params.SendGroupMessage,
+      AxiosResponse<Api.Response.SendMessage>
     >('/sendGroupMessage', payload)
     return data
   }
@@ -382,8 +385,8 @@ export class MiraiApiHttp {
       payload.quote = quote
 
     const { data } = await this.axios.post<
-    Api.Params.SendTempMessage,
-    AxiosResponse<Api.Response.SendMessage>
+      Api.Params.SendTempMessage,
+      AxiosResponse<Api.Response.SendMessage>
     >('/sendTempMessage', payload)
     return data
   }
@@ -402,8 +405,8 @@ export class MiraiApiHttp {
     group?: number,
   ) {
     const { data } = await this.axios.post<
-    Api.Params.SendImageMessage,
-    AxiosResponse<string[]>
+      Api.Params.SendImageMessage,
+      AxiosResponse<string[]>
     >('/sendImageMessage', {
       sessionKey: this.sessionKey,
       target,
@@ -425,8 +428,8 @@ export class MiraiApiHttp {
     form.append('type', type)
     form.append('img', img)
     const { data } = await this.axios.post<
-    FormData,
-    AxiosResponse<Api.Response.UploadImage>
+      FormData,
+      AxiosResponse<Api.Response.UploadImage>
     >('/uploadImage', form, {
       headers: form.getHeaders(), // same as post: { 'Content-Type': 'multipart/form-data' }
     })
@@ -444,8 +447,8 @@ export class MiraiApiHttp {
     form.append('type', type)
     form.append('voice', voice)
     const { data } = await this.axios.post<
-    FormData,
-    AxiosResponse<Api.Response.UploadVoice>
+      FormData,
+      AxiosResponse<Api.Response.UploadVoice>
     >('/uploadVoice', form, {
       headers: form.getHeaders(),
     })
@@ -480,19 +483,36 @@ export class MiraiApiHttp {
   /**
    * 撤回消息
    * 使用此方法撤回指定消息。对于bot发送的消息，有2分钟时间限制。对于撤回群聊中群员的消息，需要有相应权限
-   * @param target 需要撤回的消息的messageId
+   * @desc mirai 更新强制需要 messageId + target
+   * @param params { messageId, target }
    */
-  async recall(target: Api.Params.Recall['target']) {
-    let messageId = target
-    if (typeof target !== 'number' && target.messageChain[0].id)
-      messageId = target.messageChain[0].id
+  async recall(
+    params:
+    | RecallParams
+    | MessageType.ChatMessage,
+  ) {
+    if (
+      typeof params !== 'object'
+      || !(params as RecallParams).messageId
+      || !(params as RecallParams).target
+    )
+      throw new Error('请同时传入包含有 messageId 与 target 的对象')
+
+    let messageId = (params as RecallParams).messageId
+    let target = (params as RecallParams).target
+    // 传入 ChatMessage
+    if (isChatMessage(params) && params.messageChain[0].id) {
+      messageId = params.messageChain[0].id
+      target = params.sender.id
+    }
 
     const { data } = await this.axios.post<
-    Api.Params.Recall,
-    AxiosResponse<Api.Response.BaseResponse>
+      Api.Params.Recall,
+      AxiosResponse<Api.Response.BaseResponse>
     >('/recall', {
       sessionKey: this.sessionKey,
-      target: messageId,
+      messageId,
+      target,
     })
     return data
   }
@@ -502,8 +522,8 @@ export class MiraiApiHttp {
    */
   async friendList() {
     const { data } = await this.axios.get<
-    Api.Params.BaseRequestParams,
-    AxiosResponse<Api.Response.FriendList>
+      Api.Params.BaseRequestParams,
+      AxiosResponse<Api.Response.FriendList>
     >('/friendList', {
       params: {
         sessionKey: this.sessionKey,
@@ -517,8 +537,8 @@ export class MiraiApiHttp {
    */
   async groupList() {
     const { data } = await this.axios.get<
-    Api.Params.BaseRequestParams,
-    AxiosResponse<Api.Response.GroupList>
+      Api.Params.BaseRequestParams,
+      AxiosResponse<Api.Response.GroupList>
     >('/groupList', {
       params: {
         sessionKey: this.sessionKey,
@@ -533,8 +553,8 @@ export class MiraiApiHttp {
    */
   async memberList(target: number) {
     const { data } = await this.axios.get<
-    Api.Params.RequestParams<{ target: number }>,
-    AxiosResponse<Api.Response.MemberList>
+      Api.Params.RequestParams<{ target: number }>,
+      AxiosResponse<Api.Response.MemberList>
     >('/memberList', {
       params: {
         sessionKey: this.sessionKey,
@@ -577,8 +597,8 @@ export class MiraiApiHttp {
    */
   async muteAll(target: Api.Params.MuteAll['target']) {
     const { data } = await this.axios.post<
-    Api.Params.MuteAll,
-    AxiosResponse<Api.Response.BaseResponse>
+      Api.Params.MuteAll,
+      AxiosResponse<Api.Response.BaseResponse>
     >('/muteAll', {
       sessionKey: this.sessionKey,
       target,
@@ -592,8 +612,8 @@ export class MiraiApiHttp {
    */
   async unmuteAll(target: Api.Params.UnmuteAll['target']) {
     const { data } = await this.axios.post<
-    Api.Params.UnmuteAll,
-    AxiosResponse<Api.Response.BaseResponse>
+      Api.Params.UnmuteAll,
+      AxiosResponse<Api.Response.BaseResponse>
     >('/unmuteAll', {
       sessionKey: this.sessionKey,
       target,
@@ -609,8 +629,8 @@ export class MiraiApiHttp {
    */
   async mute(target: number, memberId: number, time = 60) {
     const { data } = await this.axios.post<
-    Api.Params.Mute,
-    AxiosResponse<Api.Response.BaseResponse>
+      Api.Params.Mute,
+      AxiosResponse<Api.Response.BaseResponse>
     >('/mute', {
       sessionKey: this.sessionKey,
       target,
@@ -627,8 +647,8 @@ export class MiraiApiHttp {
    */
   async unmute(target: number, memberId: number) {
     const { data } = await this.axios.post<
-    Api.Params.Unmute,
-    AxiosResponse<Api.Response.BaseResponse>
+      Api.Params.Unmute,
+      AxiosResponse<Api.Response.BaseResponse>
     >('/unmute', {
       sessionKey: this.sessionKey,
       target,
@@ -645,8 +665,8 @@ export class MiraiApiHttp {
    */
   async kick(target: number, memberId: number, msg = '您已被移出群聊') {
     const { data } = await this.axios.post<
-    Api.Params.Kick,
-    AxiosResponse<Api.Response.BaseResponse>
+      Api.Params.Kick,
+      AxiosResponse<Api.Response.BaseResponse>
     >('/kick', {
       sessionKey: this.sessionKey,
       target,
@@ -663,8 +683,8 @@ export class MiraiApiHttp {
    */
   async quit(target: number) {
     const { data } = await this.axios.post<
-    Api.Params.Quit,
-    AxiosResponse<Api.Response.BaseResponse>
+      Api.Params.Quit,
+      AxiosResponse<Api.Response.BaseResponse>
     >('/quit', {
       sessionKey: this.sessionKey,
       target,
@@ -681,8 +701,8 @@ export class MiraiApiHttp {
   async groupConfig(target: number, config?: Config.GroupConfig) {
     if (config) {
       const { data } = await this.axios.post<
-      Api.Params.GroupConfig,
-      AxiosResponse<Api.Response.BaseResponse>
+        Api.Params.GroupConfig,
+        AxiosResponse<Api.Response.BaseResponse>
       >('/groupConfig', {
         sessionKey: this.sessionKey,
         target,
@@ -692,8 +712,8 @@ export class MiraiApiHttp {
     }
     else {
       const { data } = await this.axios.get<
-      Api.Params.GroupConfig,
-      AxiosResponse<Config.GroupConfig>
+        Api.Params.GroupConfig,
+        AxiosResponse<Config.GroupConfig>
       >('/groupConfig', {
         params: {
           sessionKey: this.sessionKey,
@@ -718,8 +738,8 @@ export class MiraiApiHttp {
   ) {
     if (info) {
       const { data } = await this.axios.post<
-      Api.Params.MemberInfo,
-      AxiosResponse<Api.Response.BaseResponse>
+        Api.Params.MemberInfo,
+        AxiosResponse<Api.Response.BaseResponse>
       >('/memberInfo', {
         sessionKey: this.sessionKey,
         target,
@@ -730,8 +750,8 @@ export class MiraiApiHttp {
     }
     else {
       const { data } = await this.axios.get<
-      Api.Params.MemberInfo,
-      AxiosResponse<Config.MemberInfo>
+        Api.Params.MemberInfo,
+        AxiosResponse<Config.MemberInfo>
       >('/memberInfo', {
         params: {
           sessionKey: this.sessionKey,
@@ -842,8 +862,8 @@ export class MiraiApiHttp {
    */
   async setEssence(target: number) {
     const { data } = await this.axios.post<
-    Api.Params.SetEssence,
-    AxiosResponse<Api.Response.BaseResponse>
+      Api.Params.SetEssence,
+      AxiosResponse<Api.Response.BaseResponse>
     >('/setEssence', {
       sessionKey: this.sessionKey,
       target,
@@ -863,8 +883,8 @@ export class MiraiApiHttp {
     kind: Api.Params.SendNudge['kind'] = 'Group',
   ) {
     const { data } = await this.axios.post<
-    Api.Params.SendNudge,
-    AxiosResponse<Api.Response.BaseResponse>
+      Api.Params.SendNudge,
+      AxiosResponse<Api.Response.BaseResponse>
     >('/sendNudge', {
       sessionKey: this.sessionKey,
       target,

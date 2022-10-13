@@ -1,6 +1,12 @@
 {
+  "cSpell.words": [
+    "mamoe",
+    "Relogin",
+    "mirai"
+  ],
+  "prettier.enable": false,
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": true
   },
-  "cSpell.words": ["mamoe", "Relogin", "mirai"]
+  "editor.formatOnSave": false
 }

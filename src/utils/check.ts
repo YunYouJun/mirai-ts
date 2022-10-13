@@ -106,8 +106,10 @@ export function match(
  * @param msg 消息链
  */
 export function isChatMessage(
-  msg: MessageType.ChatMessage | EventType.Event,
+  msg: MessageType.ChatMessage | EventType.Event | any,
 ): msg is MessageType.ChatMessage {
+  if (!msg || !msg.type)
+    return false
   const msgType = ['FriendMessage', 'GroupMessage', 'TempMessage']
   return msgType.includes(msg.type)
 }

@@ -41,7 +41,11 @@ export type SendImageMessage = RequestParams<{
 }>
 
 export type Recall = RequestParams<{
-  target: number | MessageType.ChatMessage
+  /**
+   * 好友id或群id
+   */
+  target: number
+  messageId: number
 }>
 
 export type Unmute = RequestParams<{
