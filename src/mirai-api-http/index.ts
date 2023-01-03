@@ -286,17 +286,17 @@ export class MiraiApiHttp {
 
   /**
    * 通过 messageId 获取一条被缓存的消息
-   * @param id 获取消息的messageId
+   * @param messageId 获取消息的 messageId
    * @param target 好友 ID 或 群 ID
    */
-  async messageFromId(id: number, target: number) {
+  async messageFromId(messageId: number, target: number) {
     const { data } = await this.axios.get<
-      Api.Params.RequestParams<{ id: number; target: number }>,
+      Api.Params.RequestParams<{ messageId: number; target: number }>,
       AxiosResponse<Api.Response.MessageFromId>
     >('/messageFromId', {
       params: {
         sessionKey: this.sessionKey,
-        id,
+        messageId,
         target,
       },
     })
