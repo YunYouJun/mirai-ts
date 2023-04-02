@@ -2,7 +2,7 @@ lockfileVersion: '6.0'
 
 dependencies:
   '@yunyoujun/logger':
-    specifier: ^0.2.3
+    specifier: 0.2.3
     version: 0.2.3
   axios:
     specifier: ^1.3.4
