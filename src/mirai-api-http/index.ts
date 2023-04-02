@@ -575,19 +575,33 @@ export class MiraiApiHttp {
 
   /**
    * 此接口获取好友的详细资料
+   * @param target 好友 QQ 号
    * @returns
    */
-  async friendProfile(): Promise<UserProfile> {
-    const { data } = await this.axios.get('/friendProfile')
+  async friendProfile(target: number): Promise<UserProfile> {
+    const { data } = await this.axios.get('/friendProfile', {
+      params: {
+        sessionKey: this.sessionKey,
+        target,
+      },
+    })
     return data
   }
 
   /**
    * 此接口获取群成员的消息资料
+   * @param target 指定群的群号
+   * @param memberId 群成员 QQ 号
    * @returns
    */
-  async memberProfile(): Promise<UserProfile> {
-    const { data } = await this.axios.get('/memberProfile')
+  async memberProfile(target: number, memberId: number): Promise<UserProfile> {
+    const { data } = await this.axios.get('/memberProfile', {
+      params: {
+        sessionKey: this.sessionKey,
+        target,
+        memberId,
+      },
+    })
     return data
   }
 
