@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
-import fs from 'fs'
-import path from 'path'
+import fs from 'node:fs'
+import path from 'node:path'
 import Mirai from 'mirai-ts'
 import type { MessageType, MiraiApiHttpSetting } from 'mirai-ts'
 import yaml from 'js-yaml'

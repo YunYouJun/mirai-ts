@@ -3,7 +3,7 @@
  * @packageDocumentation
  */
 
-import events from 'events'
+import events from 'node:events'
 import chalk from 'chalk'
 import type { AxiosStatic } from 'axios'
 import { Logger } from '@yunyoujun/logger'
