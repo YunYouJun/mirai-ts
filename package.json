@@ -53,9 +53,9 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@yunyoujun/logger": "0.2.3",
     "axios": "^1.6.7",
     "chalk": "4",
+    "consola": "^3.2.3",
     "form-data": "^4.0.0",
     "ws": "^8.16.0"
   },

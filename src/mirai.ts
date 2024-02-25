@@ -4,9 +4,8 @@
  */
 
 import events from 'node:events'
-import chalk from 'chalk'
 import type { AxiosStatic } from 'axios'
-import { Logger } from '@yunyoujun/logger'
+import { createConsola } from 'consola'
 import pkg from '../package.json'
 import * as axios from './axios'
 import { MiraiApiHttp } from './mirai-api-http'
@@ -61,7 +60,7 @@ export class Mirai {
   /**
    * 日志模块
    */
-  logger = new Logger({ prefix: chalk.cyan('[mirai-ts]') })
+  logger = createConsola().withTag('mirai-ts')
   /**
    * 请求工具
    */

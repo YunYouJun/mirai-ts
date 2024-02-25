@@ -2,10 +2,12 @@
   "compilerOptions": {
     /* Visit https://aka.ms/tsconfig.json to read more about this file */
     /* Basic Options */
-    "target": "ES2016",
+    "target": "ESNext",
+    "lib": ["ESNext"],
     "experimentalDecorators": true,
     "baseUrl": ".",
-    "moduleResolution": "node",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
     "paths": {
       "mirai-ts": ["./src/index.ts"]
     },
@@ -15,7 +17,8 @@
     "declaration": true,
     "outDir": "./dist",
     "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true
   },
   "exclude": ["dist", "node_modules"]
 }

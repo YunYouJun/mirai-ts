@@ -1,3 +1,3 @@
-import { Logger } from '@yunyoujun/logger'
+import { createConsola } from 'consola'
 
-export const logger = new Logger({ prefix: 'test' })
+export const logger = createConsola().withTag('test')

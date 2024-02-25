@@ -1,20 +1,31 @@
 import fs from 'node:fs'
-import path from 'node:path'
+import path, { dirname } from 'node:path'
+import { fileURLToPath } from 'node:url'
 import { Mirai } from 'mirai-ts'
 import type { MiraiApiHttpSetting } from 'mirai-ts'
 import yaml from 'js-yaml'
+import consola from 'consola'
+
+const __dirname = dirname(fileURLToPath(import.meta.url))
 
 const qq = 712727946
 // setting 可直接读取 setting.yml 或参考 `src/types/setting.ts`
-const setting = yaml.load(
-  fs.readFileSync(
+let settingYml = ''
+try {
+  settingYml = fs.readFileSync(
     path.resolve(
       __dirname,
       '../mcl/config/net.mamoe.mirai-api-http/setting.yml',
     ),
     'utf8',
-  ),
-) as MiraiApiHttpSetting
+  )
+}
+catch (e) {
+  consola.error('读取 setting.yml 失败')
+  console.error(e)
+}
+
+const setting = yaml.load(settingYml) as MiraiApiHttpSetting
 
 const mirai = new Mirai(setting)
 

@@ -9,8 +9,7 @@ import process from 'node:process'
 import type { AxiosResponse, AxiosStatic } from 'axios'
 import FormData from 'form-data'
 import WebSocket from 'ws'
-import { Logger } from '@yunyoujun/logger'
-import chalk from 'chalk'
+import { createConsola } from 'consola'
 import { isChatMessage } from '../utils/check'
 import type {
   Api,
@@ -91,7 +90,8 @@ export class MiraiApiHttp {
    */
   resp: Resp
 
-  public logger = new Logger({ prefix: chalk.cyan('[mirai-api-http]') })
+  // public logger = new Logger({ prefix: chalk.cyan('[mirai-api-http]') })
+  public logger = createConsola().withTag('mirai-api-http')
 
   constructor(public mirai: Mirai, public axios: AxiosStatic) {
     this.setting = this.mirai.mahSetting
@@ -128,7 +128,7 @@ export class MiraiApiHttp {
             this.logger.error(`Code ${statusCode}: ${message}`)
 
             if (statusCode === 3 || statusCode === 4) {
-              this.logger.warning('正在尝试重新建立连接...')
+              this.logger.warn('正在尝试重新建立连接...')
               await this.verify()
               await this.bind(this.qq)
             }

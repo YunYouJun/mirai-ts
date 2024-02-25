@@ -5,15 +5,15 @@ settings:
   excludeLinksFromLockfile: false
 
 dependencies:
-  '@yunyoujun/logger':
-    specifier: 0.2.3
-    version: 0.2.3
   axios:
     specifier: ^1.6.7
     version: 1.6.7
   chalk:
     specifier: '4'
     version: 4.1.2
+  consola:
+    specifier: ^3.2.3
+    version: 3.2.3
   form-data:
     specifier: ^4.0.0
     version: 4.0.0
@@ -1022,12 +1022,6 @@ packages:
     resolution: {integrity: sha512-/KliRRHMF6LoiThEy+4c1Z4KB/gbPrGjWwJR+crg2otgrf/egKzRaCPvJ51S5oetgsgXLfc4Rm5ZgrKHZrtMSw==}
     dev: true
 
-  /@yunyoujun/logger@0.2.3:
-    resolution: {integrity: sha512-R9qW+3WdmxGI/ua5x6qMv7eIKD+fcBQezLYOJqvkqUjZOxeGMhf87hyu10QkTCwOw+gfBdUZEKD9dwjx76w81w==}
-    dependencies:
-      chalk: 4.1.2
-    dev: false
-
   /acorn-jsx@5.3.2(acorn@8.11.3):
     resolution: {integrity: sha512-rq9s+JNhf0IChjtDXxllJ7g41oZk5SlXtp0LHwyA5cejwn7vKmKp4pPri6YEePv2PU65sAsegbXtIinmDFDXgQ==}
     peerDependencies:
@@ -1395,7 +1389,6 @@ packages:
   /consola@3.2.3:
     resolution: {integrity: sha512-I5qxpzLv+sJhTVEoLYNcTW+bThDCPsit0vLNKShZx6rLtpilNpmmeTPaeqJb9ZE9dV3DGaeby6Vuhrw38WjeyQ==}
     engines: {node: ^14.18.0 || >=16.10.0}
-    dev: true
 
   /core-js-compat@3.36.0:
     resolution: {integrity: sha512-iV9Pd/PsgjNWBXeq8XRtWVSgz2tKAfhfvBs7qxYty+RlRd+OCksaWmOnc4JKrTc1cToXL1N0s3l/vwlxPtdElw==}
