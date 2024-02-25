@@ -5,6 +5,7 @@
  * @packageDocumentation
  */
 
+import process from 'node:process'
 import type { AxiosResponse, AxiosStatic } from 'axios'
 import FormData from 'form-data'
 import WebSocket from 'ws'
@@ -106,8 +107,8 @@ export class MiraiApiHttp {
       || `http://${httpSetting.host}:${httpSetting.port}`
 
     this.axios.defaults.baseURL = this.http.address
-    this.axios.defaults.maxContentLength = Infinity
-    this.axios.defaults.maxBodyLength = Infinity
+    this.axios.defaults.maxContentLength = Number.POSITIVE_INFINITY
+    this.axios.defaults.maxBodyLength = Number.POSITIVE_INFINITY
 
     this.command = new Command(this)
     this.file = new File(this)
@@ -291,7 +292,7 @@ export class MiraiApiHttp {
    */
   async messageFromId(messageId: number, target: number) {
     const { data } = await this.axios.get<
-      Api.Params.RequestParams<{ messageId: number; target: number }>,
+      Api.Params.RequestParams<{ messageId: number, target: number }>,
       AxiosResponse<Api.Response.MessageFromId>
     >('/messageFromId', {
       params: {
@@ -488,8 +489,8 @@ export class MiraiApiHttp {
    */
   async recall(
     params:
-    | RecallParams
-    | MessageType.ChatMessage,
+      | RecallParams
+      | MessageType.ChatMessage,
   ) {
     if (
       typeof params !== 'object'
@@ -566,7 +567,6 @@ export class MiraiApiHttp {
 
   /**
    * 此接口获取 session 绑定 bot 的详细资料
-   * @returns
    */
   async botProfile(): Promise<UserProfile> {
     const { data } = await this.axios.get('/botProfile')
@@ -576,7 +576,6 @@ export class MiraiApiHttp {
   /**
    * 此接口获取好友的详细资料
    * @param target 好友 QQ 号
-   * @returns
    */
   async friendProfile(target: number): Promise<UserProfile> {
     const { data } = await this.axios.get('/friendProfile', {
@@ -592,7 +591,6 @@ export class MiraiApiHttp {
    * 此接口获取群成员的消息资料
    * @param target 指定群的群号
    * @param memberId 群成员 QQ 号
-   * @returns
    */
   async memberProfile(target: number, memberId: number): Promise<UserProfile> {
     const { data } = await this.axios.get('/memberProfile', {

@@ -3,6 +3,7 @@
  * @packageDocumentation
  */
 
+import process from 'node:process'
 import type { AxiosStatic } from 'axios'
 import axios from 'axios'
 

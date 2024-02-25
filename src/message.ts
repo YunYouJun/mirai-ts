@@ -182,7 +182,6 @@ export function Poke(name: MessageType.PokeName): MessageType.Poke {
  * @param pictureUrl 消息卡片图片 URL
  * @param musicUrl 音乐文件 URL
  * @param brief 在消息列表显示，可选，默认为 `[分享]$title`
- * @returns
  */
 export function MusicShare(
   kind: MessageType.MusicShareKind,

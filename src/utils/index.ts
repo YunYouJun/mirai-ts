@@ -23,7 +23,6 @@ export type AvatarSize = 1 | 2 | 3 | 4 | 5 | 40 | 100 | 140 | 640
  * - 5: 640*640
  * - 40: 40*40
  * - 100: 100*100
- * @returns
  */
 export function getAvatarById(
   id: number,

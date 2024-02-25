@@ -174,7 +174,6 @@ export class File {
   /**
    * 目前仅支持群文件的操作, 所有好友文件的字段为保留字段
    * @param options
-   * @returns
    */
   async list(options: FileListOptions) {
     const { data } = await this.api.axios.get<FileInfoParams, FileListResponse>(
@@ -192,7 +191,6 @@ export class File {
   /**
    * 获取文件信息
    * @param options
-   * @returns
    */
   async info(options: FileInfoOptions) {
     const { data } = await this.api.axios.get<FileInfoParams, FileInfoResponse>(

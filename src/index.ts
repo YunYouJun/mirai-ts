@@ -4,6 +4,7 @@
  */
 
 import { Mirai } from './mirai'
+
 export * from './mirai'
 
 export type MiraiInstance = Mirai

@@ -1,5 +1,6 @@
 import type { MessageType } from '../types/message-type'
 import * as Message from '../message'
+
 /**
  * 转化为标准的 MessageChain
  */

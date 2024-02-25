@@ -193,7 +193,9 @@ export class Mirai {
    */
   _adaptMessageForAll<
     T extends 'message' | EventType.EventType | MessageType.ChatMessageType,
-  >(method: 'on' | 'off' | 'once', callback: (data: Data<T>) => any) {
+  >(method: 'on' | 'off' | 'once',
+    callback: (data: Data<T>) => any,
+  ) {
     const emitter = this.eventEmitter
     const messageType = ['FriendMessage', 'GroupMessage', 'TempMessage']
     messageType.forEach((message) => {
@@ -276,7 +278,7 @@ export class Mirai {
 
   /**
    * 快速回复（只在消息类型包含群组或好友信息时有效）
-   * @param msg 发送内容（消息链/纯文本皆可）
+   * @param msgChain 发送内容（消息链/纯文本皆可）
    * @param srcMsg 回复哪条消息
    * @param quote 是否引用回复（非聊天消息类型时无效）
    */
@@ -400,8 +402,6 @@ export class Mirai {
   /**
    * 处理消息
    * @param msg
-   * @param before 在监听器函数执行前执行
-   * @param after 在监听器函数执行后执行
    */
   handle(msg: MessageType.ChatMessage | EventType.Event) {
     createHelperForMsg(this, msg)
@@ -439,8 +439,6 @@ export class Mirai {
 
   /**
    * 监听消息和事件
-   * @param before 在监听器函数执行前执行
-   * @param after 在监听器函数执行后执行
    */
   listen() {
     if (this.mahSetting.adapters.includes('ws')) {

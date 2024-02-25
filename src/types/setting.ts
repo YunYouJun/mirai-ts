@@ -162,9 +162,9 @@ export interface MiraiApiHttpSetting {
    * adapter 的单独配置，键名与 adapters 项配置相同
    */
   adapterSettings: {
-    http: HttpAdapter
-    ws: WebsocketAdapter
+    'http': HttpAdapter
+    'ws': WebsocketAdapter
     'reverse-ws'?: ReverseWebsocketAdapter
-    webhook?: WebhookAdapter
+    'webhook'?: WebhookAdapter
   }
 }

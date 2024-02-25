@@ -18,7 +18,6 @@ import type { EventType } from '.'
 
 /**
  * 为消息和事件类型挂载辅助函数
- * @param msg
  */
 export function createHelperForMsg(
   mirai: Mirai,

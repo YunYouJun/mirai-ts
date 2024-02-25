@@ -6,6 +6,7 @@
 import type { SendMessage } from './api/params'
 import type * as Contact from './contact'
 
+// eslint-disable-next-line ts/no-namespace
 export namespace MessageType {
   interface BaseSingleMessage {
     type: string
@@ -238,23 +239,23 @@ export namespace MessageType {
   export type ForwardNode =
     | {
       /**
-         * 发送者 id
-         */
+       * 发送者 id
+       */
       senderId: number
       /**
-         * 时间戳, 单位 秒
-         */
+       * 时间戳, 单位 秒
+       */
       time: number
       /**
-         * 发送者姓名
-         */
+       * 发送者姓名
+       */
       senderName: string
       messageChain: MessageChain
     }
     | {
       /**
-         * 可以只使用消息messageId，从缓存中读取一条消息作为节点
-         */
+       * 可以只使用消息messageId，从缓存中读取一条消息作为节点
+       */
       messageId: number
     }
 
@@ -398,12 +399,12 @@ export namespace MessageType {
      * 是否为某群 groupId 发送
      * msg.group(114514)
      */
-    group: (...groupIds: number[]) => Boolean
+    group: (...groupIds: number[]) => boolean
     /**
      * 是否为某个好友 qq 发送
      * msg.friend(114514)
      */
-    friend: (...qqs: number[]) => Boolean
+    friend: (...qqs: number[]) => boolean
     /**
      * 获取消息链中第一次出现的消息类型
      * 例如：msg.get('Quote')

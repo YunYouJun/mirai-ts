@@ -78,9 +78,9 @@ export class Resp {
     const { data } = await this.api.axios.post<
     null,
     AxiosResponse<
-    | Api.Response.NewFriendRequestEvent
-    | Api.Response.MemberJoinRequestEvent
-    | Api.Response.BotInvitedJoinGroupRequestEvent
+      | Api.Response.NewFriendRequestEvent
+      | Api.Response.MemberJoinRequestEvent
+      | Api.Response.BotInvitedJoinGroupRequestEvent
     >
     >(`/resp/${event.type[0].toLowerCase()}${event.type.substring(1)}`, {
       sessionKey: this.api.sessionKey,
