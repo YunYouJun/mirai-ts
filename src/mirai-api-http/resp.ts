@@ -76,12 +76,12 @@ export class Resp {
 
   async _request(event: EventType.RequestEvent, operate: number, message = '') {
     const { data } = await this.api.axios.post<
-    null,
-    AxiosResponse<
-      | Api.Response.NewFriendRequestEvent
-      | Api.Response.MemberJoinRequestEvent
-      | Api.Response.BotInvitedJoinGroupRequestEvent
-    >
+      null,
+      AxiosResponse<
+        | Api.Response.NewFriendRequestEvent
+        | Api.Response.MemberJoinRequestEvent
+        | Api.Response.BotInvitedJoinGroupRequestEvent
+      >
     >(`/resp/${event.type[0].toLowerCase()}${event.type.substring(1)}`, {
       sessionKey: this.api.sessionKey,
       eventId: event.eventId,

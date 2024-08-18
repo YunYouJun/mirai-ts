@@ -496,8 +496,9 @@ export class MiraiApiHttp {
       typeof params !== 'object'
       || !(params as RecallParams).messageId
       || !(params as RecallParams).target
-    )
+    ) {
       throw new Error('请同时传入包含有 messageId 与 target 的对象')
+    }
 
     let messageId = (params as RecallParams).messageId
     let target = (params as RecallParams).target

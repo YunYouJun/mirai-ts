@@ -9,7 +9,7 @@ import type { Api, Contact } from '..'
 import type { MiraiApiHttp } from './index'
 
 export type FileInfoResponse = AxiosResponse<
-Api.Response.ResponseType<FileInfo>
+  Api.Response.ResponseType<FileInfo>
 >
 
 export interface BaseFileOptions {
@@ -113,7 +113,7 @@ export interface FileListOptions extends BaseFileOptions {
   size?: number
 }
 export type FileListResponse = AxiosResponse<
-Api.Response.ResponseType<FileInfo[]>
+  Api.Response.ResponseType<FileInfo[]>
 >
 
 export interface FileInfoOptions extends BaseFileOptions {
@@ -211,8 +211,8 @@ export class File {
    */
   async mkdir(options: FileMkdirOptions) {
     const { data } = await this.api.axios.post<
-    FileMkdirParams,
-    FileInfoResponse
+      FileMkdirParams,
+      FileInfoResponse
     >('/file/mkdir', {
       sessionKey: this.api.sessionKey,
       ...options,
@@ -225,8 +225,8 @@ export class File {
    */
   async delete(options: FileDeleteOptions) {
     const { data } = await this.api.axios.post<
-    FileDeleteParams,
-    AxiosResponse<Api.Response.BaseResponse>
+      FileDeleteParams,
+      AxiosResponse<Api.Response.BaseResponse>
     >('/file/delete', {
       sessionKey: this.api.sessionKey,
       ...options,
@@ -240,8 +240,8 @@ export class File {
    */
   async move(options: FileMoveOptions) {
     const { data } = await this.api.axios.post<
-    FileMoveParams,
-    AxiosResponse<Api.Response.BaseResponse>
+      FileMoveParams,
+      AxiosResponse<Api.Response.BaseResponse>
     >('/groupFileMove', {
       sessionKey: this.api.sessionKey,
       ...options,
@@ -254,8 +254,8 @@ export class File {
    */
   async rename(options: FileRenameOptions) {
     const { data } = await this.api.axios.post<
-    FileRenameParams,
-    AxiosResponse<Api.Response.BaseResponse>
+      FileRenameParams,
+      AxiosResponse<Api.Response.BaseResponse>
     >('/groupFileRename', {
       sessionKey: this.api.sessionKey,
       ...options,
