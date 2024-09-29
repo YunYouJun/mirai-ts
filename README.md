@@ -1,6 +1,6 @@
 # [mirai-ts](https://github.com/YunYouJun/mirai-ts)
 
-[![docs](https://github.com/YunYouJun/mirai-ts/workflows/docs/badge.svg)](https://www.yunyoujun.cn/mirai-ts/)
+[![docs](https://github.com/YunYouJun/mirai-ts/workflows/docs/badge.svg)](https://yunyoujun.github.io/mirai-ts/)
 [![Compatible Version](https://img.shields.io/badge/mirai--api--http-v2.3.3-blue)](https://github.com/project-mirai/mirai-api-http)
 [![npm](https://img.shields.io/npm/v/mirai-ts)](https://www.npmjs.com/package/mirai-ts)
 [![GitHub](https://img.shields.io/github/license/YunYouJun/mirai-ts)](https://github.com/YunYouJun/mirai-ts)
@@ -29,7 +29,7 @@ npm i mirai-ts@next
 
 > 由于 mirai-api-http 2.x 已经稳定，mirai-ts@latest 为 2.x 版本，如果您想使用 mirai-api-http 1.x，请安装 [mirai-ts@1.x](https://www.npmjs.com/package/mirai-ts/v/1.1.1) 版本。
 
-- [API 文档](https://www.yunyoujun.cn/mirai-ts/)
+- [API 文档](https://yunyoujun.github.io/mirai-ts/)
 - [2.x 迁移指南](./migrate.md)
 
 ## 快速开始
@@ -92,15 +92,15 @@ const { Message, Logger, check, MessageType, EventType } = require('mirai-ts')
 import { EventType, Logger, Message, MessageType, check } from 'mirai-ts'
 ```
 
-> 详情请参见 [API 文档](https://www.yunyoujun.cn/mirai-ts/)。
+> 详情请参见 [API 文档](https://yunyoujun.github.io/mirai-ts/)。
 
-#### [Message](https://www.yunyoujun.cn/mirai-ts/modules.html#message)
+#### [Message](https://yunyoujun.github.io/mirai-ts/modules.html#message)
 
 - `Message`: 生成对应消息的辅助方法，如生成艾特某人的消息 `Message.At(qq)`
 
 > 消息链应当是一个数组，如 `messageChain = [Message.At(qq), Message.Plain('来点色图')]`
 
-#### [Logger](https://www.yunyoujun.cn/mirai-ts/classes/logger.html)
+#### [Logger](https://yunyoujun.github.io/mirai-ts/classes/logger.html)
 
 简单的日志工具，当然你可以自由使用其他工具替代它。
 
@@ -111,7 +111,7 @@ const logger = new Logger({ prefix: '[mirai-ts]' })
 logger.success('We are free!')
 ```
 
-#### [check](https://www.yunyoujun.cn/mirai-ts/modules/check.html)
+#### [check](https://yunyoujun.github.io/mirai-ts/modules/check.html)
 
 消息匹配与检测。
 
