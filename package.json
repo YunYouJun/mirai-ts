@@ -2,7 +2,7 @@
   "name": "mirai-ts",
   "type": "module",
   "version": "2.4.8",
-  "packageManager": "pnpm@9.7.1",
+  "packageManager": "pnpm@9.11.0",
   "description": "Mirai TypeScript SDK",
   "author": {
     "name": "YunYouJun",
@@ -10,7 +10,7 @@
     "url": "https://www.yunyoujun.cn"
   },
   "license": "AGPL-3.0",
-  "homepage": "https://www.yunyoujun.cn/mirai-ts/",
+  "homepage": "https://yunyoujun.github.io/mirai-ts/",
   "repository": {
     "type": "git",
     "url": "https://github.com/YunYouJun/mirai-ts"
@@ -54,28 +54,28 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "axios": "^1.7.4",
+    "axios": "^1.7.7",
     "chalk": "4",
     "consola": "^3.2.3",
     "form-data": "^4.0.0",
     "ws": "^8.18.0"
   },
   "devDependencies": {
-    "@antfu/eslint-config": "^2.26.0",
+    "@antfu/eslint-config": "^2.27.3",
     "@types/js-yaml": "^4.0.9",
-    "@types/node": "^22.4.0",
+    "@types/node": "^22.7.4",
     "@types/ws": "^8.5.12",
-    "bumpp": "^9.5.1",
+    "bumpp": "^9.6.1",
     "dotenv": "^16.4.5",
-    "eslint": "^9.9.0",
+    "eslint": "^9.11.1",
     "husky": "8.0.3",
     "js-yaml": "^4.1.0",
-    "lint-staged": "^15.2.9",
+    "lint-staged": "^15.2.10",
     "prettier": "^3.3.3",
     "tsup": "6.7.0",
-    "tsx": "^4.17.0",
-    "typedoc": "^0.26.5",
-    "typescript": "^5.5.4"
+    "tsx": "^4.19.1",
+    "typedoc": "^0.26.7",
+    "typescript": "^5.6.2"
   },
   "lint-staged": {
     "*.ts": [
